@@ -1,0 +1,21 @@
+%ul.nav.nav-pills.nav-stacked
+  - if authenticated?
+    %li
+      %a{ href: '/' }
+        %i.fa.fa-home.fa-fw
+        Home
+    - Ditty.navigation.each do |item|
+      - if policy(item[:target]).list?
+        %li
+          %a{ href: "#{item[:link]}" }
+            %i.fa.fa-fw{ class: "fa-#{item[:icon]}" }
+            = item[:text]
+  - else
+    %li.active
+      %a{ href: '/auth/identity' }
+        %i.fa.fa-user.fa-fw
+        Log In
+    %li
+      %a{ href: '/auth/identity/register' }
+        %i.fa.fa-pencil-square-o.fa-fw
+        Register

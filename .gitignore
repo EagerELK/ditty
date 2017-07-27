@@ -1,0 +1,14 @@
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+*_secret
+/node_modules
+.vagrant
+*.db
+/Gemfile.dev.lock

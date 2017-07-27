@@ -1,0 +1,17 @@
+.row
+  .col-md-12
+    .panel.panel-default
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Name
+        %tbody
+          -list.each do |entity|
+            %tr
+              %td
+                %a{ href: "#{base_path}/#{entity.id}" }= entity.name
+      - if policy(::Ditty::Role).create?
+        .panel-body.text-right
+          %a.btn.btn-primary{ href: "#{base_path}/new" } New Role
+
+=pagination(list, base_path)
