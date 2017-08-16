@@ -55,7 +55,6 @@ module Ditty
         end
 
         namespace :migrate do
-          require_relative './db' if ENV['DATABASE_URL']
           folder = 'migrations'
 
           desc 'Check if the migration is current'
