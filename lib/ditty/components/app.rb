@@ -24,7 +24,7 @@ module Ditty
     def self.navigation
       [
         { order: 0, link: '/users/', text: 'Users', target: User, icon: 'user' },
-        { order: 1, link: '/roles/', text: 'Roles', target: Role, icon: 'group' },
+        { order: 1, link: '/roles/', text: 'Roles', target: Role, icon: 'check-square' },
         { order: 3, link: '/audit-logs/', text: 'Audit Logs', target: AuditLog, icon: 'history' }
       ]
     end
