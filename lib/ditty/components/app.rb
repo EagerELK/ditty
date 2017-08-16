@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Ditty
   class App
     def self.migrations
