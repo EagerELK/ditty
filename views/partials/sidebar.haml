@@ -5,7 +5,7 @@
         %i.fa.fa-home.fa-fw
         Home
     - Ditty.navigation.each do |item|
-      - if policy(item[:target]).list?
+      - if item[:target].nil? || policy(item[:target]).list?
         %li
           %a{ href: "#{item[:link]}" }
             %i.fa.fa-fw{ class: "fa-#{item[:icon]}" }
