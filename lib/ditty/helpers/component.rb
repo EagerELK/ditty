@@ -38,17 +38,6 @@ module Ditty
       def base_path
         settings.base_path || "/#{dasherize(view_location)}"
       end
-
-      def find_template(views, name, engine, &block)
-        super(views, name, engine, &block) # Root
-        super(::Ditty::App.view_folder, name, engine, &block) # Basic Plugin
-      end
-
-      def view_location
-        return settings.view_location if settings.view_location
-        return underscore(pluralize(demodulize(settings.model_class))) if settings.model_class
-        underscore(demodulize(self.class))
-      end
     end
   end
 end

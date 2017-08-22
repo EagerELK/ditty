@@ -9,10 +9,14 @@ require 'ditty/helpers/pundit'
 require 'ditty/helpers/wisper'
 require 'ditty/helpers/authentication'
 require 'ditty/services/logger'
+require 'active_support'
+require 'active_support/inflector'
 require 'rack/contrib'
 
 module Ditty
   class Application < Sinatra::Base
+    include ActiveSupport::Inflector
+
     set :root, ENV['APP_ROOT'] || ::File.expand_path(::File.dirname(__FILE__) + '/../../../')
     set :view_location, nil
     set :model_class, nil
@@ -24,6 +28,12 @@ module Ditty
 
     use Rack::PostBodyContentTypeParser
     use Rack::MethodOverride
+
+    def view_location
+      return settings.view_location if settings.view_location
+      return underscore(pluralize(demodulize(settings.model_class))) if settings.model_class
+      underscore(demodulize(self.class))
+    end
 
     configure :production do
       disable :show_exceptions
