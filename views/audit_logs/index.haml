@@ -9,7 +9,7 @@
             %th Details
             %th Created at
         %tbody
-          -list.each do |entity|
+          - list.all.each do |entity|
             %tr
               %td
                 -if entity.user

@@ -6,7 +6,7 @@
           %tr
             %th Name
         %tbody
-          -list.each do |entity|
+          - list.all.each do |entity|
             %tr
               %td
                 %a{ href: "#{base_path}/#{entity.id}" }= entity.name

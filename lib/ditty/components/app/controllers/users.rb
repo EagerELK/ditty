@@ -12,6 +12,8 @@ module Ditty
     set track_actions: true
 
     def find_template(views, name, engine, &block)
+      # raise views                    # /vagrant/gems/ditty/lib/ditty/views
+      # raise ::Ditty::App.view_folder # /vagrant/gems/ditty/views
       super(views, name, engine, &block) # Root
       super(::Ditty::App.view_folder, name, engine, &block) # Basic Plugin
     end

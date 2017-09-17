@@ -6,6 +6,6 @@
         %form.form-horizontal{ method: 'post', action: base_path }
           = haml :'users/identity', locals: { identity: identity }
           = haml :'users/user', locals: { user: entity }
-          %button.btn.btn-primary.btn{ type: 'submit' }
+          %button.btn.btn-primary{ type: 'submit' }
             Create User
   .col-md-2
