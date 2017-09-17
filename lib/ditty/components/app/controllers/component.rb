@@ -49,7 +49,6 @@ module Ditty
     # Create
     post '/' do
       authorize settings.model_class, :create
-
       entity = settings.model_class.new(permitted_attributes(settings.model_class, :create))
       success = entity.valid? && entity.save
 
@@ -98,7 +97,7 @@ module Ditty
 
     # Update Form
     get '/:id/edit' do |id|
-      entity = dataset[id]
+      entity = dataset.first(settings.model_class.pk => id)
       halt 404 unless entity
       authorize entity, :update
 
@@ -107,7 +106,7 @@ module Ditty
 
     # Update
     put '/:id' do |id|
-      entity = dataset[id]
+      entity = dataset.first(settings.model_class.pk => id)
       halt 404 unless entity
       authorize entity, :update
 
@@ -139,7 +138,7 @@ module Ditty
     end
 
     delete '/:id' do |id|
-      entity = dataset[id]
+      entity = dataset.first(settings.model_class.pk => id)
       halt 404 unless entity
       authorize entity, :delete
 
