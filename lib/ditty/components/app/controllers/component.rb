@@ -75,7 +75,7 @@ module Ditty
 
     # Read
     get '/:id' do |id|
-      entity = dataset.first(settings.model_class.pk => id)
+      entity = dataset.first(settings.model_class.primary_key => id)
       halt 404 unless entity
       authorize entity, :read
 
@@ -97,7 +97,7 @@ module Ditty
 
     # Update Form
     get '/:id/edit' do |id|
-      entity = dataset.first(settings.model_class.pk => id)
+      entity = dataset.first(settings.model_class.primary_key => id)
       halt 404 unless entity
       authorize entity, :update
 
@@ -106,7 +106,7 @@ module Ditty
 
     # Update
     put '/:id' do |id|
-      entity = dataset.first(settings.model_class.pk => id)
+      entity = dataset.first(settings.model_class.primary_key => id)
       halt 404 unless entity
       authorize entity, :update
 
@@ -138,7 +138,7 @@ module Ditty
     end
 
     delete '/:id' do |id|
-      entity = dataset.first(settings.model_class.pk => id)
+      entity = dataset.first(settings.model_class.primary_key => id)
       halt 404 unless entity
       authorize entity, :delete
 
