@@ -9,7 +9,7 @@ module Ditty
       include ActiveSupport::Inflector
 
       def dataset
-        policy_scope(settings.model_class)
+        filtered(policy_scope(settings.model_class))
       end
 
       def list
@@ -37,6 +37,26 @@ module Ditty
 
       def base_path
         settings.base_path || "/#{dasherize(view_location)}"
+      end
+
+      def filters
+        self.class.const_defined?('FILTERS') ? self.class::FILTERS : []
+      end
+
+      def filtered(dataset)
+        filters.each do |filter|
+          next unless params[filter[:name].to_s]
+          filter[:field] ||= filter[:name]
+          dataset = apply_filter(dataset, filter)
+        end
+        dataset
+      end
+
+      def apply_filter(dataset, filter)
+        value = params[filter[:name].to_s]
+        return dataset if value == '' || value.nil?
+        value = value.send(filter[:modifier]) if filter[:modifier]
+        dataset.where(filter[:field].to_sym => value)
       end
     end
   end
