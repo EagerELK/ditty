@@ -54,7 +54,7 @@ module Ditty
 
     error do
       error = env['sinatra.error']
-      haml :error, locals: { title: 'Something went wrong', message: error }
+      haml :error, locals: { title: 'Something went wrong', error: error }
     end
 
     error Helpers::NotAuthenticated do
