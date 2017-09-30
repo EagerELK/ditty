@@ -57,11 +57,59 @@ module Ditty
     #
     #   Ditty::Components.register_component(:component_name, ComponentModule)
     def self.register_component(name, mod)
+      puts "Registering #{mod} as #{name}"
       @components[name] = mod
     end
 
     def self.components
       @components
+    end
+
+    # Return a hash of controllers with their routes as keys: `{ '/users' => Ditty::Controllers::Users }`
+    def self.routes
+      @routes ||= {}
+    end
+
+    def self.routes=(routes)
+      @routes = routes
+    end
+
+    # Return an ordered list of navigation items:
+    # `[{order:0, link:'/users/', text:'Users'}, {order:1, link:'/roles/', text:'Roles'}]
+    def self.navigation
+      @navigation ||= {}
+      @navigation.compact.flatten.sort_by { |h| h[:order] }
+    end
+
+    def self.navigation=(navigation)
+      @navigation = navigation
+    end
+
+    def self.migrations
+      @migrations ||= []
+      @migrations.compact
+    end
+
+    def self.migrations=(migrations)
+      @migrations = migrations
+    end
+
+    def self.seeders
+      @seeders ||= []
+      @seeders.compact
+    end
+
+    def self.seeders=(seeders)
+      @seeders = seeders
+    end
+
+    def self.workers
+      @workers ||= []
+      @workers.compact
+    end
+
+    def self.workers=(workers)
+      @workers = workers
     end
 
     module Base
@@ -74,46 +122,18 @@ module Ditty
         #   Component.component :csrf
         def component(component, *args, &block)
           raise ComponentError, 'Cannot add a component to a frozen Component class' if frozen?
-          puts "Loading #{component}"
           component = Components.load_component(component) if component.is_a?(Symbol)
           include(component::InstanceMethods) if defined?(component::InstanceMethods)
           extend(component::ClassMethods) if defined?(component::ClassMethods)
+
           component.configure(self, *args, &block) if component.respond_to?(:configure)
+          Components.navigation << component.navigation if component.respond_to?(:navigation)
+          Components.routes.merge! component.routes if component.respond_to?(:routes)
+          Components.migrations << component.migrations if component.respond_to?(:migrations)
+          Components.seeders << component.seeder if component.respond_to?(:seeder)
+          Components.workers << component.workers if component.respond_to?(:workers)
 
           nil
-        end
-
-        # Return a hash of controllers with their routes as keys: `{ '/users' => Ditty::Controllers::Users }`
-        def routes
-          Components.components.inject({}) do |memo, component|
-            memo.merge!(component[1].routes) if component[1].respond_to?(:routes)
-          end
-        end
-
-        # Return an ordered list of navigation items:
-        # `[{order:0, link:'/users/', text:'Users'}, {order:1, link:'/roles/', text:'Roles'}]
-        def navigation
-          Components.components.map do |_key, component|
-            component.navigation if component.respond_to?(:navigation)
-          end.compact.flatten.sort_by { |h| h[:order] }
-        end
-
-        def migrations
-          Components.components.map do |_key, component|
-            component.migrations if component.respond_to?(:migrations)
-          end.compact
-        end
-
-        def seeders
-          Components.components.map do |_key, component|
-            component.seeders if component.respond_to?(:seeders)
-          end.compact
-        end
-
-        def workers
-          Components.components.map do |_key, component|
-            component.workers if component.respond_to?(:workers)
-          end.compact
         end
       end
 

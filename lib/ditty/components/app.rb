@@ -22,17 +22,21 @@ module Ditty
     end
 
     def self.navigation
+      require 'ditty/components/app/models/user'
+      require 'ditty/components/app/models/role'
+      require 'ditty/components/app/models/audit_log'
+
       [
-        { order: 0, link: '/users/', text: 'Users', target: User, icon: 'user' },
-        { order: 1, link: '/roles/', text: 'Roles', target: Role, icon: 'check-square' },
-        { order: 3, link: '/audit-logs/', text: 'Audit Logs', target: AuditLog, icon: 'history' }
+        { order: 10, link: '/users/', text: 'Users', target: ::Ditty::User, icon: 'user' },
+        { order: 20, link: '/roles/', text: 'Roles', target: ::Ditty::Role, icon: 'check-square' },
+        { order: 30, link: '/audit-logs/', text: 'Audit Logs', target: ::Ditty::AuditLog, icon: 'history' }
       ]
     end
 
     def self.seeder
       proc do
-        require 'ditty/app/models/user'
-        require 'ditty/app/models/role'
+        require 'ditty/components/app/models/user'
+        require 'ditty/components/app/models/role'
 
         ::Ditty::Role.find_or_create(name: 'super_admin')
         ::Ditty::Role.find_or_create(name: 'admin')
@@ -49,3 +53,4 @@ module Ditty
 end
 
 Ditty::Components.register_component(:app, Ditty::App)
+Ditty.component :app
