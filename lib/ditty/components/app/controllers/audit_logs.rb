@@ -5,7 +5,7 @@ require 'ditty/components/app/models/audit_log'
 require 'ditty/components/app/policies/audit_log_policy'
 
 module Ditty
-  class AuditLogs < Component
+  class AuditLogs < Ditty::Component
     set model_class: AuditLog
 
     def find_template(views, name, engine, &block)

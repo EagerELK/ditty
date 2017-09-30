@@ -77,8 +77,7 @@ module Ditty
     # Return an ordered list of navigation items:
     # `[{order:0, link:'/users/', text:'Users'}, {order:1, link:'/roles/', text:'Roles'}]
     def self.navigation
-      @navigation ||= {}
-      @navigation.compact.flatten.sort_by { |h| h[:order] }
+      @navigation ||= []
     end
 
     def self.navigation=(navigation)
@@ -127,11 +126,11 @@ module Ditty
           extend(component::ClassMethods) if defined?(component::ClassMethods)
 
           component.configure(self, *args, &block) if component.respond_to?(:configure)
-          Components.navigation << component.navigation if component.respond_to?(:navigation)
+          Components.navigation.concat component.navigation if component.respond_to?(:navigation)
           Components.routes.merge! component.routes if component.respond_to?(:routes)
           Components.migrations << component.migrations if component.respond_to?(:migrations)
           Components.seeders << component.seeder if component.respond_to?(:seeder)
-          Components.workers << component.workers if component.respond_to?(:workers)
+          Components.workers.concat component.workers if component.respond_to?(:workers)
 
           nil
         end

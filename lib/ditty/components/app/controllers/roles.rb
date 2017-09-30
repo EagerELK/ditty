@@ -5,7 +5,7 @@ require 'ditty/components/app/models/role'
 require 'ditty/components/app/policies/role_policy'
 
 module Ditty
-  class Roles < Component
+  class Roles < Ditty::Component
     set model_class: Role
 
     def find_template(views, name, engine, &block)

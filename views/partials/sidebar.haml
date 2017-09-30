@@ -1,10 +1,10 @@
 %ul.nav.nav-pills.nav-stacked
   - if authenticated?
     %li
-      %a{ href: '/' }
+      %a{ href: "#{settings.map_path}/" }
         %i.fa.fa-home.fa-fw
         Home
-    - Ditty.navigation.each do |item|
+    - Ditty::Components.navigation.each do |item|
       - if item[:target].nil? || policy(item[:target]).list?
         %li
           %a{ href: "#{item[:link]}" }
@@ -12,10 +12,10 @@
             = item[:text]
   - else
     %li.active
-      %a{ href: '/auth/identity' }
+      %a{ href: "#{settings.map_path}/auth/identity" }
         %i.fa.fa-user.fa-fw
         Log In
     %li
-      %a{ href: '/auth/identity/register' }
+      %a{ href: "#{settings.map_path}/auth/identity/register" }
         %i.fa.fa-pencil-square-o.fa-fw
         Register

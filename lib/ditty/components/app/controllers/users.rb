@@ -7,7 +7,7 @@ require 'ditty/components/app/models/identity'
 require 'ditty/components/app/policies/identity_policy'
 
 module Ditty
-  class Users < Component
+  class Users < Ditty::Component
     set model_class: User
     set track_actions: true
 

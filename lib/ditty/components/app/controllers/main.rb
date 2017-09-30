@@ -21,6 +21,12 @@ module Ditty
       haml :'identity/login', locals: { title: 'Log In' }
     end
 
+    get '/auth/failure' do
+      broadcast(:identity_failed_login)
+      flash[:warning] = 'Invalid credentials. Please try again.'
+      redirect "#{settings.map_path}/auth/identity"
+    end
+
     post '/auth/identity/callback' do
       if env['omniauth.auth']
         # Successful Login
@@ -28,12 +34,12 @@ module Ditty
         self.current_user = user
         log_action(:identity_login, user: user)
         flash[:success] = 'Logged In'
-        redirect '/'
+        redirect "#{settings.map_path}/"
       else
         # Failed Login
         broadcast(:identity_failed_login)
         flash[:warning] = 'Invalid credentials. Please try again.'
-        redirect '/auth/identity'
+        redirect "#{settings.map_path}/auth/identity"
       end
     end
 
@@ -56,7 +62,7 @@ module Ditty
 
         log_action(:identity_register, user: user)
         flash[:info] = 'Successfully Registered. Please log in'
-        redirect '/auth/identity'
+        redirect "#{settings.map_path}/auth/identity"
       else
         flash.now[:warning] = 'Could not complete the registration. Please try again.'
         haml :'identity/register', locals: { identity: identity }
@@ -69,12 +75,12 @@ module Ditty
       logout
       flash[:info] = 'Logged Out'
 
-      redirect '/'
+      redirect "#{settings.map_path}/"
     end
 
     # Unauthenticated
     get '/unauthenticated' do
-      redirect '/auth/identity'
+      redirect "#{settings.map_path}/auth/identity"
     end
   end
 end

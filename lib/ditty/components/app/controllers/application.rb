@@ -18,6 +18,7 @@ module Ditty
     include ActiveSupport::Inflector
 
     set :root, ENV['APP_ROOT'] || ::File.expand_path(::File.dirname(__FILE__) + '/../../../')
+    set :map_path, nil
     set :view_location, nil
     set :model_class, nil
     # The order here is important, since Wisper has a deprecated method respond_with method
@@ -59,12 +60,12 @@ module Ditty
 
     error Helpers::NotAuthenticated do
       flash[:warning] = 'Please log in first.'
-      redirect '/auth/identity'
+      redirect "#{settings.map_path}/auth/identity"
     end
 
     error ::Pundit::NotAuthorizedError do
       flash[:warning] = 'Please log in first.'
-      redirect '/auth/identity'
+      redirect "#{settings.map_path}/auth/identity"
     end
 
     before(/.*/) do

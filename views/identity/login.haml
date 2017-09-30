@@ -5,7 +5,7 @@
       .panel-heading
         %h4 Ditty Login
       .panel-body
-        %form{ method: 'post', action: '/auth/identity/callback' }
+        %form{ method: 'post', action: "#{settings.map_path}/auth/identity/callback" }
           .form-group
             %label.control-label Username
             %input.form-control.border-input{ name: 'username' }
@@ -15,5 +15,5 @@
           %button.btn.btn-primary{ type: 'submit' } Log In
           .pull-right
             No account yet?
-            %a.btn.btn-default{ href: '/auth/identity/register' } Register
+            %a.btn.btn-default{ href: "#{settings.map_path}/auth/identity/register" } Register
   .col-sm-3
