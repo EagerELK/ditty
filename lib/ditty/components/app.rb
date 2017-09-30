@@ -27,9 +27,16 @@ module Ditty
       require 'ditty/components/app/models/audit_log'
 
       [
-        { order: 10, link: '/users/', text: 'Users', target: ::Ditty::User, icon: 'user' },
-        { order: 20, link: '/roles/', text: 'Roles', target: ::Ditty::Role, icon: 'check-square' },
-        { order: 30, link: '/audit-logs/', text: 'Audit Logs', target: ::Ditty::AuditLog, icon: 'history' }
+        {
+          group: 'User Management',
+          order: 10,
+          icon: 'lock',
+          items: [
+            { order: 10, link: '/users/', text: 'Users', target: ::Ditty::User, icon: 'user' },
+            { order: 20, link: '/roles/', text: 'Roles', target: ::Ditty::Role, icon: 'check-square' },
+            { order: 30, link: '/audit-logs/', text: 'Audit Logs', target: ::Ditty::AuditLog, icon: 'history' }
+          ]
+        }
       ]
     end
 
