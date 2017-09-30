@@ -6,10 +6,15 @@
           %tr
             %th Name
         %tbody
-          - list.all.each do |entity|
+          - if list.count > 0
+            - list.all.each do |entity|
+              %tr
+                %td
+                  %a{ href: "#{base_path}/#{entity.id}" }= entity.name
+          - else
             %tr
-              %td
-                %a{ href: "#{base_path}/#{entity.id}" }= entity.name
+              %td.text-center{ colspan: 1 } No records
+
       - if policy(::Ditty::Role).create?
         .panel-body.text-right
           %a.btn.btn-primary{ href: "#{base_path}/new" } New Role
