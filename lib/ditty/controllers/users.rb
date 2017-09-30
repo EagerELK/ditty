@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'ditty/components/app/controllers/component'
-require 'ditty/components/app/models/user'
-require 'ditty/components/app/policies/user_policy'
-require 'ditty/components/app/models/identity'
-require 'ditty/components/app/policies/identity_policy'
+require 'ditty/controllers/component'
+require 'ditty/models/user'
+require 'ditty/policies/user_policy'
+require 'ditty/models/identity'
+require 'ditty/policies/identity_policy'
 
 module Ditty
   class Users < Ditty::Component
@@ -12,10 +12,8 @@ module Ditty
     set track_actions: true
 
     def find_template(views, name, engine, &block)
-      # raise views                    # /vagrant/gems/ditty/lib/ditty/views
-      # raise ::Ditty::App.view_folder # /vagrant/gems/ditty/views
       super(views, name, engine, &block) # Root
-      super(::Ditty::App.view_folder, name, engine, &block) # Basic Plugin
+      super(::Ditty::App.view_folder, name, engine, &block) # Ditty
     end
 
     # New

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'ditty/components/app/models/base'
+require 'ditty/models/base'
 
 module Ditty
   class Role < Sequel::Model

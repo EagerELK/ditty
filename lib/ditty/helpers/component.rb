@@ -36,7 +36,7 @@ module Ditty
       end
 
       def base_path
-        settings.base_path || "/#{dasherize(view_location)}"
+        settings.base_path || "#{settings.map_path}/#{dasherize(view_location)}"
       end
 
       def filters

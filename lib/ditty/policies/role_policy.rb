@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'ditty/components/app/policies/application_policy'
+require 'ditty/policies/application_policy'
 
 module Ditty
-  class UserPolicy < ApplicationPolicy
+  class RolePolicy < ApplicationPolicy
     def create?
       user && user.super_admin?
     end
@@ -13,7 +13,7 @@ module Ditty
     end
 
     def read?
-      user && (record.id == user.id || user.super_admin?)
+      create?
     end
 
     def update?
@@ -24,14 +24,8 @@ module Ditty
       create?
     end
 
-    def register?
-      true
-    end
-
     def permitted_attributes
-      attribs = [:email, :name, :surname]
-      attribs << :role_id if user.super_admin?
-      attribs
+      [:name]
     end
 
     class Scope < ApplicationPolicy::Scope
@@ -39,7 +33,7 @@ module Ditty
         if user && user.super_admin?
           scope
         else
-          scope.where(id: user.id)
+          scope.where(id: -1)
         end
       end
     end

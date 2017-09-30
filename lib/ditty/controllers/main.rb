@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'ditty/components/app/controllers/application'
+require 'ditty/controllers/application'
 
 module Ditty
   class Main < Application

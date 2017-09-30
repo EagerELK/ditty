@@ -1,1 +1,0 @@
-::Ditty.seeders.each(&:call)

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'ditty/components/app/controllers/component'
-require 'ditty/components/app/models/audit_log'
-require 'ditty/components/app/policies/audit_log_policy'
+require 'ditty/controllers/component'
+require 'ditty/models/audit_log'
+require 'ditty/policies/audit_log_policy'
 
 module Ditty
   class AuditLogs < Ditty::Component
@@ -10,7 +10,7 @@ module Ditty
 
     def find_template(views, name, engine, &block)
       super(views, name, engine, &block) # Root
-      super(::Ditty::App.view_folder, name, engine, &block) # Basic Plugin
+      super(::Ditty::App.view_folder, name, engine, &block) # Ditty
     end
 
     def list

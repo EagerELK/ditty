@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'bcrypt'
-require 'ditty/components/app/models/base'
+require 'ditty/models/base'
 require 'omniauth-identity'
 require 'active_support'
 require 'active_support/core_ext/object/blank'

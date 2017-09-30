@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'ditty/components/app/policies/application_policy'
+require 'ditty/policies/application_policy'
 
 module Ditty
   class IdentityPolicy < ApplicationPolicy

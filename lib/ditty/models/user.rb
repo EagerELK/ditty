@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'ditty/components/app/models/base'
+require 'ditty/models/base'
 require 'digest/md5'
 require 'active_support'
 require 'active_support/core_ext/object/blank'

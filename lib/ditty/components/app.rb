@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 
+require 'ditty'
+require 'ditty/db' unless defined? ::DB
+require 'ditty/models/user'
+require 'ditty/models/role'
+require 'ditty/models/identity'
+require 'ditty/models/audit_log'
+
 module Ditty
   class App
     def self.migrations
@@ -11,7 +18,7 @@ module Ditty
     end
 
     def self.routes
-      controllers = File.expand_path('../app/controllers', __FILE__)
+      controllers = File.expand_path('../../controllers', __FILE__)
       Dir.glob("#{controllers}/*.rb").each { |f| require f }
       {
         '/' => ::Ditty::Main,
@@ -22,10 +29,6 @@ module Ditty
     end
 
     def self.navigation
-      require 'ditty/components/app/models/user'
-      require 'ditty/components/app/models/role'
-      require 'ditty/components/app/models/audit_log'
-
       [
         {
           group: 'User Management',
@@ -42,9 +45,6 @@ module Ditty
 
     def self.seeder
       proc do
-        require 'ditty/components/app/models/user'
-        require 'ditty/components/app/models/role'
-
         ::Ditty::Role.find_or_create(name: 'super_admin')
         ::Ditty::Role.find_or_create(name: 'admin')
         user_role = ::Ditty::Role.find_or_create(name: 'user')
@@ -60,4 +60,3 @@ module Ditty
 end
 
 Ditty::Components.register_component(:app, Ditty::App)
-Ditty.component :app
