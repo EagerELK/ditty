@@ -43,7 +43,7 @@ module Ditty
 
           puts 'Preparing the Ditty migrations folder'
           Dir.mkdir 'migrations' unless File.exist?('migrations')
-          ::Ditty.migrations.each do |path|
+          ::Ditty::Components.migrations.each do |path|
             FileUtils.cp_r "#{path}/.", 'migrations'
           end
         end

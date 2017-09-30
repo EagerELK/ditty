@@ -86,7 +86,6 @@ module Ditty
 
     def self.migrations
       @migrations ||= []
-      @migrations.compact
     end
 
     def self.migrations=(migrations)
@@ -95,7 +94,6 @@ module Ditty
 
     def self.seeders
       @seeders ||= []
-      @seeders.compact
     end
 
     def self.seeders=(seeders)
@@ -104,7 +102,6 @@ module Ditty
 
     def self.workers
       @workers ||= []
-      @workers.compact
     end
 
     def self.workers=(workers)
@@ -131,7 +128,6 @@ module Ditty
           Components.migrations << component.migrations if component.respond_to?(:migrations)
           Components.seeders << component.seeder if component.respond_to?(:seeder)
           Components.workers.concat component.workers if component.respond_to?(:workers)
-
           nil
         end
       end
