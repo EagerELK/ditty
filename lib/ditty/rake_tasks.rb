@@ -2,23 +2,10 @@
 
 require 'rake'
 require 'rake/tasklib'
-require 'highline'
-require 'yaml'
 
 module Ditty
   class Tasks < ::Rake::TaskLib
     include ::Rake::DSL if defined?(::Rake::DSL)
-
-    CONFIG_PATH = File.expand_path('./config/config.yml')
-
-    POSTGRES_PACKAGES = [
-      'postgresql-common',
-      'postgresql-9.5',
-      'postgresql-client-9.5',
-      'postgresql-contrib-9.5',
-      'postgresql-9.5-plv8',
-    ]
-
 
     def install_tasks
       namespace :ditty do
