@@ -45,9 +45,9 @@ module Ditty
     # not register itself correctly.
     def self.load_component(name)
       h = @components
-      unless component = h[name]
+      unless (component = h[name])
         require "ditty/components/#{name}"
-        raise ComponentError, "Component #{name} did not register itself correctly in Ditty::Components" unless component = h[name]
+        raise ComponentError, "Component #{name} did not register itself correctly in Ditty::Components" unless (component = h[name])
       end
       component
     end
