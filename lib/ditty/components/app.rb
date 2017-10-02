@@ -18,6 +18,7 @@ module Ditty
       Sequel::Model.plugin :timestamps, update_on_create: true
 
       DB.extension(:pagination)
+      require 'ditty/listener'
     end
 
     def self.migrations
