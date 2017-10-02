@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.summary       = 'Sinatra Based Application Framework'
   spec.description   = 'Sinatra Based Application Framework'
   spec.homepage      = 'https://github.com/eagerelk/ditty'
-  spec.license       = 'LGPLv3'
+  spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = 'exe'
