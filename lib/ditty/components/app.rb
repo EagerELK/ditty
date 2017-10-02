@@ -11,6 +11,15 @@ module Ditty
       require 'ditty/models/audit_log'
     end
 
+    def self.configure(_container)
+      require 'ditty/db' unless defined? ::DB
+      Sequel::Model.plugin :auto_validations
+      Sequel::Model.plugin :update_or_create
+      Sequel::Model.plugin :timestamps, update_on_create: true
+
+      DB.extension(:pagination)
+    end
+
     def self.migrations
       File.expand_path('../../../../migrate', __FILE__)
     end

@@ -15,7 +15,7 @@ describe Ditty::Roles, type: :controller do
     env 'rack.session', 'user_id' => user.id
   end
 
-  it_behaves_like 'an API interface', subject, {}
+  it_behaves_like 'an API interface', :role, {}
 end
 
 describe Ditty::Users, type: :controller do

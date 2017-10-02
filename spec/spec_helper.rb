@@ -5,6 +5,9 @@ require 'simplecov'
 SimpleCov.start
 
 require 'ditty'
+require 'sequel'
+DB = Sequel.connect(ENV['DATABASE_URL'])
+
 if ENV['DATABASE_URL'] == 'sqlite::memory:'
   folder = File.expand_path(File.dirname(__FILE__) + '/../migrate')
   Sequel.extension :migration
@@ -14,6 +17,7 @@ if ENV['DATABASE_URL'] == 'sqlite::memory:'
   require 'ditty/seed'
 end
 
+Ditty.component :app
 require 'rspec'
 require 'rack/test'
 require 'factory_girl'

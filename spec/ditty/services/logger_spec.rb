@@ -30,6 +30,7 @@ RSpec.describe Ditty::Services::Logger, type: :service do
     end
 
     it 'reads config from file and creates an array of loggers' do
+      allow(File).to receive(:'exist?').with(subject::CONFIG).and_return(true)
       allow(YAML).to receive(:load_file).and_return(config_file)
 
       expect(subject.instance.loggers.size).to eq 2
@@ -40,6 +41,7 @@ RSpec.describe Ditty::Services::Logger, type: :service do
 
   context 'send messages' do
     it 'receives message and passes it to the loggers' do
+      allow(File).to receive(:'exist?').with(subject::CONFIG).and_return(true)
       allow(YAML).to receive(:load_file).and_return(config_file)
       allow(Logger).to receive(:warn).with('Some message')
       allow(TestLogger).to receive(:warn).with('Some message')

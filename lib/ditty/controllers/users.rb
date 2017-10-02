@@ -25,7 +25,7 @@ module Ditty
         entity: User.new,
         identity: Identity.new
       }
-      haml :"#{view_location}/new", locals: locals, layout_opts: { locals: locals }
+      haml :"#{view_location}/new", locals: locals
     end
 
     # Create
