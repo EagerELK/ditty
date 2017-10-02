@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
 require 'ditty'
-require 'ditty/db' unless defined? ::DB
-require 'ditty/models/user'
-require 'ditty/models/role'
-require 'ditty/models/identity'
-require 'ditty/models/audit_log'
 
 module Ditty
   class App
+    def self.load_models
+      require 'ditty/models/user'
+      require 'ditty/models/role'
+      require 'ditty/models/identity'
+      require 'ditty/models/audit_log'
+    end
+
     def self.migrations
       File.expand_path('../../../../migrate', __FILE__)
     end
@@ -29,6 +31,8 @@ module Ditty
     end
 
     def self.navigation
+      load_models
+
       [
         {
           group: 'User Management',
@@ -45,6 +49,8 @@ module Ditty
 
     def self.seeder
       proc do
+        load_models
+
         ::Ditty::Role.find_or_create(name: 'super_admin')
         ::Ditty::Role.find_or_create(name: 'admin')
         user_role = ::Ditty::Role.find_or_create(name: 'user')
