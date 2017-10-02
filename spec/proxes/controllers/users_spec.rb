@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'spec_helper'
 require 'ditty/controllers/users'
 require 'support/crud_shared_examples'
@@ -35,7 +36,7 @@ describe Ditty::Users do
 
     before(:each) do
       # Log in
-      env 'rack.session', { 'user_id' => user.id }
+      env 'rack.session', 'user_id' => user.id
     end
 
     it_behaves_like 'a CRUD Controller', '/users'
@@ -63,7 +64,7 @@ describe Ditty::Users do
 
     before(:each) do
       # Log in
-      env 'rack.session', { 'user_id' => user.id }
+      env 'rack.session', 'user_id' => user.id
     end
 
     it_behaves_like 'a CRUD Controller', '/users'

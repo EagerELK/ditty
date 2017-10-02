@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'spec_helper'
 require 'ditty/services/logger'
 
@@ -15,8 +16,8 @@ RSpec.describe Ditty::Services::Logger, type: :service do
   config_file = [
     { 'name' => 'file', 'class' => 'Logger' },
     { 'name' => 'ES', 'class' => 'TestLogger', 'level' => 'WARN', options: {
-      'url' => 'http://logging.ditty.io:9200', 'log' => false}
-    }
+      'url' => 'http://logging.ditty.io:9200', 'log' => false
+    } }
   ]
 
   context 'initialize' do

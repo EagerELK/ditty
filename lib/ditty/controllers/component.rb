@@ -14,7 +14,7 @@ module Ditty
     set track_actions: false
 
     # List
-    get '/', provides: [:html, :json] do
+    get '/', provides: %i[html json] do
       authorize settings.model_class, :list
 
       actions = {}

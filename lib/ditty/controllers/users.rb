@@ -149,7 +149,7 @@ module Ditty
     end
 
     # Delete
-    delete '/:id', provides: [:html, :json] do |id|
+    delete '/:id', provides: %i[html json] do |id|
       entity = dataset[id.to_i]
       halt 404 unless entity
       authorize entity, :delete

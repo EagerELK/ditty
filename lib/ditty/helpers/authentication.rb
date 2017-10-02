@@ -38,7 +38,7 @@ module Ditty
         return false unless auth.provided? && auth.basic?
 
         identity = ::Ditty::Identity.find(username: auth.credentials[0])
-        identity = ::Ditty::Identity.find(username: URI.unescape(auth.credentials[0])) unless identity
+        identity ||= ::Ditty::Identity.find(username: URI.unescape(auth.credentials[0]))
         return false unless identity
         self.current_user = identity.user if identity.authenticate(auth.credentials[1])
       end

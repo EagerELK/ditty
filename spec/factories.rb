@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'ditty/models/user'
 require 'ditty/models/identity'
 require 'ditty/models/role'

@@ -9,7 +9,7 @@ module Ditty
     end
 
     def permitted_attributes
-      [:username, :password, :password_confirmation]
+      %i[username password password_confirmation]
     end
 
     class Scope < ApplicationPolicy::Scope

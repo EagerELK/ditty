@@ -29,7 +29,7 @@ module Ditty
     end
 
     def permitted_attributes
-      attribs = [:email, :name, :surname]
+      attribs = %i[email name surname]
       attribs << :role_id if user.super_admin?
       attribs
     end
