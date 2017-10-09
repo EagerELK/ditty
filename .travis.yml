@@ -7,7 +7,9 @@ rvm:
 gemfile: Gemfile.ci
 env:
   - DATABASE_URL="sqlite::memory:" RACK_ENV=test
-before_install: gem install bundler -v 1.12.5
+before_install:
+  - gem install bundler -v 1.12.5
+  - bundle exec rake ditty:prep
 addons:
   code_climate:
     repo_token: 289860573c6284a8e277de86848caba84d840be49e35f3601bcd672ab40d1e35
