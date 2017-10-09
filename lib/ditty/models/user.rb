@@ -7,7 +7,7 @@ require 'active_support/core_ext/object/blank'
 
 # Why not store this in Elasticsearch?
 module Ditty
-  class User < Sequel::Model
+  class User < ::Sequel::Model
     include ::Ditty::Base
 
     one_to_many :identity

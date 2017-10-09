@@ -3,7 +3,7 @@
 require 'ditty/models/base'
 
 module Ditty
-  class AuditLog < Sequel::Model
+  class AuditLog < ::Sequel::Model
     include ::Ditty::Base
     many_to_one :user
 

@@ -7,7 +7,7 @@ require 'active_support'
 require 'active_support/core_ext/object/blank'
 
 module Ditty
-  class Identity < Sequel::Model
+  class Identity < ::Sequel::Model
     include ::Ditty::Base
     many_to_one :user
 

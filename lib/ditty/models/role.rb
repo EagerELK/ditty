@@ -3,7 +3,7 @@
 require 'ditty/models/base'
 
 module Ditty
-  class Role < Sequel::Model
+  class Role < ::Sequel::Model
     include ::Ditty::Base
 
     many_to_many :users
