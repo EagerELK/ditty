@@ -5,8 +5,7 @@ require 'simplecov'
 SimpleCov.start
 
 require 'ditty'
-require 'sequel'
-DB = Sequel.connect(ENV['DATABASE_URL'])
+require 'ditty/db'
 
 if ENV['DATABASE_URL'] == 'sqlite::memory:'
   folder = File.expand_path(File.dirname(__FILE__) + '/../migrate')
