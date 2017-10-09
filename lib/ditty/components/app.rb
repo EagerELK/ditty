@@ -4,7 +4,10 @@ require 'ditty'
 
 module Ditty
   class App
-    def self.load_models
+    def self.load
+      controllers = File.expand_path('../../controllers', __FILE__)
+      Dir.glob("#{controllers}/*.rb").each { |f| require f }
+
       require 'ditty/models/user'
       require 'ditty/models/role'
       require 'ditty/models/identity'
@@ -25,8 +28,7 @@ module Ditty
     end
 
     def self.routes
-      controllers = File.expand_path('../../controllers', __FILE__)
-      Dir.glob("#{controllers}/*.rb").each { |f| require f }
+      load
       {
         '/' => ::Ditty::Main,
         '/users' => ::Ditty::Users,
@@ -36,7 +38,7 @@ module Ditty
     end
 
     def self.navigation
-      load_models
+      load
 
       [
         {
@@ -54,7 +56,7 @@ module Ditty
 
     def self.seeder
       proc do
-        load_models
+        load
 
         ::Ditty::Role.find_or_create(name: 'super_admin')
         ::Ditty::Role.find_or_create(name: 'admin')
