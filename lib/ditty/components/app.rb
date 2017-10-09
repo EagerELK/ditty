@@ -13,11 +13,6 @@ module Ditty
 
     def self.configure(_container)
       require 'ditty/db' unless defined? ::DB
-      Sequel::Model.plugin :auto_validations
-      Sequel::Model.plugin :update_or_create
-      Sequel::Model.plugin :timestamps, update_on_create: true
-
-      DB.extension(:pagination)
       require 'ditty/listener'
     end
 
