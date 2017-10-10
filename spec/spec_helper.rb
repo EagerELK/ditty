@@ -6,6 +6,12 @@ SimpleCov.start
 
 require 'ditty'
 require 'ditty/db'
+require 'rspec'
+require 'rack/test'
+require 'factory_girl'
+require 'database_cleaner'
+require 'timecop'
+
 
 if ENV['DATABASE_URL'] == 'sqlite::memory:'
   folder = File.expand_path(File.dirname(__FILE__) + '/../migrate')
@@ -17,12 +23,6 @@ if ENV['DATABASE_URL'] == 'sqlite::memory:'
 end
 
 Ditty.component :app
-require 'rspec'
-require 'rack/test'
-require 'factory_girl'
-require 'database_cleaner'
-require 'timecop'
-
 RSpec.configure do |config|
   config.include Rack::Test::Methods
   config.include FactoryGirl::Syntax::Methods
