@@ -33,6 +33,8 @@ module Ditty
           ::Ditty::Components.migrations.each do |path|
             FileUtils.cp_r "#{path}/.", 'migrations'
           end
+          puts 'Migrations added'
+          Dir.foreach('migrations').sort.each { |x| puts x if File.file?("migrations/#{x}") }
         end
 
         desc 'Migrate Ditty database to latest version'
