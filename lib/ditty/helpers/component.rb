@@ -9,7 +9,7 @@ module Ditty
       include ActiveSupport::Inflector
 
       def dataset
-        filtered(policy_scope(settings.model_class))
+        search(filtered(policy_scope(settings.model_class)))
       end
 
       def list
@@ -43,6 +43,10 @@ module Ditty
         self.class.const_defined?('FILTERS') ? self.class::FILTERS : []
       end
 
+      def searchable_fields
+        self.class.const_defined?('SEARCHABLE') ? self.class::SEARCHABLE : []
+      end
+
       def filtered(dataset)
         filters.each do |filter|
           next unless params[filter[:name].to_s]
@@ -57,6 +61,24 @@ module Ditty
         return dataset if value == '' || value.nil?
         value = value.send(filter[:modifier]) if filter[:modifier]
         dataset.where(filter[:field].to_sym => value)
+      end
+
+      def search(dataset)
+        return dataset if params['q'] == '' || params['q'].nil?
+
+        searchable_fields.each do |field|
+          dataset = if dataset.respond_to?(:or)
+                      dataset.or(search_condition(field))
+                    else
+                      dataset.where(search_condition(field))
+                    end
+        end
+
+        dataset
+      end
+
+      def search_condition(field)
+        Sequel.ilike(field.to_sym, "%#{params[:q]}%")
       end
     end
   end
