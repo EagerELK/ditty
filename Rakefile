@@ -14,3 +14,7 @@ begin
 rescue LoadError => err
   puts err
 end
+
+task :lint do
+  sh 'BUNDLE_GEMFILE=Gemfile.ci bundle exec rubocop'
+end
