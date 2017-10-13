@@ -45,6 +45,7 @@ module Ditty
           group: 'User Management',
           order: 10,
           icon: 'lock',
+          target: ::Ditty::User,
           items: [
             { order: 10, link: '/users/', text: 'Users', target: ::Ditty::User, icon: 'user' },
             { order: 20, link: '/roles/', text: 'Roles', target: ::Ditty::Role, icon: 'check-square' },

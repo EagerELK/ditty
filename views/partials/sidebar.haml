@@ -15,10 +15,11 @@
                 %span.fa.arrow
               %ul.nav.nav-second-level
                 - item[:items].each do |sub_item|
-                  %li
-                    %a{ href: "#{settings.map_path}#{sub_item[:link]}" }
-                      %i.fa.fa-fw{ class: "fa-#{sub_item[:icon]}" }
-                      = sub_item[:text]
+                  - if sub_item[:target].nil? || policy(sub_item[:target]).list?
+                    %li
+                      %a{ href: "#{settings.map_path}#{sub_item[:link]}" }
+                        %i.fa.fa-fw{ class: "fa-#{sub_item[:icon]}" }
+                        = sub_item[:text]
           - else
             %li
               %a{ href: "#{settings.map_path}#{item[:link]}" }
