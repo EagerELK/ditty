@@ -9,7 +9,7 @@ class DummyComponent < Ditty::Component
   set model_class: Ditty::User
 
   FILTERS = [{ name: :email }]
-  SEARCHABLE = [:email, :name]
+  SEARCHABLE = %i[name email]
 end
 
 describe Ditty::Helpers::Component do
@@ -44,6 +44,7 @@ describe Ditty::Helpers::Component do
   before(:each) do
     env 'rack.session', 'user_id' => user.id
     create(:user, email: 'bruce@wayne.com')
+    create(:user, email: 'tony@stark.com')
   end
 
   describe 'filters' do

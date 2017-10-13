@@ -66,19 +66,8 @@ module Ditty
       def search(dataset)
         return dataset if params['q'] == '' || params['q'].nil?
 
-        searchable_fields.each do |field|
-          dataset = if dataset.respond_to?(:or)
-                      dataset.or(search_condition(field))
-                    else
-                      dataset.where(search_condition(field))
-                    end
-        end
-
-        dataset
-      end
-
-      def search_condition(field)
-        Sequel.ilike(field.to_sym, "%#{params[:q]}%")
+        filters = searchable_fields.map { |f| Sequel.ilike(f.to_sym, "%#{params[:q]}%") }
+        dataset.where Sequel.|(*filters)
       end
     end
   end
