@@ -1,4 +1,4 @@
-Metrics/LineLength:
+jetrics/LineLength:
   Max: 120
 
 Style/Documentation:
@@ -21,6 +21,10 @@ Metrics/AbcSize:
   Enabled: false
 
 Style/EachWithObject:
+  Enabled: false
+
+# Integer is supported only in 2.4.0 <
+Lint/UnifiedInteger:
   Enabled: false
 
 Metrics/CyclomaticComplexity:
