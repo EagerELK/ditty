@@ -13,3 +13,28 @@ Style/LeadingCommentSpace:
 
 AllCops:
   TargetRubyVersion: 2.2
+
+Style/MethodMissing:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Style/EachWithObject:
+  Enabled: false
+
+# Integer is supported only in 2.4.0 <
+Lint/UnifiedInteger:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Max: 8
+
+Metrics/MethodLength:
+  Max: 15
+
+Metrics/BlockLength:
+  Max: 50
+
+Metrics/ClassLength:
+  Max: 150
