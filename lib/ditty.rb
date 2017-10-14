@@ -79,7 +79,7 @@ module Ditty
       components.inject([]) do |memo, comp|
         memo.concat comp[1].navigation if comp[1].respond_to?(:navigation)
         memo
-      end
+      end.sort_by { |v| v[:order] }
     end
 
     def self.migrations
@@ -96,7 +96,7 @@ module Ditty
 
     def self.workers
       components.inject([]) do |memo, comp|
-        memo.concat comp.workers if comp.respond_to?(:workers)
+        memo.concat comp[1].workers if comp[1].respond_to?(:workers)
         memo
       end
     end
