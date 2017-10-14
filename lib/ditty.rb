@@ -88,6 +88,12 @@ module Ditty
       end.compact
     end
 
+    def self.public_folder
+      components.map do |_name, comp|
+        comp.public_folder if comp.respond_to?(:public_folder)
+      end.compact
+    end
+
     def self.seeders
       components.map do |_name, comp|
         comp.seeder if comp.respond_to?(:seeder)

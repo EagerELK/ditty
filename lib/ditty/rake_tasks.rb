@@ -23,17 +23,23 @@ module Ditty
           require 'ditty/seed'
         end
 
-        desc 'Prepare Ditty migrations'
+        desc 'Prepare Ditty'
         task :prep do
           puts 'Prepare the Ditty folders'
           Dir.mkdir 'pids' unless File.exist?('pids')
+
+          puts 'Preparing the Ditty public folder'
+          Dir.mkdir 'public' unless File.exist?('public')
+          ::Ditty::Components.public_folder.each do |path|
+            FileUtils.cp_r "#{path}/.", 'public'
+          end
 
           puts 'Preparing the Ditty migrations folder'
           Dir.mkdir 'migrations' unless File.exist?('migrations')
           ::Ditty::Components.migrations.each do |path|
             FileUtils.cp_r "#{path}/.", 'migrations'
           end
-          puts 'Migrations added'
+          puts 'Migrations added:'
           Dir.foreach('migrations').sort.each { |x| puts x if File.file?("migrations/#{x}") }
         end
 
