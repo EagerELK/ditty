@@ -22,6 +22,16 @@ module Ditty
         }
       end
 
+      def filter_control(filter, opts = {})
+        meth = "#{filter[:name]}_options".to_sym
+        return unless respond_to? meth
+        haml :'partials/filter_control', locals: {
+          name: filter[:name],
+          label: opts[:label] || filter[:name].titlecase,
+          options: send(meth)
+        }
+      end
+
       def flash_messages(key = :flash)
         return '' if flash(key).empty?
         id = (key == :flash ? 'flash' : "flash_#{key}")

@@ -1,0 +1,21 @@
+- if self.class.const_defined?(:SEARCHABLE) || self.class.const_defined?(:FILTERS)
+  %form{ method: 'get', action: base_path }
+    - if self.class.const_defined?(:SEARCHABLE)
+      .form-group
+        .input-group
+          %input.form-control{ name: 'q', type: 'text', placeholder: 'Search...', value: params['q'] }
+          .input-group-btn
+            %button.btn.btn-primary{ type: 'submit' }
+              %span.fa.fa-search
+          - if self.class.const_defined? :FILTERS
+            .input-group-btn
+              %button.btn.btn-default{ type: 'button', :'data-toggle' => 'collapse', :'data-target' => '#filter-form', :'aria-expanded' => 'false', :'aria-controls' => '#filter-form'}
+                %span.fa.fa-arrow-down
+
+    - if self.class.const_defined?(:FILTERS)
+      #filter-form{ class: self.class.const_defined?(:SEARCHABLE) ? 'collapse' : '' }
+        .form-inline
+          - FILTERS.each do |filter|
+            = filter_control(filter)
+          - unless self.class.const_defined?(:SEARCHABLE)
+            %button.btn.btn-default{ type: 'submit'} Go

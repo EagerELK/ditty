@@ -1,0 +1,6 @@
+.form-group
+  %label{ for: "filter_#{name}" }= label
+  %select.form-control{ name: name, id: "filter_#{name}" }
+    %option{ value: '' } -- Select One --
+    - options.each do |k,v| k ||= v;  v ||= k;
+      %option{ value: k, selected: (params[name].eql? k)}= v
