@@ -53,7 +53,7 @@ module Ditty
           require 'logger'
 
           folder = 'migrations'
-          ::DB.loggers << Logger.new($stdout)
+          ::DB.loggers << Logger.new($stdout) if defined? :DB
 
           desc 'Check if the migration is current'
           task :check do
