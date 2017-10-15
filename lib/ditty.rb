@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'ditty/version'
+require 'ditty/services/logger'
 
 module Ditty
   class ComponentError < StandardError; end
@@ -57,7 +58,7 @@ module Ditty
     #
     #   Ditty::Components.register_component(:component_name, ComponentModule)
     def self.register_component(name, mod)
-      puts "Registering #{mod} as #{name}"
+      Ditty::Services::Logger.instance.info "Registering #{mod} as #{name}"
       @components[name] = mod
     end
 

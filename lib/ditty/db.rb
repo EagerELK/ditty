@@ -3,12 +3,16 @@
 require 'sequel'
 require 'ditty/services/logger'
 
+if ENV['DATABASE_URL'].nil?
+  Ditty::Services::Logger.instance.error 'No database connection set up'
+  return
+end
+
 # Delete DATABASE_URL from the environment, so it isn't accidently
 # passed to subprocesses.  DATABASE_URL may contain passwords.
 DB = Sequel.connect(ENV['RACK_ENV'] == 'production' ? ENV.delete('DATABASE_URL') : ENV['DATABASE_URL'])
 
-log_level = (ENV['SEQUEL_LOGGING_LEVEL'] || :debug).to_sym
-DB.sql_log_level = log_level
+DB.sql_log_level = (ENV['SEQUEL_LOGGING_LEVEL'] || :debug).to_sym
 DB.loggers << Ditty::Services::Logger.instance
 
 Sequel::Model.plugin :validation_helpers
