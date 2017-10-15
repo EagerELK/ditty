@@ -50,35 +50,39 @@ module Ditty
         end
 
         namespace :migrate do
+          require 'logger'
+
           folder = 'migrations'
+          ::DB.loggers << Logger.new($stdout)
 
           desc 'Check if the migration is current'
           task :check do
-            require 'sequel'
             puts 'Running Ditty Migrations check'
             ::Sequel.extension :migration
-            ::Sequel::Migrator.check_current(::DB, folder)
+            begin
+              ::Sequel::Migrator.check_current(::DB, folder)
+              puts 'Migrations up to date'
+            rescue Sequel::Migrator::Error => _e
+              puts 'Migrations NOT up to date'
+            end
           end
 
           desc 'Migrate Ditty database to latest version'
           task :up do
-            require 'sequel'
             puts 'Running Ditty Migrations up'
             ::Sequel.extension :migration
             ::Sequel::Migrator.apply(::DB, folder)
           end
 
-          desc 'Roll back the Ditty database'
+          desc 'Remove the whole Ditty database. You WILL lose data'
           task :down do
-            require 'sequel'
             puts 'Running Ditty Migrations down'
             ::Sequel.extension :migration
             ::Sequel::Migrator.apply(::DB, folder, 0)
           end
 
-          desc 'Reset the Ditty database'
+          desc 'Reset the Ditty database. You WILL lose data'
           task :bounce do
-            require 'sequel'
             puts 'Running Ditty Migrations bounce'
             ::Sequel.extension :migration
             ::Sequel::Migrator.apply(::DB, folder, 0)
