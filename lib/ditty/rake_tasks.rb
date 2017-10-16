@@ -2,6 +2,7 @@
 
 require 'rake'
 require 'rake/tasklib'
+require 'ditty/db'
 
 module Ditty
   class Tasks < ::Rake::TaskLib
