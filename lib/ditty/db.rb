@@ -5,7 +5,7 @@ require 'ditty/services/logger'
 
 if ENV['DATABASE_URL'].nil?
   Ditty::Services::Logger.instance.error 'No database connection set up'
-  return
+  exit(false)
 end
 
 # Delete DATABASE_URL from the environment, so it isn't accidently
