@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'timecop'
 
   spec.add_dependency 'activesupport', '>= 3'
-  spec.add_dependency 'bcrypt', '~> 3.0'
+  spec.add_dependency 'bcrypt', '~> 3.1'
   spec.add_dependency 'haml', '~> 5.0'
   spec.add_dependency 'logger', '~> 1.0'
   spec.add_dependency 'omniauth', '~> 1.0'
