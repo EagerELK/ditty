@@ -8,6 +8,21 @@ module Ditty
   class AuditLogs < Ditty::Component
     set model_class: AuditLog
 
+    FILTERS = [
+      { name: :user, field: 'user.email' },
+      { name: :action }
+    ].freeze
+
+    helpers do
+      def user_options
+        policy_scope(::Ditty::User).as_hash(:email, :email)
+      end
+
+      def action_options
+        policy_scope(::Ditty::AuditLog).as_hash(:action, :action)
+      end
+    end
+
     def find_template(views, name, engine, &block)
       super(views, name, engine, &block) # Root
       super(::Ditty::App.view_folder, name, engine, &block) # Ditty
