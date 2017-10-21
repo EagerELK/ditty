@@ -87,7 +87,7 @@ module Ditty
 
     # Update
     put '/:id' do |id|
-      entity = dataset[id.to_i]
+      entity = dataset.first(settings.model_class.primary_key => id)
       halt 404 unless entity
       authorize entity, :update
 
@@ -105,7 +105,7 @@ module Ditty
         respond_to do |format|
           format.html do
             flash[:success] = "#{heading} Updated"
-            redirect "/users/#{entity.id}"
+            redirect back
           end
           format.json do
             content_type 'application/json'
@@ -127,7 +127,7 @@ module Ditty
     end
 
     put '/:id/identity' do |id|
-      entity = dataset[id.to_i]
+      entity = dataset.first(settings.model_class.primary_key => id)
       halt 404 unless entity
       authorize entity, :update
 
@@ -151,7 +151,7 @@ module Ditty
         log_action("#{dehumanized}_update_password".to_sym) if settings.track_actions
         flash[:success] = 'Password Updated'
         redirect back
-      elsif current_user.super_admin? && current_user.id != id
+      elsif current_user.super_admin? && current_user.id != id.to_i
         haml :"#{view_location}/display", locals: { entity: entity, identity: identity, title: heading }
       else
         haml :"#{view_location}/profile", locals: { entity: entity, identity: identity, title: heading }
@@ -160,7 +160,7 @@ module Ditty
 
     # Delete
     delete '/:id', provides: %i[html json] do |id|
-      entity = dataset[id.to_i]
+      entity = dataset.first(settings.model_class.primary_key => id)
       halt 404 unless entity
       authorize entity, :delete
 
