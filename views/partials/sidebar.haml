@@ -30,7 +30,8 @@
         %a{ href: "#{settings.map_path}/auth/identity" }
           %i.fa.fa-user.fa-fw
           Log In
-      %li
-        %a{ href: "#{settings.map_path}/auth/identity/register" }
-          %i.fa.fa-pencil-square-o.fa-fw
-          Register
+      - if policy(::Ditty::Identity).register?
+        %li
+          %a{ href: "#{settings.map_path}/auth/identity/register" }
+            %i.fa.fa-pencil-square-o.fa-fw
+            Register

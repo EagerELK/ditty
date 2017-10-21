@@ -24,10 +24,6 @@ module Ditty
       create?
     end
 
-    def register?
-      true
-    end
-
     def permitted_attributes
       attribs = %i[email name surname]
       attribs << :role_id if user.super_admin?

@@ -45,12 +45,16 @@ module Ditty
 
     # Register Page
     get '/auth/identity/register' do
+      authorize ::Ditty::Identity, :register
+
       identity = Identity.new
       haml :'identity/register', locals: { title: 'Register', identity: identity }
     end
 
     # Register Action
     post '/auth/identity/new' do
+      authorize ::Ditty::Identity, :register
+
       identity = Identity.new(params['identity'])
       if identity.valid? && identity.save
         user = User.find_or_create(email: identity.username)
