@@ -27,7 +27,7 @@ module Ditty
         return unless respond_to? meth
         haml :'partials/filter_control', locals: {
           name: filter[:name],
-          label: opts[:label] || filter[:name].titlecase,
+          label: opts[:label] || filter[:name].to_s.titlecase,
           options: send(meth)
         }
       end
