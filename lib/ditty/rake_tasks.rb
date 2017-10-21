@@ -54,10 +54,10 @@ module Ditty
           require 'logger'
 
           folder = 'migrations'
-          ::DB.loggers << Logger.new($stdout) if defined? :DB
 
           desc 'Check if the migration is current'
           task :check do
+            ::DB.loggers << Logger.new($stdout)
             puts 'Running Ditty Migrations check'
             ::Sequel.extension :migration
             begin
@@ -70,6 +70,7 @@ module Ditty
 
           desc 'Migrate Ditty database to latest version'
           task :up do
+            ::DB.loggers << Logger.new($stdout)
             puts 'Running Ditty Migrations up'
             ::Sequel.extension :migration
             ::Sequel::Migrator.apply(::DB, folder)
@@ -77,6 +78,7 @@ module Ditty
 
           desc 'Remove the whole Ditty database. You WILL lose data'
           task :down do
+            ::DB.loggers << Logger.new($stdout)
             puts 'Running Ditty Migrations down'
             ::Sequel.extension :migration
             ::Sequel::Migrator.apply(::DB, folder, 0)
@@ -84,6 +86,7 @@ module Ditty
 
           desc 'Reset the Ditty database. You WILL lose data'
           task :bounce do
+            ::DB.loggers << Logger.new($stdout)
             puts 'Running Ditty Migrations bounce'
             ::Sequel.extension :migration
             ::Sequel::Migrator.apply(::DB, folder, 0)
