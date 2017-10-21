@@ -46,7 +46,16 @@ module Ditty
       if password_required
         validates_presence :password
         validates_presence :password_confirmation
-        validates_min_length 8, :password
+        validates_format(
+          # 1 Uppercase
+          # 1 lowercase
+          # 1 Special Character
+          # 1 Number
+          # At least 8 characters
+          %r[\A(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#&$*)(}{%^=_+|\\:";'<>,.\-\/?\[\]])(?=.*[0-9]).{8,}\Z],
+          :password,
+          message: 'is not strong enough'
+        )
       end
 
       errors.add(:password_confirmation, 'must match password') if !password.blank? && password != password_confirmation

@@ -30,8 +30,8 @@ describe Ditty::Users, type: :controller do
   params = {
     identity: {
       username: 'test-user@abc.abc',
-      password: '123456789',
-      password_confirmation: '123456789'
+      password: 'som3Password!',
+      password_confirmation: 'som3Password!'
     }
   }
 
