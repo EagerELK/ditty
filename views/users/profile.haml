@@ -20,6 +20,15 @@
         %p.description
           %label Signed up:
           = entity.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        .row
+          .col-md-6
+            - if policy(entity).update?
+              %a.btn.btn-default{ href: "#{base_path}/#{entity.id}/edit" } Edit
+          .col-md-6.text-right
+            - if policy(entity).delete?
+              %form{ method: 'post', action: "#{base_path}/#{entity.id}" }
+                %input{ name: '_method', value: 'DELETE', type: 'hidden' }
+                %button.btn.btn-warning{ type: 'submit' } Delete
   .col-md-2
 
 .row

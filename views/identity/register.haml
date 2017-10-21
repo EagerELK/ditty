@@ -3,10 +3,10 @@
   .col-md-8
     .panel.panel-default
       .panel-heading
-        %h4 Ditty Registration
+        %h4 Register
       .panel-body
         %form.form-horizontal{ method: 'post', action: "#{settings.map_path}/auth/identity/new" }
-          = form_control(:username, identity, label: 'Email', placeholder: 'Your email address')
+          = form_control(:username, identity, label: 'Username', placeholder: 'Your username')
           = form_control(:password, identity, label: 'Password', type: :password)
           = form_control(:password_confirmation, identity, label: 'Confirm Password', type: :password)
 

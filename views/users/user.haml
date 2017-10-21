@@ -1,3 +1,4 @@
 = form_control(:name, user)
 = form_control(:surname, user)
-= form_control(:role_id, user, type: 'select', options: Ditty::Role.as_hash(:id, :name), name: 'user[role_id][]', field: :roles, multiple: true)
+- if policy(user).permitted_attributes.include? :role_id
+  = form_control(:role_id, user, type: 'select', options: Ditty::Role.as_hash(:id, :name), name: 'user[role_id][]', field: :roles, multiple: true)

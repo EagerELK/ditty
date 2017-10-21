@@ -23,7 +23,8 @@
 
         .row
           .col-md-6
-            %a.btn.btn-default{ href: "#{base_path}/#{entity.id}/edit" } Edit
+            - if policy(entity).update?
+              %a.btn.btn-default{ href: "#{base_path}/#{entity.id}/edit" } Edit
           .col-md-6.text-right
             - if policy(entity).delete?
               %form{ method: 'post', action: "#{base_path}/#{entity.id}" }

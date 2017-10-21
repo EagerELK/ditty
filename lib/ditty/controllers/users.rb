@@ -95,9 +95,12 @@ module Ditty
       roles  = values.delete('role_id')
       entity.set values
       if entity.valid? && entity.save
-        entity.remove_all_roles
-        roles.each { |role_id| entity.add_role(role_id) } if roles
-        entity.check_roles
+        if roles
+          entity.remove_all_roles
+          roles.each { |role_id| entity.add_role(role_id) }
+          entity.check_roles
+        end
+
         log_action("#{dehumanized}_update".to_sym) if settings.track_actions
         respond_to do |format|
           format.html do
@@ -140,8 +143,8 @@ module Ditty
       if identity.valid? && identity.save
         log_action("#{dehumanized}_update_password".to_sym) if settings.track_actions
         flash[:success] = 'Password Updated'
-        redirect "#{base_path}/#{entity.id}"
-      elsif current_user.super_admin?
+        redirect back
+      elsif current_user.super_admin? && current_user.id != id
         haml :"#{view_location}/display", locals: { entity: entity, identity: identity, title: heading }
       else
         haml :"#{view_location}/profile", locals: { entity: entity, identity: identity, title: heading }
