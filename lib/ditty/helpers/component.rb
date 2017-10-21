@@ -49,23 +49,42 @@ module Ditty
 
       def filtered(dataset)
         filters.each do |filter|
-          next unless params[filter[:name].to_s]
+          next if [nil, ''].include? params[filter[:name].to_s]
           filter[:field] ||= filter[:name]
+          filter[:modifier] ||= :to_s
           dataset = apply_filter(dataset, filter)
         end
         dataset
       end
 
       def apply_filter(dataset, filter)
-        value = params[filter[:name].to_s]
-        return dataset if value == '' || value.nil?
-        value = value.send(filter[:modifier]) if filter[:modifier]
-        dataset.where(filter[:field].to_sym => value)
+        value = params[filter[:name].to_s].send(filter[:modifier])
+        return dataset.where(filter[:field] => value) unless filter[:field].to_s.include? '.'
+
+        dataset.where(filter_field(filter) => filter_value(filter))
+      end
+
+      def filter_field(filter)
+        filter[:field].to_s.split('.').first.to_sym
+      end
+
+      def filter_value(filter)
+        field = filter[:field].to_s.split('.').last.to_sym
+        assoc = filter_association(filter)
+        value = params[filter[:name].to_s].send(filter[:modifier])
+        value = assoc.associated_dataset.first(field => value)
+        value.nil? ? assoc.associated_class.new : value
+      end
+
+      def filter_association(filter)
+        assoc = filter[:field].to_s.split('.').first.to_sym
+        assoc = settings.model_class.association_reflection(assoc)
+        raise "Unknown association #{assoc}" if assoc.nil?
+        assoc
       end
 
       def search(dataset)
-        return dataset if params['q'] == '' || params['q'].nil?
-        return dataset if searchable_fields == []
+        return dataset if ['', nil].include?(params['q']) || searchable_fields == []
 
         filters = searchable_fields.map { |f| Sequel.ilike(f.to_sym, "%#{params[:q]}%") }
         dataset.where Sequel.|(*filters)
