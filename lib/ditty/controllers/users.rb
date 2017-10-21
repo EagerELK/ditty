@@ -115,7 +115,14 @@ module Ditty
           end
         end
       else
-        haml :"#{view_location}/edit", locals: { entity: entity, title: heading(:edit) }
+        respond_to do |format|
+          format.html do
+            haml :"#{view_location}/edit", locals: { entity: entity, title: heading(:edit) }
+          end
+          format.json do
+            400
+          end
+        end
       end
     end
 
