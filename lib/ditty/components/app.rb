@@ -39,19 +39,19 @@ module Ditty
 
     def self.navigation
       load
-
       [
         {
-          group: 'User Management',
-          order: 10,
-          icon: 'lock',
-          target: ::Ditty::User,
-          items: [
-            { order: 10, link: '/users/', text: 'Users', target: ::Ditty::User, icon: 'user' },
-            { order: 20, link: '/roles/', text: 'Roles', target: ::Ditty::Role, icon: 'check-square' },
-            { order: 30, link: '/audit-logs/', text: 'Audit Logs', target: ::Ditty::AuditLog, icon: 'history' }
-          ]
+          group: 'User Management', order: 10, icon: 'lock', target: ::Ditty::User,
+          items: items
         }
+      ]
+    end
+
+    def items
+      [
+        { order: 10, link: '/users/', text: 'Users', target: ::Ditty::User, icon: 'user' },
+        { order: 20, link: '/roles/', text: 'Roles', target: ::Ditty::Role, icon: 'check-square' },
+        { order: 30, link: '/audit-logs/', text: 'Audit Logs', target: ::Ditty::AuditLog, icon: 'history' }
       ]
     end
 

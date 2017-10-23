@@ -12,4 +12,5 @@ begin
   RSpec::Core::RakeTask.new(:spec)
   task default: :spec
 rescue LoadError
+  puts 'Fail to load lib depedencies'
 end

@@ -27,7 +27,7 @@ module Ditty
       end
 
       def method_missing(method, *args, &block)
-        loggers.each { |logger| logger.send(method, *args, &block) }
+        loggers.each { |logger| logger.send(method, *args, &block) } || super
       end
 
       def respond_to_missing?(method, _include_private = false)
