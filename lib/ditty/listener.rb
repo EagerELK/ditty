@@ -8,14 +8,18 @@ module Ditty
 
     def method_missing(method, *args)
       vals = { action: method }
-      return unless args[0].is_a? Hash
-      vals[:user] = args[0][:user] if args[0] && args[0].key?(:user)
-      vals[:details] = args[0][:details] if args[0] && args[0].key?(:details)
+      return super unless args[0].is_a? Hash
+      vals[:user] = args[0][:user] if args_by_key(args, :user)
+      vals[:details] = args[0][:details] if args_by_key(args, :details)
       @mutex.synchronize { AuditLog.create vals }
     end
 
     def respond_to_missing?(_method, _include_private = false)
       true
+    end
+
+    def args_by_key?(args, key)
+      args[0] && args[0].key?(key)
     end
   end
 end

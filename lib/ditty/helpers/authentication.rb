@@ -36,9 +36,9 @@ module Ditty
       def check_basic(request)
         auth = Rack::Auth::Basic::Request.new(request.env)
         return false unless auth.provided? && auth.basic?
-
-        identity = ::Ditty::Identity.find(username: auth.credentials[0])
-        identity ||= ::Ditty::Identity.find(username: CGI.unescape(auth.credentials[0]))
+        username = auth.credentials[0]
+        identity = ::Ditty::Identity.find(username: username)
+        identity ||= ::Ditty::Identity.find(username: CGI.unescape(username))
         return false unless identity
         self.current_user = identity.user if identity.authenticate(auth.credentials[1])
       end

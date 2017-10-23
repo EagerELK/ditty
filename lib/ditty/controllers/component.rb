@@ -13,11 +13,11 @@ module Ditty
     set view_location: nil
     set track_actions: false
 
+    actions = {}
     # List
     get '/', provides: %i[html json] do
       authorize settings.model_class, :list
 
-      actions = {}
       actions["#{base_path}/new"] = "New #{heading}" if policy(settings.model_class).create?
 
       log_action("#{dehumanized}_list".to_sym) if settings.track_actions
@@ -28,12 +28,8 @@ module Ditty
         end
         format.json do
           # TODO: Add links defined by actions (New #{heading})
-          json(
-            'items' => list.map(&:for_json),
-            'page' => params[:page],
-            'count' => list.count,
-            'total' => dataset.count
-          )
+          json('items' => list.map(&:for_json), 'page' => params[:page],
+               'count' => list.count, 'total' => dataset.count)
         end
       end
     end
@@ -41,7 +37,6 @@ module Ditty
     # Create Form
     get '/new' do
       authorize settings.model_class, :create
-
       entity = settings.model_class.new(permitted_attributes(settings.model_class, :create))
       haml :"#{view_location}/new", locals: { entity: entity, title: heading(:new) }
     end
@@ -79,7 +74,6 @@ module Ditty
       halt 404 unless entity
       authorize entity, :read
 
-      actions = {}
       actions["#{base_path}/#{entity.id}/edit"] = "Edit #{heading}" if policy(entity).update?
 
       log_action("#{dehumanized}_read".to_sym) if settings.track_actions
@@ -109,9 +103,7 @@ module Ditty
       entity = dataset.first(settings.model_class.primary_key => id)
       halt 404 unless entity
       authorize entity, :update
-
       entity.set(permitted_attributes(settings.model_class, :update))
-
       success = entity.valid? && entity.save
       log_action("#{dehumanized}_update".to_sym) if success && settings.track_actions
       if success
@@ -130,9 +122,7 @@ module Ditty
           format.html do
             haml :"#{view_location}/edit", locals: { entity: entity, title: heading(:edit) }
           end
-          format.json do
-            400
-          end
+          format.json { 400 }
         end
       end
     end

@@ -8,8 +8,8 @@ require 'ditty/models/user'
 class DummyComponent < Ditty::Component
   set model_class: Ditty::User
 
-  FILTERS = [{ name: :email }]
-  SEARCHABLE = %i[name email]
+  FILTERS = [{ name: :email }].freeze
+  SEARCHABLE = %i[name email].freeze
 end
 
 describe Ditty::Helpers::Component do
