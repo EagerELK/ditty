@@ -20,4 +20,4 @@ module Ditty
   end
 end
 
-Wisper.subscribe(Ditty::Listener.new)
+Wisper.subscribe(Ditty::Listener.new) unless ENV['RACK_ENV'] == 'test'
