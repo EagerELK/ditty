@@ -32,13 +32,13 @@ module Ditty
           puts 'Preparing the Ditty public folder'
           Dir.mkdir 'public' unless File.exist?('public')
           ::Ditty::Components.public_folder.each do |path|
-            FileUtils.cp_r "#{path}/.", 'public'
+            FileUtils.cp_r "#{path}/.", 'public' unless File.expand_path("#{path}/.").eql? File.expand_path('public')
           end
 
           puts 'Preparing the Ditty migrations folder'
           Dir.mkdir 'migrations' unless File.exist?('migrations')
           ::Ditty::Components.migrations.each do |path|
-            FileUtils.cp_r "#{path}/.", 'migrations'
+            FileUtils.cp_r "#{path}/.", 'migrations' unless File.expand_path("#{path}/.").eql? File.expand_path('migrations')
           end
           puts 'Migrations added:'
           Dir.foreach('migrations').sort.each { |x| puts x if File.file?("migrations/#{x}") }
