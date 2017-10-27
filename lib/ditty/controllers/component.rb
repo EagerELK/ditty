@@ -29,7 +29,7 @@ module Ditty
         format.json do
           # TODO: Add links defined by actions (New #{heading})
           json(
-            'items' => list.map(&:for_json),
+            'items' => list.all.map(&:for_json),
             'page' => params[:page],
             'count' => list.count,
             'total' => dataset.count
