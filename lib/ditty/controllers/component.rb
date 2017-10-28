@@ -63,11 +63,11 @@ module Ditty
           end
         end
         format.json do
-          headers 'Content-Type' => 'application/json'
+          content_type :json
           if success
             redirect "#{base_path}/#{entity.id}", 201
           else
-            400
+            [400, { errors: entity.errors }.to_json]
           end
         end
       end
@@ -131,7 +131,8 @@ module Ditty
             haml :"#{view_location}/edit", locals: { entity: entity, title: heading(:edit) }
           end
           format.json do
-            400
+            content_type :json
+            [400, { errors: entity.errors }.to_json]
           end
         end
       end
@@ -151,7 +152,7 @@ module Ditty
           redirect base_path.to_s
         end
         format.json do
-          content_type 'application/json'
+          content_type :json
           headers 'Location' => '/users'
           status 204
         end
