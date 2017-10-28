@@ -13,6 +13,10 @@ module Ditty
     set view_location: nil
     set track_actions: false
 
+    def read(id)
+      dataset.first(settings.model_class.primary_key => id)
+    end
+
     # List
     get '/', provides: %i[html json] do
       authorize settings.model_class, :list
@@ -75,7 +79,7 @@ module Ditty
 
     # Read
     get '/:id' do |id|
-      entity = dataset.first(settings.model_class.primary_key => id)
+      entity = read(id)
       halt 404 unless entity
       authorize entity, :read
 
@@ -97,7 +101,7 @@ module Ditty
 
     # Update Form
     get '/:id/edit' do |id|
-      entity = dataset.first(settings.model_class.primary_key => id)
+      entity = read(id)
       halt 404 unless entity
       authorize entity, :update
 
@@ -106,7 +110,7 @@ module Ditty
 
     # Update
     put '/:id' do |id|
-      entity = dataset.first(settings.model_class.primary_key => id)
+      entity = read(id)
       halt 404 unless entity
       authorize entity, :update
 
@@ -117,6 +121,7 @@ module Ditty
       if success
         respond_to do |format|
           format.html do
+            # TODO Ability to customize the return path and message?
             flash[:success] = "#{heading} Updated"
             redirect "#{base_path}/#{entity.id}"
           end
@@ -139,7 +144,7 @@ module Ditty
     end
 
     delete '/:id' do |id|
-      entity = dataset.first(settings.model_class.primary_key => id)
+      entity = read(id)
       halt 404 unless entity
       authorize entity, :delete
 
