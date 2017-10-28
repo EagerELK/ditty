@@ -59,13 +59,27 @@ module Ditty
     end
 
     error Helpers::NotAuthenticated do
-      flash[:warning] = 'Please log in first.'
-      redirect "#{settings.map_path}/auth/identity"
+      respond_to do |format|
+        format.html do
+          flash[:warning] = 'Please log in first.'
+          redirect "#{settings.map_path}/auth/identity"
+        end
+        format.json do
+          [401, { 'Content-Type' => 'text/json' }, ["{\"code\":#{401},\"errors\":[\"Not Authenticated\"]}"]]
+        end
+      end
     end
 
     error ::Pundit::NotAuthorizedError do
-      flash[:warning] = 'Please log in first.'
-      redirect "#{settings.map_path}/auth/identity"
+      respond_to do |format|
+        format.html do
+          flash[:warning] = 'Please log in first.'
+          redirect "#{settings.map_path}/auth/identity"
+        end
+        format.json do
+          [401, { 'Content-Type' => 'text/json' }, ["{\"code\":#{401},\"errors\":[\"Not Authorized\"]}"]]
+        end
+      end
     end
 
     before(/.*/) do
