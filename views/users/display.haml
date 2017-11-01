@@ -22,11 +22,14 @@
           = entity.created_at.strftime('%Y-%m-%d %H:%M:%S')
 
         .row
-          .col-md-6
-            - if policy(entity).update?
+          - if policy(entity).update?
+            .col-md-4
               %a.btn.btn-default{ href: "#{base_path}/#{entity.id}/edit" } Edit
-          .col-md-6.text-right
-            - if policy(entity).delete?
+          .col-md-4
+            %form{ method: 'post', action: "#{base_path}/#{entity.id}/token" }
+              %button.btn.btn-info{ type: 'submit' } Generate Token
+          - if policy(entity).delete?
+            .col-md-4.text-right
               %form{ method: 'post', action: "#{base_path}/#{entity.id}" }
                 %input{ name: '_method', value: 'DELETE', type: 'hidden' }
                 %button.btn.btn-warning{ type: 'submit' } Delete

@@ -62,7 +62,7 @@ module Ditty
             redirect "/users/#{user.id}"
           end
           format.json do
-            headers 'Content-Type' => 'application/json'
+            content_type :json
             redirect "/users/#{user.id}", 201
           end
         end
@@ -188,6 +188,31 @@ module Ditty
       authorize entity, :read
 
       haml :"#{view_location}/profile", locals: { entity: entity, identity: entity.identity.first, title: 'My Account' }
+    end
+
+    post '/:id/token' do |id|
+      entity = dataset.first(settings.model_class.primary_key => id)
+      halt 404 unless entity
+
+      secret = File.read('.token_secret').chomp
+      # payload[:exp] = Time.now.to_i + (expiry_days.to_i * 24 * 60 * 60)
+      payload = {
+        iss: 'aex',
+        sub: entity.email,
+        iat: DateTime.now,
+        roles: entity.roles.map(&:name),
+        user_id: entity.id
+      }
+      options = {
+        verify_expiration: true,
+        iss: 'aex',
+        algorithm: 'HS512'
+      }
+
+      encoded = JWT.encode(payload, secret, options[:algorithm])
+      logger.debug JWT.decode(encoded, secret, true, options)
+      flash[:success] = "Token: #{encoded}"
+      redirect back
     end
   end
 end
