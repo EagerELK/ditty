@@ -43,6 +43,10 @@ module Ditty
       end
     end
 
+    get '/reset-password' do
+      haml :'identity/reset_password', locals: { title: 'Reset Password' }
+    end
+
     # Register Page
     get '/auth/identity/register' do
       authorize ::Ditty::Identity, :register

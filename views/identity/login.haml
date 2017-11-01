@@ -12,9 +12,14 @@
           .form-group
             %label.control-label Password
             %input.form-control.border-input{ name: 'password', type: 'password' }
-          %button.btn.btn-primary{ type: 'submit' } Log In
+          .row
+            .col-md-6
+              %button.btn.btn-primary{ type: 'submit' } Log In
+            .col-md-6.text-right
+              %a.btn.btn-default{ href: "#{settings.map_path}/reset-password" } Forgot my Password
           - if policy(::Ditty::Identity).register?
-            .pull-right
+            %hr
+            %p.text-center
               No account yet?
-              %a.btn.btn-default{ href: "#{settings.map_path}/auth/identity/register" } Register
+              %a.btn.btn-success{ href: "#{settings.map_path}/auth/identity/register" } Register
   .col-sm-3
