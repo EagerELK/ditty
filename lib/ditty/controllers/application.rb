@@ -14,6 +14,7 @@ require 'active_support/inflector'
 require 'rack/contrib'
 
 module Ditty
+
   class Application < Sinatra::Base
     include ActiveSupport::Inflector
 
@@ -55,6 +56,7 @@ module Ditty
 
     error do
       error = env['sinatra.error']
+      broadcast(:application_error, error)
       haml :error, locals: { title: 'Something went wrong', error: error }
     end
 
