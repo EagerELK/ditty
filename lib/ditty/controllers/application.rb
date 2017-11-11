@@ -51,13 +51,27 @@ module Ditty
     end
 
     not_found do
-      haml :'404', locals: { title: '4 oh 4' }
+      respond_to do |format|
+        format.html do
+          haml :'404', locals: { title: '4 oh 4' }
+        end
+        format.json do
+          [401, { 'Content-Type' => 'application/json' }, ["{\"code\":#{404},\"errors\":[\"Not Found\"]}"]]
+        end
+      end
     end
 
     error do
       error = env['sinatra.error']
       broadcast(:application_error, error)
-      haml :error, locals: { title: 'Something went wrong', error: error }
+      respond_to do |format|
+        format.html do
+          haml :error, locals: { title: 'Something went wrong', error: error }
+        end
+        format.json do
+          [500, { 'Content-Type' => 'application/json' }, ["{\"code\":#{401},\"errors\":[\"Something went wrong\"]}"]]
+        end
+      end
     end
 
     error Helpers::NotAuthenticated do
@@ -67,7 +81,7 @@ module Ditty
           redirect "#{settings.map_path}/auth/identity"
         end
         format.json do
-          [401, { 'Content-Type' => 'text/json' }, ["{\"code\":#{401},\"errors\":[\"Not Authenticated\"]}"]]
+          [401, { 'Content-Type' => 'application/json' }, ["{\"code\":#{401},\"errors\":[\"Not Authenticated\"]}"]]
         end
       end
     end
@@ -79,7 +93,7 @@ module Ditty
           redirect "#{settings.map_path}/auth/identity"
         end
         format.json do
-          [401, { 'Content-Type' => 'text/json' }, ["{\"code\":#{401},\"errors\":[\"Not Authorized\"]}"]]
+          [401, { 'Content-Type' => 'application/json' }, ["{\"code\":#{401},\"errors\":[\"Not Authorized\"]}"]]
         end
       end
     end
