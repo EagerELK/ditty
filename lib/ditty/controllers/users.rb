@@ -59,11 +59,11 @@ module Ditty
         respond_to do |format|
           format.html do
             flash[:success] = 'User created'
-            redirect "/users/#{user.id}"
+            redirect "#{base_path}/#{user.id}"
           end
           format.json do
             headers 'Content-Type' => 'application/json'
-            redirect "/users/#{user.id}", 201
+            redirect "#{base_path}/#{user.id}", 201
           end
         end
       else
@@ -172,7 +172,7 @@ module Ditty
       respond_to do |format|
         format.html do
           flash[:success] = "#{heading} Deleted"
-          redirect '/users'
+          redirect base_path
         end
         format.json do
           content_type 'application/json'
