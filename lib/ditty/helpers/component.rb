@@ -13,10 +13,10 @@ module Ditty
       end
 
       def list
-        params['count'] ||= 10
-        params['page'] ||= 1
+        count = params['count'] || 10
+        page = params['page'] || 1
 
-        dataset.select.paginate(params['page'].to_i, params['count'].to_i)
+        dataset.select.paginate(page.to_i, count.to_i)
       end
 
       def heading(action = nil)
