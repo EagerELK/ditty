@@ -2,13 +2,25 @@
   - if list.pagination_record_count > 0
     %p.text-center Showing #{list.current_page_record_range} of #{list.pagination_record_count} records
     %ul.pager
-      %li
-        %a{href: "#{base_path}?page=1&count=#{list.page_size}"} First
-      %li{class: ("disabled" if list.first_page?)}
-        %a{href: prev_link} Previous
-      %li{class: ("disabled" if list.last_page?)}
-        %a{href: next_link} Next
-      %li
-        %a{href: "#{base_path}?page=#{list.page_count}&count=#{list.page_size}"} Last
+      - if list.first_page?
+        %li.disabled
+          %span First
+        %li.disabled
+          %span Previous
+      - else
+        %li
+          %a{href: first_link} First
+        %li
+          %a{href: prev_link} Previous
+      - if list.last_page?
+        %li.disabled
+          %span Next
+        %li.disabled
+          %span Last
+      - else
+        %li
+          %a{href: next_link} Next
+        %li
+          %a{href: last_link} Last
   - else
     %p.text-center No records to show

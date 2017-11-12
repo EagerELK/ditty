@@ -46,10 +46,14 @@ module Ditty
         haml :'partials/delete_form', locals: locals
       end
 
-      def pagination(list, base_path)
+      def pagination(list, base_path, qp = {})
+        qs = params.clone.merge(qp)
+        qs.delete('captures')
         locals = {
-          next_link: list.last_page? ? '#' : "#{base_path}?page=#{list.next_page}&count=#{list.page_size}",
-          prev_link: list.first_page? ? '#' : "#{base_path}?page=#{list.prev_page}&count=#{list.page_size}",
+          first_link: "#{base_path}?#{Rack::Utils.build_query(qs.merge('page' => 1))}",
+          next_link: list.last_page? ? '#' : "#{base_path}?#{Rack::Utils.build_query(qs.merge('page' => list.next_page))}",
+          prev_link: list.first_page? ? '#' : "#{base_path}?#{Rack::Utils.build_query(qs.merge('page' => list.prev_page))}",
+          last_link: "#{base_path}?#{Rack::Utils.build_query(qs.merge('page' => list.page_count))}",
           base_path: base_path,
           list: list
         }
