@@ -56,7 +56,7 @@ module Ditty
           haml :'404', locals: { title: '4 oh 4' }
         end
         format.json do
-          [401, { 'Content-Type' => 'application/json' }, ["{\"code\":#{404},\"errors\":[\"Not Found\"]}"]]
+          [401, { 'Content-Type' => 'application/json' }, ["{\"code\":404,\"errors\":[\"Not Found\"]}"]]
         end
       end
     end
@@ -69,7 +69,7 @@ module Ditty
           haml :error, locals: { title: 'Something went wrong', error: error }
         end
         format.json do
-          [500, { 'Content-Type' => 'application/json' }, ["{\"code\":#{401},\"errors\":[\"Something went wrong\"]}"]]
+          [500, { 'Content-Type' => 'application/json' }, [{ code: 401, errors: ['Something went wrong'] }.to_json]]
         end
       end
     end
@@ -81,7 +81,7 @@ module Ditty
           redirect "#{settings.map_path}/auth/identity"
         end
         format.json do
-          [401, { 'Content-Type' => 'application/json' }, ["{\"code\":#{401},\"errors\":[\"Not Authenticated\"]}"]]
+          [401, { 'Content-Type' => 'application/json' }, [{ code: 401, errors: ['Not Authenticated'] }.to_json]]
         end
       end
     end
@@ -93,7 +93,7 @@ module Ditty
           redirect "#{settings.map_path}/auth/identity"
         end
         format.json do
-          [401, { 'Content-Type' => 'application/json' }, ["{\"code\":#{401},\"errors\":[\"Not Authorized\"]}"]]
+          [401, { 'Content-Type' => 'application/json' }, [{ code: 401, errors: ['Not Authorized'] }.to_json]]
         end
       end
     end

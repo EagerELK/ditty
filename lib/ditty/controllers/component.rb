@@ -34,7 +34,7 @@ module Ditty
           # TODO: Add links defined by actions (New #{heading})
           json(
             'items' => list.all.map(&:for_json),
-            'page' => params[:page],
+            'page' => (params['page'] || 1).to_i,
             'count' => list.count,
             'total' => dataset.count
           )
@@ -121,7 +121,7 @@ module Ditty
       if success
         respond_to do |format|
           format.html do
-            # TODO Ability to customize the return path and message?
+            # TODO: Ability to customize the return path and message?
             flash[:success] = "#{heading} Updated"
             redirect "#{base_path}/#{entity.id}"
           end

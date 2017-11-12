@@ -33,6 +33,10 @@ module Ditty
     def inject(memo, &block)
       @mutex.synchronize { @hash.inject(memo, &block) }
     end
+
+    def each_with_object(memo, &block)
+      @mutex.synchronize { @hash.each_with_object(memo, &block) }
+    end
   end
 
   # Ripped off from Roda - https://github.com/jeremyevans/roda
@@ -68,19 +72,19 @@ module Ditty
 
     # Return a hash of controllers with their routes as keys: `{ '/users' => Ditty::Controllers::Users }`
     def self.routes
-      components.inject({}) do |memo, comp|
+      rts = components.each_with_object({}) do |comp, memo|
         memo.merge! comp[1].routes if comp[1].respond_to?(:routes)
-        memo
-      end.compact
+      end
+      rts.compact
     end
 
     # Return an ordered list of navigation items:
     # `[{order:0, link:'/users/', text:'Users'}, {order:1, link:'/roles/', text:'Roles'}]
     def self.navigation
-      components.inject([]) do |memo, comp|
+      nav = components.each_with_object([]) do |comp, memo|
         memo.concat comp[1].navigation if comp[1].respond_to?(:navigation)
-        memo
-      end.sort_by { |v| v[:order] }
+      end
+      nav.sort_by { |v| v[:order] }
     end
 
     def self.migrations
@@ -102,9 +106,8 @@ module Ditty
     end
 
     def self.workers
-      components.inject([]) do |memo, comp|
+      components.each_with_object([]) do |comp, memo|
         memo.concat comp[1].workers if comp[1].respond_to?(:workers)
-        memo
       end
     end
 
