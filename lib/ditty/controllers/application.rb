@@ -14,7 +14,6 @@ require 'active_support/inflector'
 require 'rack/contrib'
 
 module Ditty
-
   class Application < Sinatra::Base
     include ActiveSupport::Inflector
 
@@ -56,7 +55,7 @@ module Ditty
           haml :'404', locals: { title: '4 oh 4' }
         end
         format.json do
-          [401, { 'Content-Type' => 'application/json' }, ["{\"code\":404,\"errors\":[\"Not Found\"]}"]]
+          [401, { 'Content-Type' => 'application/json' }, [{ code: 404, errors: ['Not Found'] }]]
         end
       end
     end
