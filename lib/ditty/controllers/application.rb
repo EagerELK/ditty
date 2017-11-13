@@ -68,7 +68,7 @@ module Ditty
           haml :error, locals: { title: 'Something went wrong', error: error }
         end
         format.json do
-          [500, { 'Content-Type' => 'application/json' }, [{ code: 401, errors: ['Something went wrong'] }.to_json]]
+          [500, { 'Content-Type' => 'application/json' }, [{ code: 500, errors: ['Something went wrong'] }.to_json]]
         end
       end
     end
@@ -93,6 +93,17 @@ module Ditty
         end
         format.json do
           [401, { 'Content-Type' => 'application/json' }, [{ code: 401, errors: ['Not Authorized'] }.to_json]]
+        end
+      end
+    end
+
+    error ::Sequel::ForeignKeyConstraintViolation do
+      respond_to do |format|
+        format.html do
+          haml :error, locals: { title: 'Something went wrong', error: error }
+        end
+        format.json do
+          [400, { 'Content-Type' => 'application/json' }, [{ code: 400, errors: ['Invalid Relation Specified'] }.to_json]]
         end
       end
     end
