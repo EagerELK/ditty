@@ -89,8 +89,8 @@ module Ditty
       log_action("#{dehumanized}_read".to_sym) if settings.track_actions
       respond_to do |format|
         format.html do
-          haml :"#{view_location}/display",
-               locals: { entity: entity, title: heading, actions: actions }
+          title = heading(:read) + (entity.respond_to?(:name) ? ": #{entity.name}" : '')
+          haml :"#{view_location}/display", locals: { entity: entity, title: title, actions: actions }
         end
         format.json do
           # TODO: Add links defined by actions (Edit #{heading})
