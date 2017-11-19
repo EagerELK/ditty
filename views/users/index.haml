@@ -8,6 +8,7 @@
             %th Name
             %th Surname
             %th Roles
+            %th Signed Up
         %tbody
           - list.all.each do |entity|
             %tr
@@ -16,6 +17,7 @@
               %td= entity.name
               %td= entity.surname
               %td= entity.roles_dataset.map(:name).map(&:titlecase).join(', ')
+              %td= entity.created_at.strftime('%Y-%m-%d')
       - if policy(::Ditty::User).create?
         .panel-body.text-right
           %a.btn.btn-primary{ href: "#{base_path}/new" } New User
