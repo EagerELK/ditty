@@ -83,11 +83,13 @@ module Ditty
         assoc
       end
 
+      def search_filters
+        searchable_fields.map { |f| Sequel.ilike(f.to_sym, "%#{params[:q]}%") }
+      end
+
       def search(dataset)
         return dataset if ['', nil].include?(params['q']) || searchable_fields == []
-
-        filters = searchable_fields.map { |f| Sequel.ilike(f.to_sym, "%#{params[:q]}%") }
-        dataset.where Sequel.|(*filters)
+        dataset.where Sequel.|(*search_filters)
       end
     end
   end
