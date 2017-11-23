@@ -3,7 +3,9 @@
 require 'sequel'
 require 'ditty/services/logger'
 
-if ENV['DATABASE_URL']
+if defined? DB
+  Ditty::Services::Logger.instance.warn 'Database connection already set up'
+elsif ENV['DATABASE_URL']
   # Delete DATABASE_URL from the environment, so it isn't accidently
   # passed to subprocesses.  DATABASE_URL may contain passwords.
   DB = Sequel.connect(ENV['RACK_ENV'] == 'production' ? ENV.delete('DATABASE_URL') : ENV['DATABASE_URL'])
