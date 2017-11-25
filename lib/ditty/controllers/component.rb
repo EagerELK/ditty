@@ -52,8 +52,8 @@ module Ditty
 
     # Create
     post '/' do
-      authorize settings.model_class, :create
       entity = settings.model_class.new(permitted_attributes(settings.model_class, :create))
+      authorize entity, :create
       success = entity.valid? && entity.save
 
       log_action("#{dehumanized}_create".to_sym) if success && settings.track_actions
