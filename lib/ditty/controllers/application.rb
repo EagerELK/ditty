@@ -38,6 +38,7 @@ module Ditty
 
     configure :production do
       disable :show_exceptions
+      set :dump_errors, false
     end
 
     configure :development do
@@ -46,7 +47,7 @@ module Ditty
 
     configure :production, :development do
       enable :logging
-      # use Rack::CommonLogger, Ditty::Services::Logger.instance
+      use Rack::CommonLogger, Ditty::Services::Logger.instance
     end
 
     not_found do
@@ -73,7 +74,7 @@ module Ditty
       end
     end
 
-    error Helpers::NotAuthenticated do
+    error Helpers::NotAuthenticated, ::Pundit::NotAuthorizedError do
       respond_to do |format|
         format.html do
           flash[:warning] = 'Please log in first.'
@@ -81,18 +82,6 @@ module Ditty
         end
         format.json do
           [401, { 'Content-Type' => 'application/json' }, [{ code: 401, errors: ['Not Authenticated'] }.to_json]]
-        end
-      end
-    end
-
-    error ::Pundit::NotAuthorizedError do
-      respond_to do |format|
-        format.html do
-          flash[:warning] = 'Please log in first.'
-          redirect "#{settings.map_path}/auth/identity"
-        end
-        format.json do
-          [401, { 'Content-Type' => 'application/json' }, [{ code: 401, errors: ['Not Authorized'] }.to_json]]
         end
       end
     end
