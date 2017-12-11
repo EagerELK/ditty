@@ -2,11 +2,12 @@
 
 require 'ditty/controllers/application'
 require 'ditty/helpers/component'
+require 'ditty/helpers/response'
 require 'sinatra/json'
 
 module Ditty
   class Component < Application
-    helpers Helpers::Component
+    helpers Helpers::Component, Helpers::Response
 
     set base_path: nil
     set dehumanized: nil
@@ -21,25 +22,10 @@ module Ditty
     get '/', provides: %i[html json] do
       authorize settings.model_class, :list
 
-      actions = {}
-      actions["#{base_path}/new"] = "New #{heading}" if policy(settings.model_class).create?
+      result = list
 
       log_action("#{dehumanized}_list".to_sym) if settings.track_actions
-      respond_to do |format|
-        format.html do
-          haml :"#{view_location}/index",
-               locals: { list: list, title: heading(:list), actions: actions }
-        end
-        format.json do
-          # TODO: Add links defined by actions (New #{heading})
-          json(
-            'items' => list.all.map(&:for_json),
-            'page' => (params['page'] || 1).to_i,
-            'count' => list.count,
-            'total' => dataset.count
-          )
-        end
-      end
+      list_response(result)
     end
 
     # Create Form
@@ -54,27 +40,11 @@ module Ditty
     post '/' do
       entity = settings.model_class.new(permitted_attributes(settings.model_class, :create))
       authorize entity, :create
-      success = entity.valid? && entity.save
 
-      log_action("#{dehumanized}_create".to_sym) if success && settings.track_actions
-      respond_to do |format|
-        format.html do
-          if success
-            flash[:success] = "#{heading} Created"
-            redirect "#{base_path}/#{entity.id}"
-          else
-            haml :"#{view_location}/new", locals: { entity: entity, title: heading(:new) }
-          end
-        end
-        format.json do
-          content_type :json
-          if success
-            redirect "#{base_path}/#{entity.id}", 201
-          else
-            [400, { errors: entity.errors }.to_json]
-          end
-        end
-      end
+      entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
+
+      log_action("#{dehumanized}_create".to_sym) if settings.track_actions
+      create_response(entity)
     end
 
     # Read
@@ -83,20 +53,8 @@ module Ditty
       halt 404 unless entity
       authorize entity, :read
 
-      actions = {}
-      actions["#{base_path}/#{entity.id}/edit"] = "Edit #{heading}" if policy(entity).update?
-
       log_action("#{dehumanized}_read".to_sym) if settings.track_actions
-      respond_to do |format|
-        format.html do
-          title = heading(:read) + (entity.respond_to?(:name) ? ": #{entity.name}" : '')
-          haml :"#{view_location}/display", locals: { entity: entity, title: title, actions: actions }
-        end
-        format.json do
-          # TODO: Add links defined by actions (Edit #{heading})
-          json entity.for_json
-        end
-      end
+      read_response(entity)
     end
 
     # Update Form
@@ -115,32 +73,10 @@ module Ditty
       authorize entity, :update
 
       entity.set(permitted_attributes(settings.model_class, :update))
+      entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
 
-      success = entity.valid? && entity.save
-      log_action("#{dehumanized}_update".to_sym) if success && settings.track_actions
-      if success
-        respond_to do |format|
-          format.html do
-            # TODO: Ability to customize the return path and message?
-            flash[:success] = "#{heading} Updated"
-            redirect "#{base_path}/#{entity.id}"
-          end
-          format.json do
-            headers 'Location' => "#{base_path}/#{entity.id}"
-            json body entity.for_json
-          end
-        end
-      else
-        respond_to do |format|
-          format.html do
-            haml :"#{view_location}/edit", locals: { entity: entity, title: heading(:edit) }
-          end
-          format.json do
-            content_type :json
-            [400, { errors: entity.errors }.to_json]
-          end
-        end
-      end
+      log_action("#{dehumanized}_update".to_sym) if settings.track_actions
+      update_response(entity)
     end
 
     delete '/:id' do |id|
@@ -151,15 +87,19 @@ module Ditty
       entity.destroy
 
       log_action("#{dehumanized}_delete".to_sym) if settings.track_actions
+      delete_response(entity)
+    end
+
+    error Sequel::ValidationFailed do
       respond_to do |format|
+        entity = env['sinatra.error'].model
+        errors = env['sinatra.error'].errors
         format.html do
-          flash[:success] = "#{heading} Deleted"
-          redirect base_path.to_s
+          action = entity.id ? :edit : :new
+          haml :"#{view_location}/#{action}", locals: { entity: entity, title: heading(action) }
         end
         format.json do
-          content_type :json
-          headers 'Location' => '/users'
-          status 204
+          json [400, { errors: errors }]
         end
       end
     end
