@@ -103,6 +103,8 @@ module Ditty
         request.accept.unshift('application/json')
         request.path_info = request.path_info.gsub(/.json/, '')
       end
+      # Ensure the accept header is set. People forget to include it in API requests
+      request.accept.unshift('application/json') if request.accept.count.eql?(1) && request.accept.first.to_s.eql?('*/*')
     end
   end
 end
