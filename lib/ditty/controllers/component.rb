@@ -94,6 +94,7 @@ module Ditty
       respond_to do |format|
         entity = env['sinatra.error'].model
         errors = env['sinatra.error'].errors
+        status 400
         format.html do
           action = entity.id ? :edit : :new
           haml :"#{view_location}/#{action}", locals: { entity: entity, title: heading(action) }
