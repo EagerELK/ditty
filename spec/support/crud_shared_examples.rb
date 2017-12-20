@@ -63,12 +63,14 @@ shared_examples 'a CRUD Controller' do |route|
 
   context 'POST' do
     it '/doesnotexist' do
+      header 'Accept', 'text/html'
       post '/doesnotexist'
       expect(last_response).to_not be_ok
       expect(last_response.status).to eq 404
     end
 
     it route.to_s do
+      header 'Accept', 'text/html'
       post '/', create_data
 
       if Pundit.policy(user, app.model_class).list?
@@ -79,10 +81,12 @@ shared_examples 'a CRUD Controller' do |route|
     end
 
     it "#{route} with invalid parameters" do
+      header 'Accept', 'text/html'
+      header 'Content-Type', 'application/x-www-form-urlencoded'
       post '/', invalid_create_data
 
       if Pundit.policy(user, app.model_class).list?
-        expect(last_response).to be_ok # A 200 is given since it just re-renders the form
+        expect(last_response.status).to eq 400
       else
         expect(last_response).to_not be_ok
       end
@@ -91,12 +95,14 @@ shared_examples 'a CRUD Controller' do |route|
 
   context 'PUT' do
     it '/doesnotexist' do
+      header 'Accept', 'text/html'
       put '/doesnotexist'
       expect(last_response).to_not be_ok
       expect(last_response.status).to eq 404
     end
 
     it "#{route}/:id" do
+      header 'Accept', 'text/html'
       put "/#{model.id}", update_data
 
       if Pundit.policy(user, app.model_class).list?
@@ -107,10 +113,11 @@ shared_examples 'a CRUD Controller' do |route|
     end
 
     it "#{route} with invalid parameters" do
+      header 'Accept', 'text/html'
       put "/#{model.id}", invalid_update_data
 
       if Pundit.policy(user, app.model_class).list?
-        expect(last_response).to be_ok # A 200 is given since it just re-renders the form
+        expect(last_response.status).to eq 400
       else
         expect(last_response).to_not be_ok
       end
@@ -125,6 +132,7 @@ shared_examples 'a CRUD Controller' do |route|
     end
 
     it "#{route}/id" do
+      header 'Accept', 'text/html'
       delete "/#{model.id}"
 
       if Pundit.policy(user, app.model_class).list?
