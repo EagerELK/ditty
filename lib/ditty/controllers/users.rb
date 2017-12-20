@@ -42,47 +42,20 @@ module Ditty
       user     = locals[:user]     = User.new(user_params)
       identity = locals[:identity] = Identity.new(identity_params)
 
-      if identity.valid? && user.valid?
-        DB.transaction(isolation: :serializable) do
-          identity.save
-          user.save
-          user.add_identity identity
-          if roles
-            roles.each do |role_id|
-              user.add_role(role_id) unless user.roles.map(&:id).include? role_id.to_i
-            end
-          end
-          user.check_roles
-        end
-
-        log_action("#{dehumanized}_create".to_sym) if settings.track_actions
-        respond_to do |format|
-          format.html do
-            flash[:success] = 'User created'
-            redirect "#{base_path}/#{user.id}"
-          end
-          format.json do
-            headers 'Content-Type' => 'application/json'
-            redirect "#{base_path}/#{user.id}", 201
+      DB.transaction(isolation: :serializable) do
+        identity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
+        user.save
+        user.add_identity identity
+        if roles
+          roles.each do |role_id|
+            user.add_role(role_id) unless user.roles.map(&:id).include? role_id.to_i
           end
         end
-      else
-        respond_to do |format|
-          format.html do
-            flash.now[:danger] = 'Could not create the user'
-            locals[:entity] = user
-            locals[:identity] = identity
-            haml :"#{view_location}/new", locals: locals
-          end
-          format.json do
-            headers \
-              'Content-Type' => 'application/json',
-              'Content-Location' => "#{view_location}/new"
-            body ''
-            status 402
-          end
-        end
+        user.check_roles
       end
+
+      log_action("#{dehumanized}_create".to_sym) if settings.track_actions
+      create_response(user)
     end
 
     # Update
@@ -94,36 +67,16 @@ module Ditty
       values = permitted_attributes(settings.model_class, :update)
       roles  = values.delete('role_id')
       entity.set values
-      if entity.valid? && entity.save
-        if roles
-          entity.remove_all_roles
-          roles.each { |role_id| entity.add_role(role_id) }
-          entity.check_roles
-        end
+      entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
 
-        log_action("#{dehumanized}_update".to_sym) if settings.track_actions
-        respond_to do |format|
-          format.html do
-            flash[:success] = "#{heading} Updated"
-            redirect back
-          end
-          format.json do
-            content_type 'application/json'
-            headers 'Location' => "/users/#{entity.id}"
-            body entity.to_hash.to_json
-            status 200
-          end
-        end
-      else
-        respond_to do |format|
-          format.html do
-            haml :"#{view_location}/edit", locals: { entity: entity, title: heading(:edit) }
-          end
-          format.json do
-            400
-          end
-        end
+      if roles
+        entity.remove_all_roles
+        roles.each { |role_id| entity.add_role(role_id) }
+        entity.check_roles
       end
+
+      log_action("#{dehumanized}_update".to_sym) if settings.track_actions
+      update_response(entity)
     end
 
     put '/:id/identity' do |id|
@@ -169,17 +122,7 @@ module Ditty
       entity.destroy
 
       log_action("#{dehumanized}_delete".to_sym) if settings.track_actions
-      respond_to do |format|
-        format.html do
-          flash[:success] = "#{heading} Deleted"
-          redirect base_path
-        end
-        format.json do
-          content_type 'application/json'
-          headers 'Location' => '/users'
-          status 204
-        end
-      end
+      delete_response(entity)
     end
 
     # Profile

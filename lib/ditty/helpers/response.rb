@@ -9,7 +9,7 @@ module Ditty
             actions = {}
             actions["#{base_path}/new"] = "New #{heading}" if policy(settings.model_class).create?
             haml :"#{view_location}/index",
-                 locals: { list: result, title: heading(:list), actions: @actions }
+                 locals: { list: result, title: heading(:list), actions: actions }
           end
           format.json do
             # TODO: Add links defined by actions (New #{heading})
