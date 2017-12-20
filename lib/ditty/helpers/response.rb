@@ -65,7 +65,7 @@ module Ditty
         end
       end
 
-      def delete_response(entity)
+      def delete_response(_entity)
         respond_to do |format|
           format.html do
             flash[:success] = "#{heading} Deleted"
