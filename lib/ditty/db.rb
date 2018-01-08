@@ -2,10 +2,12 @@
 
 require 'sequel'
 require 'ditty/services/logger'
+require 'active_support'
+require 'active_support/core_ext/object/blank'
 
 if defined? DB
   Ditty::Services::Logger.instance.warn 'Database connection already set up'
-elsif ENV['DATABASE_URL'].empty? == false
+elsif ENV['DATABASE_URL'].blank? == false
   # Delete DATABASE_URL from the environment, so it isn't accidently
   # passed to subprocesses.  DATABASE_URL may contain passwords.
   DB = Sequel.connect(ENV['RACK_ENV'] == 'production' ? ENV.delete('DATABASE_URL') : ENV['DATABASE_URL'])
