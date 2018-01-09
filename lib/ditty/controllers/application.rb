@@ -99,12 +99,11 @@ module Ditty
 
     before(/.*/) do
       ::Ditty::Services::Logger.instance.debug "Running with #{self.class}"
-      if request.url =~ /.json/
-        request.accept.unshift('application/json')
-        request.path_info = request.path_info.gsub(/.json/, '')
+      if request.path =~ /.*\.json\Z/
+        content_type :json
       end
       # Ensure the accept header is set. People forget to include it in API requests
-      request.accept.unshift('application/json') if request.accept.count.eql?(1) && request.accept.first.to_s.eql?('*/*')
+      content_type(:json) if request.accept.count.eql?(1) && request.accept.first.to_s.eql?('*/*')
     end
   end
 end

@@ -19,7 +19,7 @@ module Ditty
     end
 
     # List
-    get '/', provides: %i[html json] do
+    get '/' do
       authorize settings.model_class, :list
 
       result = list
