@@ -47,6 +47,7 @@ module Ditty
       end
 
       def pagination(list, base_path, qp = {})
+        return unless list.respond_to? :pagination_record_count
         qs = params.clone.merge(qp)
         qs.delete('captures')
         locals = {
