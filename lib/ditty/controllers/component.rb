@@ -89,20 +89,5 @@ module Ditty
       log_action("#{dehumanized}_delete".to_sym) if settings.track_actions
       delete_response(entity)
     end
-
-    error Sequel::ValidationFailed do
-      respond_to do |format|
-        entity = env['sinatra.error'].model
-        errors = env['sinatra.error'].errors
-        status 400
-        format.html do
-          action = entity.id ? :edit : :new
-          haml :"#{view_location}/#{action}", locals: { entity: entity, title: heading(action) }
-        end
-        format.json do
-          json code: 400, errors: errors
-        end
-      end
-    end
   end
 end

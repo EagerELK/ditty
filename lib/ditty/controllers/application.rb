@@ -52,11 +52,55 @@ module Ditty
 
     not_found do
       respond_to do |format|
+        status 404
         format.html do
           haml :'404', locals: { title: '4 oh 4' }
         end
         format.json do
-          [404, { 'Content-Type' => 'application/json' }, [{ code: 404, errors: ['Not Found'] }.to_json]]
+          json code: 404, errors: ['Not Found']
+        end
+      end
+    end
+
+    error Helpers::NotAuthenticated, ::Pundit::NotAuthorizedError do
+      respond_to do |format|
+        status 401
+        format.html do
+          flash[:warning] = 'Please log in first.'
+          redirect "#{settings.map_path}/auth/identity"
+        end
+        format.json do
+          json code: 401, errors: ['Not Authenticated']
+        end
+      end
+    end
+
+    error Sequel::ValidationFailed do
+      respond_to do |format|
+        entity = env['sinatra.error'].model
+        errors = env['sinatra.error'].errors
+        status 400
+        format.html do
+          action = entity.id ? :edit : :new
+          haml :"#{view_location}/#{action}", locals: { entity: entity, title: heading(action) }
+        end
+        format.json do
+          json code: 400, errors: errors
+        end
+      end
+    end
+
+    error ::Sequel::ForeignKeyConstraintViolation do
+      error = env['sinatra.error']
+      broadcast(:application_error, error)
+      ::Ditty::Services::Logger.instance.error error
+      respond_to do |format|
+        status 400
+        format.html do
+          haml :error, locals: { title: 'Something went wrong', error: error }
+        end
+        format.json do
+          json code: 400, errors: ['Invalid Relation Specified']
         end
       end
     end
@@ -64,35 +108,14 @@ module Ditty
     error do
       error = env['sinatra.error']
       broadcast(:application_error, error)
+      ::Ditty::Services::Logger.instance.error error
       respond_to do |format|
+        status 500
         format.html do
           haml :error, locals: { title: 'Something went wrong', error: error }
         end
         format.json do
-          [500, { 'Content-Type' => 'application/json' }, [{ code: 500, errors: ['Something went wrong'] }.to_json]]
-        end
-      end
-    end
-
-    error Helpers::NotAuthenticated, ::Pundit::NotAuthorizedError do
-      respond_to do |format|
-        format.html do
-          flash[:warning] = 'Please log in first.'
-          redirect "#{settings.map_path}/auth/identity"
-        end
-        format.json do
-          [401, { 'Content-Type' => 'application/json' }, [{ code: 401, errors: ['Not Authenticated'] }.to_json]]
-        end
-      end
-    end
-
-    error ::Sequel::ForeignKeyConstraintViolation do
-      respond_to do |format|
-        format.html do
-          haml :error, locals: { title: 'Something went wrong', error: error }
-        end
-        format.json do
-          [400, { 'Content-Type' => 'application/json' }, [{ code: 400, errors: ['Invalid Relation Specified'] }.to_json]]
+          json code: 500, errors: ['Something went wrong']
         end
       end
     end
