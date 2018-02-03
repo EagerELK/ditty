@@ -8,7 +8,7 @@ require 'ditty'
 require 'ditty/db'
 require 'rspec'
 require 'rack/test'
-require 'factory_girl'
+require 'factory_bot'
 require 'database_cleaner'
 require 'timecop'
 
@@ -24,7 +24,7 @@ end
 Ditty.component :app
 RSpec.configure do |config|
   config.include Rack::Test::Methods
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   config.alias_example_to :fit, focus: true
   config.filter_run focus: true
@@ -32,7 +32,7 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
-    FactoryGirl.find_definitions
+    FactoryBot.find_definitions
     Timecop.freeze
   end
 

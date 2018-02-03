@@ -4,7 +4,7 @@ require 'ditty/models/user'
 require 'ditty/models/identity'
 require 'ditty/models/role'
 
-FactoryGirl.define do
+FactoryBot.define do
   to_create(&:save)
 
   sequence(:email) { |n| "person-#{n}@example.com" }
