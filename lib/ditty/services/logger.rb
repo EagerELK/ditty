@@ -17,7 +17,7 @@ module Ditty
         @loggers = []
         config.each do |values|
           klass = values['class'].constantize
-          opts = values['options'] || nil
+          opts = tr(values['options']) || nil
           logger = klass.new(opts)
           if values['level']
             logger.level = klass.const_get(values['level'].to_sym)
@@ -38,6 +38,13 @@ module Ditty
 
       def config
         @config ||= File.exist?(CONFIG) ? YAML.load_file(CONFIG) : default
+      end
+
+      def tr(val)
+        {
+          '$stdout' => $stdout,
+          '$stderr' => $stderr
+        }[val] || val
       end
 
       def default
