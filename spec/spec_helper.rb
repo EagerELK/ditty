@@ -4,6 +4,8 @@ ENV['RACK_ENV'] ||= 'test'
 require 'simplecov'
 SimpleCov.start
 
+ENV['DATABASE_URL'] ||= 'sqlite::memory:'
+
 require 'ditty'
 require 'ditty/db'
 require 'rspec'

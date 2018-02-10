@@ -17,7 +17,9 @@ RSpec.describe Ditty::Services::Logger, type: :service do
     { 'name' => 'file', 'class' => 'Logger' },
     { 'name' => 'ES', 'class' => 'TestLogger', 'level' => 'WARN', options: {
       'url' => 'http://logging.ditty.io:9200', 'log' => false
-    } }
+    } },
+    { 'name' => 'stdout', 'class' => 'Logger', 'options' => '$stdout' },
+    { 'name' => 'stderr', 'class' => 'Logger', 'options' => '$stderr' }
   ]
 
   context 'initialize' do
@@ -33,7 +35,7 @@ RSpec.describe Ditty::Services::Logger, type: :service do
       allow(File).to receive(:'exist?').with(subject::CONFIG).and_return(true)
       allow(YAML).to receive(:load_file).and_return(config_file)
 
-      expect(subject.instance.loggers.size).to eq 2
+      expect(subject.instance.loggers.size).to eq 4
       expect(subject.instance.loggers[0]).to be_instance_of Logger
       expect(subject.instance.loggers[1]).to be_instance_of TestLogger
     end
@@ -48,6 +50,8 @@ RSpec.describe Ditty::Services::Logger, type: :service do
 
       expect(subject.instance.loggers[0]).to receive(:warn).with('Some message')
       expect(subject.instance.loggers[1]).to receive(:warn).with('Some message')
+      expect($stdout).to receive(:write).with(/Some message$/)
+      expect($stderr).to receive(:write).with(/Some message$/)
 
       subject.instance.warn 'Some message'
     end
