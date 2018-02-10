@@ -24,7 +24,7 @@ module Ditty
 
       result = list
 
-      log_action("#{dehumanized}_list".to_sym) if settings.track_actions
+      broadcast(:"#{dehumanized}_list")
       list_response(result)
     end
 
@@ -43,7 +43,7 @@ module Ditty
 
       entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
 
-      log_action("#{dehumanized}_create".to_sym) if settings.track_actions
+      broadcast(:"#{dehumanized}_create")
       create_response(entity)
     end
 
@@ -53,7 +53,7 @@ module Ditty
       halt 404 unless entity
       authorize entity, :read
 
-      log_action("#{dehumanized}_read".to_sym) if settings.track_actions
+      broadcast(:"#{dehumanized}_read")
       read_response(entity)
     end
 
@@ -75,7 +75,7 @@ module Ditty
       entity.set(permitted_attributes(settings.model_class, :update))
       entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
 
-      log_action("#{dehumanized}_update".to_sym) if settings.track_actions
+      broadcast(:"#{dehumanized}_update")
       update_response(entity)
     end
 
@@ -86,7 +86,7 @@ module Ditty
 
       entity.destroy
 
-      log_action("#{dehumanized}_delete".to_sym) if settings.track_actions
+      broadcast(:"#{dehumanized}_delete")
       delete_response(entity)
     end
   end

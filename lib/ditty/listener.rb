@@ -8,7 +8,7 @@ module Ditty
       @mutex = Mutex.new
     end
 
-    def method_missing(method, *args)
+    def log_action(method, *args)
       vals = { action: method }
       return unless args[0].is_a? Hash
       vals[:user] = args[0][:user] if args[0] && args[0].key?(:user)
@@ -17,6 +17,7 @@ module Ditty
     end
 
     def respond_to_missing?(_method, _include_private = false)
+      # Respond to all tracking events
       true
     end
   end
