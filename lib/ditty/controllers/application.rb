@@ -85,7 +85,7 @@ module Ditty
           haml :"#{view_location}/#{action}", locals: { entity: entity, title: heading(action) }
         end
         format.json do
-          json code: 400, errors: errors
+          json code: 400, errors: errors, full_errors: errors.full_messages
         end
       end
     end
