@@ -30,10 +30,17 @@ module Ditty
     use Rack::PostBodyContentTypeParser
     use Rack::MethodOverride
 
-    def view_location
-      return settings.view_location if settings.view_location
-      return underscore(pluralize(demodulize(settings.model_class))) if settings.model_class
-      underscore(demodulize(self.class))
+    helpers do
+      def base_path
+        settings.base_path || "#{settings.map_path}/#{dasherize(view_location)}"
+      end
+
+
+      def view_location
+        return settings.view_location if settings.view_location
+        return underscore(pluralize(demodulize(settings.model_class))) if settings.model_class
+        underscore(demodulize(self.class))
+      end
     end
 
     configure :production do

@@ -36,10 +36,6 @@ module Ditty
         settings.dehumanized || underscore(heading)
       end
 
-      def base_path
-        settings.base_path || "#{settings.map_path}/#{dasherize(view_location)}"
-      end
-
       def filters
         self.class.const_defined?('FILTERS') ? self.class::FILTERS : []
       end
