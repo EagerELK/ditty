@@ -2,8 +2,6 @@
   .col-md-2
   .col-md-8
     .panel.panel-default
-      .panel-heading
-        %h4 Register
       .panel-body
         %form.form-horizontal{ method: 'post', action: "#{settings.map_path}/auth/identity/new" }
           = form_control(:username, identity, label: 'Username', placeholder: 'Your username')

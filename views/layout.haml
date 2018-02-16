@@ -34,10 +34,16 @@
     #wrapper
       = haml :'partials/navbar', locals: { title: (defined?(title) ? title : 'Ditty') }
       #page-wrapper
+        -if defined?(title) || defined?(actions)
+          .row
+            %h1.col-md-9= defined?(title) ? title : '&nbsp'
+            .col-md-3.text-left{ style: 'margin-top: 20px' }
+              = haml :'partials/actions', locals: { actions: defined?(actions) ? actions : {} }
+        -else
+          %div{ style: 'padding-top: 20px' }
+
         .row
           .col-md-12
-            -if defined? title
-              %h1.page-header= title
             = haml :'partials/notifications'
 
         = yield
