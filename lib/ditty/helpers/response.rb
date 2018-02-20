@@ -13,11 +13,12 @@ module Ditty
           end
           format.json do
             # TODO: Add links defined by actions (New #{heading})
+            total = result.respond_to?(:pagination_record_count) ? result.pagination_record_count : result.count
             json(
               'items' => result.all.map(&:for_json),
               'page' => (params['page'] || 1).to_i,
               'count' => result.count,
-              'total' => result.pagination_record_count
+              'total' => total
             )
           end
         end
