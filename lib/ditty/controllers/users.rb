@@ -8,6 +8,8 @@ require 'ditty/policies/identity_policy'
 
 module Ditty
   class Users < Ditty::Component
+    SEARCHABLE = %i[name surname email].freeze
+
     set model_class: User
     set track_actions: true
 
