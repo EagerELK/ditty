@@ -10,7 +10,7 @@ module Ditty
         user_id = current_user_id
         self.current_user = anonymous_user if user_id.nil?
         @users ||= Hash.new { |h, k| h[k] = User[k] }
-        @users[user_id]
+        @users[user_id] unless user_id.nil?
       end
 
       def current_user=(user)
