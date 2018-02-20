@@ -8,5 +8,6 @@
           = form_control(:password, identity, label: 'Password', type: :password)
           = form_control(:password_confirmation, identity, label: 'Confirm Password', type: :password)
 
-          %button.btn.btn-primary{ type: 'submit' } Register
+          - if policy(::Ditty::Identity).register?
+            %button.btn.btn-primary{ type: 'submit' } Register
   .col-md-2
