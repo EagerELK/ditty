@@ -29,6 +29,23 @@ module Ditty
       haml :'identity/login', locals: { title: 'Log In' }
     end
 
+    get '/auth/identity/forgot' do
+      haml :'identity/forgot', locals: { title: 'Forgot your password?' }
+    end
+
+    post '/auth/identity/forgot' do
+      # TODO
+    end
+
+    get '/auth/identity/reset' do
+      user = Identity.first.user
+      haml :'identity/reset', locals: { title: 'Reset your password' }
+    end
+
+    post '/auth/identity/reset' do
+      # TODO
+    end
+
     get '/auth/failure' do
       broadcast(:identity_failed_login, target: self)
       flash[:warning] = 'Invalid credentials. Please try again.'
