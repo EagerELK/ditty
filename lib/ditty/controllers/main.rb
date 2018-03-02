@@ -40,7 +40,7 @@ module Ditty
         self.current_user = user
         log_action(:identity_login, user: user)
         flash[:success] = 'Logged In'
-        redirect "#{settings.map_path}/"
+        redirect env['omniauth.origin'] || "#{settings.map_path}/"
       else
         # Failed Login
         broadcast(:identity_failed_login)
