@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'wisper'
+require 'oga'
 require 'sinatra/base'
 require 'sinatra/flash'
 require 'sinatra/respond_with'
@@ -74,7 +75,7 @@ module Ditty
         status 401
         format.html do
           flash[:warning] = 'Please log in first.'
-          redirect "#{settings.map_path}/auth/identity"
+          redirect with_layout("#{settings.map_path}/auth/identity")
         end
         format.json do
           json code: 401, errors: ['Not Authenticated']
@@ -134,6 +135,17 @@ module Ditty
       end
       # Ensure the accept header is set. People forget to include it in API requests
       content_type(:json) if request.accept.count.eql?(1) && request.accept.first.to_s.eql?('*/*')
+    end
+
+    after do
+      return if params['layout'].nil?
+      response.body = response.body.map do |resp|
+        document = Oga.parse_html(resp)
+        document.css('a').each do |elm|
+          elm.set 'href', with_layout(elm.get('href'))
+        end
+        document.to_xml
+      end
     end
   end
 end

@@ -3,6 +3,20 @@
 module Ditty
   module Helpers
     module Views
+      def layout
+        return :embedded if request.params['layout'] == 'embedded'
+        :layout
+      end
+
+      def with_layout(url)
+        uri = URI.parse(url)
+        # Don't set the layout if there's none. Don't set the layout for external URIs
+        return url if params['layout'].nil? || uri.host
+        qs = { 'layout' => params['layout'] }.merge(uri.query ? CGI.parse(uri.query) : {})
+        uri.query = Rack::Utils.build_query qs
+        uri.to_s
+      end
+
       def form_control(name, model, opts = {})
         label = opts.delete(:label) || name.to_s.titlecase
         klass = opts.delete(:class) || 'form-control' unless opts[:type] == 'file'

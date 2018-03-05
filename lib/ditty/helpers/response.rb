@@ -9,7 +9,8 @@ module Ditty
             actions = {}
             actions["#{base_path}/new"] = "New #{heading}" if policy(settings.model_class).create?
             haml :"#{view_location}/index",
-                 locals: { list: result, title: heading(:list), actions: actions }
+                 locals: { list: result, title: heading(:list), actions: actions },
+                 layout: layout
           end
           format.json do
             # TODO: Add links defined by actions (New #{heading})
@@ -28,7 +29,7 @@ module Ditty
         respond_to do |format|
           format.html do
             flash[:success] = "#{heading} Created"
-            redirect "#{base_path}/#{entity.id}"
+            redirect with_layout("#{base_path}/#{entity.id}")
           end
           format.json do
             content_type :json
@@ -43,7 +44,10 @@ module Ditty
             actions = {}
             actions["#{base_path}/#{entity.id}/edit"] = "Edit #{heading}" if policy(entity).update?
             title = heading(:read) + (entity.respond_to?(:name) ? ": #{entity.name}" : '')
-            haml :"#{view_location}/display", locals: { entity: entity, title: title, actions: actions }
+            haml :"#{view_location}/display",
+                 locals: { entity: entity, title: title, actions: actions },
+                 layout: layout
+
           end
           format.json do
             # TODO: Add links defined by actions (Edit #{heading})
@@ -57,7 +61,7 @@ module Ditty
           format.html do
             # TODO: Ability to customize the return path and message?
             flash[:success] = "#{heading} Updated"
-            redirect "#{base_path}/#{entity.id}"
+            redirect with_layout("#{base_path}/#{entity.id}")
           end
           format.json do
             headers 'Location' => "#{base_path}/#{entity.id}"
@@ -70,7 +74,7 @@ module Ditty
         respond_to do |format|
           format.html do
             flash[:success] = "#{heading} Deleted"
-            redirect base_path.to_s
+            redirect with_layout(base_path.to_s)
           end
           format.json do
             content_type :json
