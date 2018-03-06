@@ -3,7 +3,7 @@
   .col-md-8
     .panel.panel-default
       .panel-body
-        %form.form-horizontal{ method: 'post', action: base_path }
+        = new_form_tag base_path do
           = haml :'roles/form', locals: { entity: entity }
           %button.btn.btn-primary{ type: 'submit' }
             Create Role

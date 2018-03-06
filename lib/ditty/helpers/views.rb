@@ -55,15 +55,38 @@ module Ditty
         "<div id='#{id}'>\n" + messages.join + '</div>'
       end
 
+      def query_string(add = {})
+        qs = params.clone.merge(add)
+        qs.delete('captures')
+        Rack::Utils.build_query qs
+      end
+
       def delete_form(entity, label = 'Delete')
         locals = { delete_label: label, entity: entity }
         haml :'partials/delete_form', locals: locals
       end
 
-      def query_string(add = {})
-        qs = params.clone.merge(add)
-        qs.delete('captures')
-        Rack::Utils.build_query qs
+      def delete_form_tag(url, options = {}, &block)
+        options[:form_verb] = :delete
+        form_tag(url, options, &block)
+      end
+
+      def edit_form_tag(url, options = {}, &block)
+        options[:form_verb] = :put
+        form_tag(url, options, &block)
+      end
+
+      def new_form_tag(url, options = {}, &block)
+        options[:form_verb] = :post
+        form_tag(url, options, &block)
+      end
+
+      def form_tag(url, options = {}, &block)
+        options[:form_verb] ||= :post
+        options[:attributes] ||= {}
+        options[:attributes] = { :'class' => 'form-horizontal'}.merge options[:attributes]
+        options[:url] = url
+        haml :'partials/form_tag', locals: options.merge(block: block)
       end
 
       def pagination(list, base_path, qp = {})

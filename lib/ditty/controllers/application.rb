@@ -142,6 +142,7 @@ module Ditty
       response.body = response.body.map do |resp|
         document = Oga.parse_html(resp)
         document.css('a').each do |elm|
+          return if elm.get('href').nil?
           elm.set 'href', with_layout(elm.get('href'))
         end
         document.to_xml
