@@ -47,7 +47,6 @@ module Ditty
             haml :"#{view_location}/display",
                  locals: { entity: entity, title: title, actions: actions },
                  layout: layout
-
           end
           format.json do
             # TODO: Add links defined by actions (Edit #{heading})
@@ -78,7 +77,7 @@ module Ditty
           end
           format.json do
             content_type :json
-            headers 'Location' => "#{base_path}"
+            headers 'Location' => base_path.to_s
             status 204
           end
         end

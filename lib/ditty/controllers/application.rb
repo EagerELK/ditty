@@ -36,7 +36,6 @@ module Ditty
         settings.base_path || "#{settings.map_path}/#{dasherize(view_location)}"
       end
 
-
       def view_location
         return settings.view_location if settings.view_location
         return underscore(pluralize(demodulize(settings.model_class))) if settings.model_class
@@ -142,8 +141,9 @@ module Ditty
       response.body = response.body.map do |resp|
         document = Oga.parse_html(resp)
         document.css('a').each do |elm|
-          return if elm.get('href').nil?
-          elm.set 'href', with_layout(elm.get('href'))
+          unless (href = elm.get('href')).nil?
+            elm.set 'href', with_layout(href)
+          end
         end
         document.to_xml
       end

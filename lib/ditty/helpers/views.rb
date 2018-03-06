@@ -84,7 +84,7 @@ module Ditty
       def form_tag(url, options = {}, &block)
         options[:form_verb] ||= :post
         options[:attributes] ||= {}
-        options[:attributes] = { :'class' => 'form-horizontal'}.merge options[:attributes]
+        options[:attributes] = { 'class': 'form-horizontal' }.merge options[:attributes]
         options[:url] = url
         haml :'partials/form_tag', locals: options.merge(block: block)
       end
