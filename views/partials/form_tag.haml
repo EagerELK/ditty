@@ -1,0 +1,4 @@
+%form{ { method: %i[get post].include?(form_verb.to_sym) ? form_verb : :post, action: with_layout(url) }.merge(attributes) }
+  - if %i[get post].include?(form_verb.to_sym) == false
+    %input{ name: '_method', value: form_verb.upcase, type: 'hidden' }
+  = capture_haml(&block).chomp
