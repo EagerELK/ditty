@@ -85,7 +85,7 @@ module Ditty
         options[:form_verb] ||= :post
         options[:attributes] ||= {}
         options[:attributes] = { 'class': 'form-horizontal' }.merge options[:attributes]
-        options[:url] = url
+        options[:url] = options[:form_verb].to_sym == :get  ? url : with_layout(url)
         haml :'partials/form_tag', locals: options.merge(block: block)
       end
 
