@@ -131,6 +131,7 @@ module Ditty
       ::Ditty::Services::Logger.instance.debug "Running with #{self.class}"
       if request.path =~ /.*\.json\Z/
         content_type :json
+        request.path_info = request.path_info.gsub(/.json$/,'')
       end
       # Ensure the accept header is set. People forget to include it in API requests
       content_type(:json) if request.accept.count.eql?(1) && request.accept.first.to_s.eql?('*/*')
