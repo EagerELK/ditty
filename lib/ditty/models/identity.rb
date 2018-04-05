@@ -21,6 +21,7 @@ module Ditty
     end
 
     def authenticate(unencrypted)
+      return false if crypted_password.nil?
       self if ::BCrypt::Password.new(crypted_password) == unencrypted
     end
 
