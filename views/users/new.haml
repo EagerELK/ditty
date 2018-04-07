@@ -4,7 +4,7 @@
     .panel.panel-default
       .panel-body
         = new_form_tag base_path do
-          = haml :'users/identity', locals: { identity: Ditty::Identity.new }
+          = haml :'users/identity', locals: { identity: identity }
           = haml :'users/user', locals: { user: entity }
           %button.btn.btn-primary{ type: 'submit' }
             Create User

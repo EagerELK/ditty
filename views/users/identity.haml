@@ -1,3 +1,10 @@
 = form_control(:username, identity, label: 'Email', placeholder: 'Your email address')
+- if identity.errors[:password] && identity.errors[:password].include?('is not strong enough')
+  .alert.alert-warning
+    %p Make sure your password is at least 8 characters long, and including the following
+    %ul
+      %li Upper- and lowercase letters
+      %li Numbers
+      %li Special Characters
 = form_control(:password, identity, type: 'password', placeholder: 'Your password')
 = form_control(:password_confirmation, identity, type: 'password', label: 'Confirm Password', placeholder: 'Confirm your password')

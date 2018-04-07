@@ -22,11 +22,7 @@ module Ditty
     get '/new' do
       authorize settings.model_class, :create
 
-      locals = {
-        title: heading(:new),
-        entity: User.new,
-        identity: Identity.new
-      }
+      locals = { title: heading(:new), entity: User.new, identity: Identity.new }
       haml :"#{view_location}/new", locals: locals
     end
 
@@ -45,9 +41,15 @@ module Ditty
       identity = locals[:identity] = Identity.new(identity_params)
 
       DB.transaction(isolation: :serializable) do
-        identity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
+        begin
+          identity.save
+        rescue Sequel::ValidationFailed
+          locals = { title: heading(:new), entity: user, identity: identity }
+          return haml(:"#{view_location}/new", locals: locals)
+        end
         user.save
         user.add_identity identity
+
         if roles
           roles.each do |role_id|
             user.add_role(role_id) unless user.roles.map(&:id).include? role_id.to_i

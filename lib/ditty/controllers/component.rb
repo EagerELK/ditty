@@ -33,6 +33,7 @@ module Ditty
       authorize settings.model_class, :create
 
       entity = settings.model_class.new(permitted_attributes(settings.model_class, :create))
+      session[:redirect_to] = request.full_path
       haml :"#{view_location}/new",
            locals: { entity: entity, title: heading(:new) },
            layout: layout
