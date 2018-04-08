@@ -21,8 +21,9 @@ module Ditty
                         'permitted_attributes'
                       end
 
+        policy_fields = policy.public_send(method_name)
         request.params.fetch(param_key, {}).select do |key, _value|
-          policy.public_send(method_name).include? key.to_sym
+          policy_fields.include? key.to_sym
         end
       end
 
