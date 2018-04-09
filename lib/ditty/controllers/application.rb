@@ -61,7 +61,7 @@ module Ditty
       respond_to do |format|
         status 404
         format.html do
-          haml :'404', locals: { title: '4 oh 4' }
+          haml :'404', locals: { title: '4 oh 4' }, layout: layout
         end
         format.json do
           json code: 404, errors: ['Not Found']
@@ -89,7 +89,7 @@ module Ditty
         status 400
         format.html do
           action = entity.id ? :edit : :new
-          haml :"#{view_location}/#{action}", locals: { entity: entity, title: heading(action) }
+          haml :"#{view_location}/#{action}", locals: { entity: entity, title: heading(action) }, layout: layout
         end
         format.json do
           json code: 400, errors: errors, full_errors: errors.full_messages
@@ -104,7 +104,7 @@ module Ditty
       respond_to do |format|
         status 400
         format.html do
-          haml :error, locals: { title: 'Something went wrong', error: error }
+          haml :error, locals: { title: 'Something went wrong', error: error }, layout: layout
         end
         format.json do
           json code: 400, errors: ['Invalid Relation Specified']
@@ -119,7 +119,7 @@ module Ditty
       respond_to do |format|
         status 500
         format.html do
-          haml :error, locals: { title: 'Something went wrong', error: error }
+          haml :error, locals: { title: 'Something went wrong', error: error }, layout: layout
         end
         format.json do
           json code: 500, errors: ['Something went wrong']
