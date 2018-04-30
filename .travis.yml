@@ -9,6 +9,7 @@ gemfile: Gemfile.ci
 env:
   global:
     - CC_TEST_REPORTER_ID=289860573c6284a8e277de86848caba84d840be49e35f3601bcd672ab40d1e35
+    - DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL=true
   matrix:
     - DATABASE_URL="sqlite::memory:" RACK_ENV=test
 before_install:
