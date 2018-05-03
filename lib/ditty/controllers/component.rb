@@ -18,6 +18,14 @@ module Ditty
       dataset.first(settings.model_class.primary_key => id)
     end
 
+    after do
+      verify_authorized unless settings.environment == 'production'
+    end
+
+    after '/' do
+      verify_policy_scoped unless settings.environment == 'production'
+    end
+
     # List
     get '/' do
       authorize settings.model_class, :list
