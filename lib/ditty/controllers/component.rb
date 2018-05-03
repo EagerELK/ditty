@@ -23,6 +23,8 @@ module Ditty
     end
 
     after '/' do
+      return unless request.request_method == 'GET'
+
       verify_policy_scoped unless settings.environment == 'production'
     end
 
