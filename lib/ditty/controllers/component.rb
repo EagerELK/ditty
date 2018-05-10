@@ -19,11 +19,14 @@ module Ditty
     end
 
     after do
+      return unless response.successful? || response.redirection?
+
       verify_authorized unless settings.environment == 'production'
     end
 
     after '/' do
       return unless request.request_method == 'GET'
+      return unless response.successful? || response.redirection?
 
       verify_policy_scoped unless settings.environment == 'production'
     end
