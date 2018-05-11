@@ -60,7 +60,7 @@ module Ditty
         user.check_roles
       end
 
-      log_action("#{dehumanized}_create".to_sym) if settings.track_actions
+      broadcast(:component_create, target: self)
       create_response(user)
     end
 
@@ -81,7 +81,7 @@ module Ditty
         entity.check_roles
       end
 
-      log_action("#{dehumanized}_update".to_sym) if settings.track_actions
+      broadcast(:component_update, target: self)
       update_response(entity)
     end
 
@@ -99,7 +99,7 @@ module Ditty
       end
 
       unless current_user.super_admin? || identity.authenticate(identity_params['old_password'])
-        log_action("#{dehumanized}_update_password_failed".to_sym) if settings.track_actions
+        broadcast(:identity_update_password_failed, target: self)
         flash[:danger] = 'Old Password didn\'t match'
         return redirect back
       end
@@ -107,7 +107,7 @@ module Ditty
       values = permitted_attributes(Identity, :create)
       identity.set values
       if identity.valid? && identity.save
-        log_action("#{dehumanized}_update_password".to_sym) if settings.track_actions
+        broadcast(:identity_update_password, target: self)
         flash[:success] = 'Password Updated'
         redirect back
       elsif current_user.super_admin? && current_user.id != id.to_i
@@ -127,7 +127,7 @@ module Ditty
       entity.remove_all_roles
       entity.destroy
 
-      log_action("#{dehumanized}_delete".to_sym) if settings.track_actions
+      broadcast(:component_delete, target: self)
       delete_response(entity)
     end
 

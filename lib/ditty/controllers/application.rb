@@ -7,7 +7,6 @@ require 'sinatra/flash'
 require 'sinatra/respond_with'
 require 'ditty/helpers/views'
 require 'ditty/helpers/pundit'
-require 'ditty/helpers/wisper'
 require 'ditty/helpers/authentication'
 require 'ditty/services/logger'
 require 'active_support'
@@ -23,7 +22,7 @@ module Ditty
     set :view_location, nil
     set :model_class, nil
     # The order here is important, since Wisper has a deprecated method respond_with method
-    helpers Wisper::Publisher, Helpers::Wisper
+    helpers Wisper::Publisher
     helpers Helpers::Pundit, Helpers::Views, Helpers::Authentication
 
     register Sinatra::Flash, Sinatra::RespondWith
