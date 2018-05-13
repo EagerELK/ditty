@@ -9,14 +9,9 @@ module Ditty
       CONFIG = './config/email.yml'.freeze
 
       class << self
-        def method_missing(method, *args, &block)
-          return super unless respond_to_missing?(method)
+        def create
           config!
-          Mail.send(method, *args, &block)
-        end
-
-        def respond_to_missing?(method, _include_private = false)
-          Mail.respond_to? method
+          Mail.new
         end
 
         def config
