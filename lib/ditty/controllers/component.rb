@@ -57,9 +57,11 @@ module Ditty
       entity = settings.model_class.new(permitted_attributes(settings.model_class, :create))
       authorize entity, :create
 
-      entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
+      entity.db.transaction do
+        entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
+        broadcast(:component_create, target: self, entity: entity)
+      end
 
-      broadcast(:component_create, target: self)
       create_response(entity)
     end
 
@@ -69,7 +71,7 @@ module Ditty
       halt 404 unless entity
       authorize entity, :read
 
-      broadcast(:component_read, target: self)
+      broadcast(:component_read, target: self, entity: entity)
       read_response(entity)
     end
 
@@ -90,10 +92,12 @@ module Ditty
       halt 404 unless entity
       authorize entity, :update
 
-      entity.set(permitted_attributes(settings.model_class, :update))
-      entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
+      entity.db.transaction do
+        entity.set(permitted_attributes(settings.model_class, :update))
+        entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
+        broadcast(:component_update, target: self, entity: entity)
+      end
 
-      broadcast(:component_update, target: self)
       update_response(entity)
     end
 
@@ -102,9 +106,11 @@ module Ditty
       halt 404 unless entity
       authorize entity, :delete
 
-      entity.destroy
+      entity.db.transaction do
+        entity.destroy
+        broadcast(:component_delete, target: self, entity: entity)
+      end
 
-      broadcast(:component_delete, target: self)
       delete_response(entity)
     end
   end
