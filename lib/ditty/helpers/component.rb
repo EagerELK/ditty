@@ -22,7 +22,7 @@ module Ditty
 
       def heading(action = nil)
         @headings ||= begin
-          heading = titleize(demodulize(settings.model_class))
+          heading = settings.model_class.to_s.demodulize.titleize
           h = Hash.new(heading)
           h[:new] = "New #{heading}"
           h[:list] = pluralize heading

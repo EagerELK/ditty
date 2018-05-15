@@ -4,6 +4,8 @@ require 'ditty/controllers/application'
 
 module Ditty
   class Main < Application
+    set track_actions: true
+
     def find_template(views, name, engine, &block)
       super(views, name, engine, &block) # Root
       super(::Ditty::App.view_folder, name, engine, &block) # Basic Plugin
@@ -28,7 +30,7 @@ module Ditty
     end
 
     get '/auth/failure' do
-      broadcast(:identity_failed_login)
+      broadcast(:identity_failed_login, target: self)
       flash[:warning] = 'Invalid credentials. Please try again.'
       redirect "#{settings.map_path}/auth/identity"
     end
@@ -38,12 +40,12 @@ module Ditty
         # Successful Login
         user = User.find(email: env['omniauth.auth']['info']['email'])
         self.current_user = user
-        log_action(:identity_login, user: user)
+        broadcast(:identity_login, target: self)
         flash[:success] = 'Logged In'
         redirect env['omniauth.origin'] || "#{settings.map_path}/"
       else
         # Failed Login
-        broadcast(:identity_failed_login)
+        broadcast(:identity_failed_login, target: self)
         flash[:warning] = 'Invalid credentials. Please try again.'
         redirect "#{settings.map_path}/auth/identity"
       end
@@ -70,7 +72,7 @@ module Ditty
         sa = Role.find_or_create(name: 'super_admin')
         user.add_role sa if User.where(roles: sa).count == 0
 
-        log_action(:identity_register, user: user)
+        broadcast(:identity_register, target: self, values: { user: user })
         flash[:info] = 'Successfully Registered. Please log in'
         redirect "#{settings.map_path}/auth/identity"
       else
@@ -81,7 +83,7 @@ module Ditty
 
     # Logout Action
     delete '/auth/identity' do
-      log_action(:identity_logout)
+      broadcast(:identity_logout, target: self)
       logout
       flash[:info] = 'Logged Out'
 
