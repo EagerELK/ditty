@@ -1,3 +1,4 @@
+require 'haml'
 require 'ditty/services/email'
 require 'ditty/services/settings'
 require 'ditty/components/app'
