@@ -5,6 +5,7 @@
       .panel-body
         %form.form-horizontal{ method: 'post', action: "#{settings.map_path}/auth/identity/reset" }
           %input{ name: '_method', value: 'PUT', type: 'hidden' }
+          %input{ name: 'token', value: params['token'], type: 'hidden' }
           = form_control(:password, Ditty::Identity.new, type: 'password', placeholder: 'Your password', group: 'identity')
           = form_control(:password_confirmation, Ditty::Identity.new, type: 'password', label: 'Confirm Password', placeholder: 'Confirm your password', group: 'identity')
           %button.btn.btn-primary{ type: 'submit' }
