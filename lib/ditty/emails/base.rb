@@ -1,20 +1,18 @@
 require 'haml'
-require 'ditty/services/email'
-require 'ditty/services/settings'
 require 'ditty/components/app'
 
 module Ditty
   module Emails
     class Base
-      attr_accessor :view, :options, :locals
+      attr_accessor :options, :locals, :mail
 
-      def initialize(view, locals = {}, options = nil)
-        @view = view
-        @locals = locals
-        @options = options ? options : base_options
+      def initialize(options = {})
+        @mail = options[:mail] || Mail.new
+        @locals = options[:locals] || {}
+        @options = base_options.merge options
       end
 
-      def deliver(to = nil, locals = {})
+      def deliver!(to = nil, locals = {})
         options[:to] = to unless to.nil?
         @locals.merge!(locals)
         %i[to from subject].each do |param|
@@ -35,10 +33,6 @@ module Ditty
 
       private
 
-      def mail
-        @mail ||= Services::Email.create
-      end
-
       def content
         result = Haml::Engine.new(content_haml).render(Object.new, locals)
         return result unless options[:layout]
@@ -46,7 +40,7 @@ module Ditty
       end
 
       def content_haml
-        read_template(view)
+        read_template(options[:view])
       end
 
       def layout_haml
@@ -58,7 +52,7 @@ module Ditty
       end
 
       def base_options
-        { subject: '(No Subject)', from: 'no-reply@ditty.io' }
+        { subject: '(No Subject)', from: 'no-reply@ditty.io', view: :base }
       end
 
       def find_template(file)
@@ -70,8 +64,9 @@ module Ditty
       end
 
       class << self
-        def deliver(to = nil, locals = {})
-          new.deliver(to, locals)
+        def deliver!(to = nil, options = {})
+          locals = options[:locals] || {}
+          new(options).deliver!(to, locals)
         end
       end
     end

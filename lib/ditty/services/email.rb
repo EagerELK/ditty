@@ -1,24 +1,15 @@
 # frozen_string_literal: true
 
 require 'mail'
+require 'active_support/inflector'
 require 'ditty/services/logger'
+require 'ditty/services/settings'
 
 module Ditty
   module Services
     module Email
-      CONFIG = './config/email.yml'.freeze
-
       class << self
-        def create
-          config!
-          Mail.new
-        end
-
-        def config
-          @config ||= symbolize_keys File.exist?(CONFIG) ? YAML.load_file(CONFIG) : default
-        end
-
-        private
+        include ActiveSupport::Inflector
 
         def config!
           cfg = config
@@ -27,14 +18,26 @@ module Ditty
           end
         end
 
+        def deliver(email, to = nil, options = {})
+          config!
+          options[:to] ||= to unless to.nil?
+          email = from_symbol(email, options) if email.is_a? Symbol
+          email.deliver!
+        end
+
+        private
+
+        def config
+          Settings.values[:email] || default
+        end
+
         def default
           { delivery_method: :logger, logger: Ditty::Services::Logger.instance }
         end
 
-        def symbolize_keys(hash)
-          return hash.map { |v| symbolize_keys(v) } if hash.is_a? Array
-          return hash unless hash.is_a? Hash
-          Hash[hash.map { |k, v| [k.to_sym, symbolize_keys(v)] }]
+        def from_symbol(email, options)
+          require "ditty/emails/#{email}"
+          constantize("Ditty::Emails::#{classify(email)}").new(options)
         end
       end
     end

@@ -6,9 +6,9 @@ require 'ditty/services/email'
 module Ditty
   module Emails
     class ForgotPassword < Base
-      def initialize(locals = {}, options = nil)
-        super(:forgot_password, locals, options)
-        @options[:layout] ||= :action
+      def initialize(options = {})
+        options = { view: :forgot_password, layout: :action }.merge(options)
+        super(options)
       end
     end
   end

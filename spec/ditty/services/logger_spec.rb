@@ -11,7 +11,7 @@ class TestLogger
   end
 end
 
-RSpec.describe Ditty::Services::Logger, type: :service do
+describe Ditty::Services::Logger, type: :service do
   let(:subject) { described_class.clone }
   config_file = [
     { 'name' => 'file', 'class' => 'Logger' },
