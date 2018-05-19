@@ -1,0 +1,6 @@
+---
+option_a: 1
+option_b: value
+no_file_section:
+  section_1: 2
+  section_2: set
