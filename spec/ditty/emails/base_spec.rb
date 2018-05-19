@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'ditty/emails/base'
 require 'mail'
 
 describe Ditty::Emails::Base do
