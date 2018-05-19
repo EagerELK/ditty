@@ -1,0 +1,16 @@
+.row
+  .col-md-4
+  .col-md-4
+    .panel.panel-default
+      .panel-body
+        %p.text-center
+          Enter your email address and we will send you a link to reset your password if you've registered on the system.
+        %form.form-horizontal{ method: 'post', action: "#{settings.map_path}/auth/identity/forgot" }
+          .form-group
+            .col-sm-12
+              %input.form-control{ name: 'email', type: 'text', placeholder: 'Enter your email address' }
+          .row.text-right
+            .col-md-12
+              %button.btn.btn-primary.btn-block{ type: 'submit' }
+                Email password reset link
+  .col-md-4

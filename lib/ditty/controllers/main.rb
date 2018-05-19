@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'ditty/controllers/application'
+require 'ditty/services/email'
+require 'securerandom'
 
 module Ditty
   class Main < Application
@@ -27,6 +29,49 @@ module Ditty
         redirect "#{settings.map_path}/auth/identity/register"
       end
       haml :'identity/login', locals: { title: 'Log In' }
+    end
+
+    get '/auth/identity/forgot' do
+      haml :'identity/forgot', locals: { title: 'Forgot your password?' }
+    end
+
+    post '/auth/identity/forgot' do
+      email = params['email']
+      identity = Identity[username: email]
+      if identity
+        # Update record
+        token = SecureRandom.hex(16)
+        identity.update(reset_token: token, reset_requested: Time.now)
+        # Send Email
+        reset_url = "#{request.base_url}#{settings.map_path}/auth/identity/reset?token=#{token}"
+        Ditty::Services::Email.deliver(:forgot_password, email, locals: { identity: identity, reset_url: reset_url, request: request })
+      end
+      flash[:info] = 'An email was sent to the email provided with instructions on how to reset your password'
+      redirect '/auth/identity'
+    end
+
+    get '/auth/identity/reset' do
+      identity = Identity[reset_token: params['token']]
+      halt 404 unless identity && identity.reset_requested && identity.reset_requested > (Time.now - (24 * 60 * 60))
+
+      haml :'identity/reset', locals: { title: 'Reset your password', identity: identity }
+    end
+
+    put '/auth/identity/reset' do
+      identity = Identity[reset_token: params['token']]
+      halt 404 unless identity && identity.reset_requested && identity.reset_requested > (Time.now - (24 * 60 * 60))
+
+      identity_params = permitted_attributes(Identity, :update)
+
+      identity.set identity_params.merge(reset_token: nil, reset_requested: nil)
+      if identity.valid? && identity.save
+        broadcast(:identity_update_password, target: self)
+        flash[:success] = 'Password Updated'
+        redirect "#{settings.map_path}/auth/identity"
+      else
+        broadcast(:identity_update_password_failed, target: self)
+        haml :'identity/reset', locals: { title: 'Reset your password', identity: identity }
+      end
     end
 
     get '/auth/failure' do

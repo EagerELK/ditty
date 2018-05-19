@@ -8,7 +8,10 @@
             %label.control-label Email
             %input.form-control.border-input{ name: 'username' }
           .form-group
-            %label.control-label Password
+            %label.control-label{ style: 'display: block' }
+              Password
+              %a{ href: "#{settings.map_path}/auth/identity/forgot", style: 'float: right;' }
+                Forgot?
             %input.form-control.border-input{ name: 'password', type: 'password' }
           %button.btn.btn-primary{ type: 'submit' } Log In
           - if policy(::Ditty::Identity).register?

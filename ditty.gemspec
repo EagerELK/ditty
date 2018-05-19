@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'haml', '~> 5.0'
   spec.add_dependency 'logger', '~> 1.0'
   spec.add_dependency 'oga', '>= 2.14'
+  spec.add_dependency 'mail', '>= 1.7'
   spec.add_dependency 'omniauth', '~> 1.0'
   spec.add_dependency 'omniauth-identity', '~> 1.0'
   spec.add_dependency 'pundit', '~> 1.0'
