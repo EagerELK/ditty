@@ -93,11 +93,6 @@ module Ditty
       identity = entity.identity.first
       identity_params = params['identity']
 
-      unless identity_params['password'] == identity_params['password_confirmation']
-        flash[:warning] = 'Password didn\'t match'
-        return redirect back
-      end
-
       unless current_user.super_admin? || identity.authenticate(identity_params['old_password'])
         broadcast(:identity_update_password_failed, target: self)
         flash[:danger] = 'Old Password didn\'t match'
@@ -111,8 +106,10 @@ module Ditty
         flash[:success] = 'Password Updated'
         redirect back
       elsif current_user.super_admin? && current_user.id != id.to_i
+        broadcast(:identity_update_password_failed, target: self)
         haml :"#{view_location}/display", locals: { entity: entity, identity: identity, title: heading }
       else
+        broadcast(:identity_update_password_failed, target: self)
         haml :"#{view_location}/profile", locals: { entity: entity, identity: identity, title: heading }
       end
     end

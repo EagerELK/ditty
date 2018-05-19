@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'ditty/controllers/application'
-require 'ditty/emails/forgot_password'
+require 'ditty/services/email'
 require 'securerandom'
 
 module Ditty
@@ -44,7 +44,7 @@ module Ditty
         identity.update(reset_token: token, reset_requested: Time.now)
         # Send Email
         reset_url = "#{request.base_url}#{settings.map_path}/auth/identity/reset?token=#{token}"
-        Ditty::Emails::ForgotPassword.deliver(email, identity: identity, reset_url: reset_url, request: request)
+        Ditty::Services::Email.deliver(:forgot_password, email, locals: { identity: identity, reset_url: reset_url, request: request })
       end
       flash[:info] = 'An email was sent to the email provided with instructions on how to reset your password'
       redirect '/auth/identity'
@@ -54,7 +54,7 @@ module Ditty
       identity = Identity[reset_token: params['token']]
       halt 404 unless identity && identity.reset_requested && identity.reset_requested > (Time.now - (24 * 60 * 60))
 
-      haml :'identity/reset', locals: { title: 'Reset your password' }
+      haml :'identity/reset', locals: { title: 'Reset your password', identity: identity }
     end
 
     put '/auth/identity/reset' do
@@ -63,17 +63,15 @@ module Ditty
 
       identity_params = permitted_attributes(Identity, :update)
 
-      unless identity_params['password'] == identity_params['password_confirmation']
-        flash[:warning] = 'Password didn\'t match'
-        return redirect back
-      end
-
       identity.set identity_params.merge(reset_token: nil, reset_requested: nil)
       if identity.valid? && identity.save
-        # log_action("#{dehumanized}_update_password".to_sym) if settings.track_actions
+        broadcast(:identity_update_password, target: self)
         flash[:success] = 'Password Updated'
+        redirect "#{settings.map_path}/auth/identity"
+      else
+        broadcast(:identity_update_password_failed, target: self)
+        haml :'identity/reset', locals: { title: 'Reset your password', identity: identity }
       end
-      redirect "#{settings.map_path}/auth/identity"
     end
 
     get '/auth/failure' do
