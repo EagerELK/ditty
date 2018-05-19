@@ -15,6 +15,12 @@ describe Ditty::Emails::Base do
     it 'defaults to base options' do
       expect(subject.options).to include subject: '(No Subject)', from: 'no-reply@ditty.io', view: :base
     end
+
+    it 'allows the use of layouts' do
+      base = described_class.new(layout: 'action', mail: mail)
+      expect(mail).to receive(:body).with(/^<!DOCTYPE html>/m)
+      base.deliver!('test@email.com')
+    end
   end
 
   context '.deliver!' do
