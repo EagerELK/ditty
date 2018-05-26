@@ -44,7 +44,11 @@ module Ditty
         identity.update(reset_token: token, reset_requested: Time.now)
         # Send Email
         reset_url = "#{request.base_url}#{settings.map_path}/auth/identity/reset?token=#{token}"
-        Ditty::Services::Email.deliver(:forgot_password, email, locals: { identity: identity, reset_url: reset_url, request: request })
+        Ditty::Services::Email.deliver(
+          :forgot_password,
+          email,
+          locals: { identity: identity, reset_url: reset_url, request: request }
+        )
       end
       flash[:info] = 'An email was sent to the email provided with instructions on how to reset your password'
       redirect '/auth/identity'
