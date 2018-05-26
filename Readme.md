@@ -32,18 +32,9 @@ gem install ditty
 ## Usage
 
 1. Add the components to your rack config file. See the included [`config.ru`](https://github.com/EagerELK/ditty/blob/master/config.ru) file for an example setup
-2. Add the Ditty rake tasks to your Rakefile: `require 'ditty/rake_tasks'`
-3. Set the DB connection as the `DATABASE_URL` ENV variable: `DATABASE_URL=sqlite://development.db`
-4. Create and populate the DB and secret tokens:
-
-```bash
-bundle exec rake proxes:prep
-bundle exec rake proxes:generate_tokens
-bundle exec rake proxes:migrate
-bundle exec rake proxes:seed
-```
-
-4. Start up the web app: `bundle exec rackup`
+2. Set the DB connection as the `DATABASE_URL` ENV variable: `DATABASE_URL=sqlite://development.db`
+3. Run the Ditty migrations: `bundle exec ditty migrate`
+4. Run the Ditty server: `bundle exec ditty server`
 
 ## Components
 

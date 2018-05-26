@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'ditty/cli'
+
+Ditty::CLI.start

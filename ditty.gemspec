@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = 'exe'
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.executables   = ['ditty']
   spec.require_paths = ['lib']
 
   spec.add_development_dependency 'bundler', '~> 1.12'
@@ -44,5 +44,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'sinatra-contrib', '~> 2.0'
   spec.add_dependency 'sinatra-flash', '~> 0.3'
   spec.add_dependency 'tilt', '>= 2'
+  spec.add_dependency 'thor', '>= 0.20'
   spec.add_dependency 'wisper', '~> 2.0'
 end
