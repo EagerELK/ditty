@@ -21,6 +21,10 @@ module Ditty
       # Check the migrations
       Rake::Task['ditty:migrate:check'].invoke
 
+      # Seed Ditty DB
+      puts 'Seeding the Ditty DB'
+      Rake::Task['ditty:seed'].invoke
+
       # RackUP!
       puts 'Starting the Ditty Server'
       Rack::Server.start(config: 'config.ru')
