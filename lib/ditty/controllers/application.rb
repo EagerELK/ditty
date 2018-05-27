@@ -52,7 +52,7 @@ module Ditty
     end
 
     configure :production, :development do
-      enable :logging
+      disable :logging
       use Rack::CommonLogger, Ditty::Services::Logger.instance
     end
 
