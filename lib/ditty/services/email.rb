@@ -28,7 +28,7 @@ module Ditty
         private
 
         def config
-          Settings.values[:email] || default
+          default.merge Ditty::Services::Settings.values(:email)
         end
 
         def default

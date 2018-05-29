@@ -4,20 +4,22 @@ require 'logger'
 require 'yaml'
 require 'singleton'
 require 'active_support/inflector'
+require 'ditty/services/settings'
+require 'active_support/core_ext/object/blank'
 
 module Ditty
   module Services
     class Logger
       include Singleton
 
-      CONFIG = './config/logger.yml'.freeze
       attr_reader :loggers
 
       def initialize
         @loggers = []
-        config.each do |values|
-          klass = values['class'].constantize
-          opts = tr(values['options']) || nil
+        return if config[:loggers].blank?
+        config[:loggers].each do |values|
+          klass = values[:class].constantize
+          opts = tr(values[:options]) || nil
           logger = klass.new(opts)
           if values['level']
             logger.level = klass.const_get(values['level'].to_sym)
@@ -37,7 +39,7 @@ module Ditty
       private
 
       def config
-        @config ||= File.exist?(CONFIG) ? YAML.load_file(CONFIG) : default
+        default.merge Ditty::Services::Settings.values(:logger)
       end
 
       def tr(val)
@@ -48,7 +50,7 @@ module Ditty
       end
 
       def default
-        [{ 'name' => 'default', 'class' => 'Logger' }]
+        { loggers: [{ name: 'default', class: 'Logger' }] }
       end
     end
   end

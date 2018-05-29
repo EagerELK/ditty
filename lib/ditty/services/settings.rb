@@ -9,6 +9,7 @@ module Ditty
   module Services
     module Settings
       CONFIG_FOLDER = './config'.freeze
+      CONFIG_FILE = "#{CONFIG_FOLDER}/settings.yml".freeze
 
       class << self
         def [](key)
