@@ -42,7 +42,7 @@ module Ditty
     end
 
     # Create Form
-    get '/new' do
+    get '/new/?' do
       authorize settings.model_class, :create
 
       entity = settings.model_class.new(permitted_attributes(settings.model_class, :create))
@@ -66,7 +66,7 @@ module Ditty
     end
 
     # Read
-    get '/:id' do |id|
+    get '/:id/?' do |id|
       entity = read(id)
       halt 404 unless entity
       authorize entity, :read
@@ -76,7 +76,7 @@ module Ditty
     end
 
     # Update Form
-    get '/:id/edit' do |id|
+    get '/:id/edit/?' do |id|
       entity = read(id)
       halt 404 unless entity
       authorize entity, :update
@@ -87,7 +87,7 @@ module Ditty
     end
 
     # Update
-    put '/:id' do |id|
+    put '/:id/?' do |id|
       entity = read(id)
       halt 404 unless entity
       authorize entity, :update
@@ -101,7 +101,7 @@ module Ditty
       update_response(entity)
     end
 
-    delete '/:id' do |id|
+    delete '/:id/?' do |id|
       entity = read(id)
       halt 404 unless entity
       authorize entity, :delete
