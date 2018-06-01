@@ -8,9 +8,9 @@ describe Ditty::Services::Settings do
     settings = File.read('./spec/fixtures/settings.yml')
     section = File.read('./spec/fixtures/section.yml')
 
+    allow(File).to receive(:file?).and_return(false)
     allow(File).to receive(:file?).with('./config/settings.yml').and_return(true)
     allow(File).to receive(:file?).with('./config/section.yml').and_return(true)
-    allow(File).to receive(:file?).with('./config/no_file_section.yml').and_return(false)
 
     allow(File).to receive(:read).with('./config/settings.yml').and_return(settings)
     allow(File).to receive(:read).with('./config/section.yml').and_return(section)
@@ -19,6 +19,7 @@ describe Ditty::Services::Settings do
   context '#[]' do
     before(:each) do
       setup_files
+      described_class.values = nil
     end
 
     it 'returns the specified values from the global settings' do

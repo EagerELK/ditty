@@ -13,16 +13,27 @@ module Ditty
 
       class << self
         def [](key)
-          values[key.to_sym]
+          values(key.to_sym)
         end
 
         def values(scope = :settings)
-          @values ||= Hash.new do |h, k|
-            h[k] = read("#{CONFIG_FOLDER}/#{k}.yml") if File.file?("#{CONFIG_FOLDER}/#{k}.yml")
-            h[k] = h[:settings][k] if h.key?(k) == false && h.key?(:settings) && k != :settings
-            h.key?(k) ? h[k] : {}
+          @values ||= begin
+            v = Hash.new do |h, k|
+              h[k] = if File.file?("#{CONFIG_FOLDER}/#{k}.yml")
+                       read("#{CONFIG_FOLDER}/#{k}.yml")
+                     elsif k != :settings && h[:settings].key?(k)
+                       h[:settings][k]
+                     end
+              h[k]
+            end
+            v[:settings] = File.file?(CONFIG_FILE) ? read(CONFIG_FILE) : {}
+            v
           end
           @values[scope]
+        end
+
+        def values=(values)
+          @values = values
         end
 
         def read(filename)

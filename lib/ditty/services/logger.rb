@@ -39,7 +39,7 @@ module Ditty
       private
 
       def config
-        default.merge Ditty::Services::Settings.values(:logger)
+        default.merge Ditty::Services::Settings.values(:logger) || {}
       end
 
       def tr(val)

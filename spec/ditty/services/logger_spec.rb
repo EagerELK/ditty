@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'logger'
 require 'spec_helper'
 require 'ditty/services/logger'
 
@@ -13,14 +14,7 @@ end
 
 describe Ditty::Services::Logger, type: :service do
   let(:subject) { described_class.clone }
-  config_file = [
-    { 'name' => 'file', 'class' => 'Logger' },
-    { 'name' => 'ES', 'class' => 'TestLogger', 'level' => 'WARN', options: {
-      'url' => 'http://logging.ditty.io:9200', 'log' => false
-    } },
-    { 'name' => 'stdout', 'class' => 'Logger', 'options' => '$stdout' },
-    { 'name' => 'stderr', 'class' => 'Logger', 'options' => '$stderr' }
-  ]
+  let(:config_file) { File.read('./spec/fixtures/logger.yml') }
 
   context 'initialize' do
     it '.instance always refers to the same instance' do
@@ -32,8 +26,10 @@ describe Ditty::Services::Logger, type: :service do
     end
 
     it 'reads config from file and creates an array of loggers' do
-      allow(File).to receive(:'exist?').with(subject::CONFIG).and_return(true)
-      allow(YAML).to receive(:load_file).and_return(config_file)
+      Ditty::Services::Settings.values = nil
+      allow(File).to receive(:'file?').and_return(false)
+      allow(File).to receive(:'file?').with('./config/logger.yml').and_return(true)
+      allow(File).to receive(:read).and_return(config_file)
 
       expect(subject.instance.loggers.size).to eq 4
       expect(subject.instance.loggers[0]).to be_instance_of Logger
@@ -43,8 +39,10 @@ describe Ditty::Services::Logger, type: :service do
 
   context 'send messages' do
     it 'receives message and passes it to the loggers' do
-      allow(File).to receive(:'exist?').with(subject::CONFIG).and_return(true)
-      allow(YAML).to receive(:load_file).and_return(config_file)
+      Ditty::Services::Settings.values = nil
+      allow(File).to receive(:'file?').and_return(false)
+      allow(File).to receive(:'file?').with('./config/logger.yml').and_return(true)
+      allow(File).to receive(:read).and_return(config_file)
       allow(Logger).to receive(:warn).with('Some message')
       allow(TestLogger).to receive(:warn).with('Some message')
 
