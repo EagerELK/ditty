@@ -8,24 +8,22 @@ module Ditty
   class Listener
     EVENTS = %i[
       component_list component_create component_read component_update component_delete
-      identity_register identity_login identity_logout identity_failed_login identity_update_password identity_update_password_failed
-    ]
+      identity_register identity_login identity_logout identity_failed_login identity_update_password
+      identity_update_password_failed
+    ].freeze
 
     def initialize
       @mutex = Mutex.new
     end
 
     def method_missing(method, *args)
-      return super unless args[0].is_a?(Hash) && args[0].has_key?(:target)
+      return unless args[0].is_a?(Hash) && args[0][:target] && args[0][:target].settings.track_actions
 
-      return unless args[0][:target].settings.track_actions
-      args[0][:values] ||= {}
-      values = {
+      log_action({
         user: args[0][:target].current_user,
         action: action_from(args[0][:target], method),
         details: args[0][:details]
-      }.merge(args[0][:values])
-      log_action values
+      }.merge(args[0][:values] || {}))
     end
 
     def respond_to_missing?(method, _include_private = false)
