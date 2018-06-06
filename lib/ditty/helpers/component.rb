@@ -16,7 +16,7 @@ module Ditty
         count = params['count'] || 10
         page = params['page'] || 1
 
-        ds = dataset.select
+        ds = dataset.respond_to?(:dataset) ? dataset.dataset : dataset
         count == 'all' ? ds : ds.paginate(page.to_i, count.to_i)
       end
 
