@@ -85,7 +85,7 @@ module Ditty
       end
 
       def search(dataset)
-        return dataset if ['', nil].include?(params['q']) || searchable_fields == []
+        return dataset if ['', nil].include?(params['q']) || search_filters == []
         dataset.where Sequel.|(*search_filters)
       end
     end
