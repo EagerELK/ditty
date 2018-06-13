@@ -69,17 +69,17 @@ module Ditty
 
       identity.set identity_params.merge(reset_token: nil, reset_requested: nil)
       if identity.valid? && identity.save
-        broadcast(:identity_update_password, target: self)
+        broadcast(:identity_update_password, target: self, details: "IP: #{request.ip}")
         flash[:success] = 'Password Updated'
         redirect "#{settings.map_path}/auth/identity"
       else
-        broadcast(:identity_update_password_failed, target: self)
+        broadcast(:identity_update_password_failed, target: self, details: "IP: #{request.ip}")
         haml :'identity/reset', locals: { title: 'Reset your password', identity: identity }
       end
     end
 
     get '/auth/failure' do
-      broadcast(:identity_failed_login, target: self)
+      broadcast(:identity_failed_login, target: self, details: "IP: #{request.ip}")
       flash[:warning] = 'Invalid credentials. Please try again.'
       redirect "#{settings.map_path}/auth/identity"
     end
@@ -89,12 +89,12 @@ module Ditty
         # Successful Login
         user = User.find(email: env['omniauth.auth']['info']['email'])
         self.current_user = user
-        broadcast(:identity_login, target: self)
+        broadcast(:identity_login, target: self, details: "IP: #{request.ip}")
         flash[:success] = 'Logged In'
         redirect env['omniauth.origin'] || "#{settings.map_path}/"
       else
         # Failed Login
-        broadcast(:identity_failed_login, target: self)
+        broadcast(:identity_failed_login, target: self, details: "IP: #{request.ip}")
         flash[:warning] = 'Invalid credentials. Please try again.'
         redirect "#{settings.map_path}/auth/identity"
       end
@@ -121,7 +121,7 @@ module Ditty
         sa = Role.find_or_create(name: 'super_admin')
         user.add_role sa if User.where(roles: sa).count == 0
 
-        broadcast(:identity_register, target: self, values: { user: user })
+        broadcast(:identity_register, target: self, values: { user: user }, details: "IP: #{request.ip}")
         flash[:info] = 'Successfully Registered. Please log in'
         redirect "#{settings.map_path}/auth/identity"
       else
@@ -132,7 +132,7 @@ module Ditty
 
     # Logout Action
     delete '/auth/identity' do
-      broadcast(:identity_logout, target: self)
+      broadcast(:identity_logout, target: self, details: "IP: #{request.ip}")
       logout
       flash[:info] = 'Logged Out'
 
