@@ -13,7 +13,7 @@ module Ditty
       super(::Ditty::App.view_folder, name, engine, &block) # Basic Plugin
     end
 
-    before /.*/ do
+    before(/.*/) do
       # Redirect to the registration page if there's no SA user
       sa = Role.find_or_create(name: 'super_admin')
       if User.where(roles: sa).count == 0

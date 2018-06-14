@@ -32,9 +32,7 @@ module Ditty
           @values[scope]
         end
 
-        def values=(values)
-          @values = values
-        end
+        attr_writer :values
 
         def read(filename)
           base = YAML.safe_load(ERB.new(File.read(filename)).result).deep_symbolize_keys
