@@ -14,6 +14,7 @@ module Ditty
     end
 
     before(/.*/) do
+      return if ["#{settings.map_path}/auth/identity/new", "#{settings.map_path}/auth/identity/register"].include? request.path
       # Redirect to the registration page if there's no SA user
       sa = Role.find_or_create(name: 'super_admin')
       if User.where(roles: sa).count == 0
