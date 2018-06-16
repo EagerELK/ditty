@@ -17,7 +17,7 @@ module Ditty
         if user.super_admin?
           scope.all
         else
-          []
+          scope.where(id: -1)
         end
       end
     end
