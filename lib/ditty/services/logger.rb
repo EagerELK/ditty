@@ -21,8 +21,8 @@ module Ditty
           klass = values[:class].constantize
           opts = tr(values[:options]) || nil
           logger = klass.new(opts)
-          if values['level']
-            logger.level = klass.const_get(values['level'].to_sym)
+          if values[:level]
+            logger.level = klass.const_get(values[:level].to_sym)
           end
           @loggers << logger
         end

@@ -1,15 +1,17 @@
 loggers:
 - name: file
   class: Logger
+  level: 'DEBUG'
 - name: ES
   class: TestLogger
-  level: 'WARN'
   options:
     url: 'http://logging.ditty.io:9200'
     log: false
 - name: stdout
   class: Logger
   options: '$stdout'
+  level: INFO
 - name: stderr
   class: Logger
   options: '$stderr'
+  level: WARN

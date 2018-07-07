@@ -35,6 +35,16 @@ describe Ditty::Services::Logger, type: :service do
       expect(subject.instance.loggers[0]).to be_instance_of Logger
       expect(subject.instance.loggers[1]).to be_instance_of TestLogger
     end
+
+    it 'sets the correct logging level' do
+      Ditty::Services::Settings.values = nil
+      allow(File).to receive(:'file?').and_return(false)
+      allow(File).to receive(:'file?').with('./config/logger.yml').and_return(true)
+      allow(File).to receive(:read).and_return(config_file)
+      expect(subject.instance.loggers[0].level).to eq Logger::DEBUG
+      expect(subject.instance.loggers[2].level).to eq Logger::INFO
+      expect(subject.instance.loggers[3].level).to eq Logger::WARN
+    end
   end
 
   context 'send messages' do
