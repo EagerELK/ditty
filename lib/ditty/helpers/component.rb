@@ -17,7 +17,9 @@ module Ditty
         page = params['page'] || 1
 
         ds = dataset.respond_to?(:dataset) ? dataset.dataset : dataset
-        count == 'all' ? ds : ds.paginate(page.to_i, count.to_i)
+        return ds if count == 'all'
+        # Account for difference between sequel paginate and will paginate
+        ds.is_a?(Array) ? ds.paginate(page: page.to_i, per_page: count.to_i) : ds.paginate(page.to_i, count.to_i)
       end
 
       def heading(action = nil)

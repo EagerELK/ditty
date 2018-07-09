@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'ditty/services/pagination_wrapper'
+
 module Ditty
   module Helpers
     module Views
@@ -90,7 +92,8 @@ module Ditty
       end
 
       def pagination(list, base_path, qp = {})
-        return unless list.respond_to? :pagination_record_count
+        return unless list.respond_to?(:pagination_record_count) || list.respond_to?(:total_entries)
+        list = Ditty::Services::PaginationWrapper.new(list)
         locals = {
           first_link: "#{base_path}?" + query_string(qp.merge(page: 1)),
           next_link: list.last_page? ? '#' : "#{base_path}?" + query_string(qp.merge(page: list.next_page)),
