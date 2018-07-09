@@ -15,11 +15,14 @@ module Ditty
     one_to_many :audit_logs
 
     def role?(check)
-      !roles_dataset.first(name: check).nil?
+      @roles ||= Hash.new do |h,k|
+        h[k] = !roles_dataset.first(name: k).nil?
+      end
+      @roles[check]
     end
 
     def method_missing(method_sym, *arguments, &block)
-      if method_sym.to_s[-1] == '?'
+      if respond_to_missing?(method_sym)
         role?(method_sym[0..-2])
       else
         super
