@@ -108,7 +108,7 @@ module Ditty
           identity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
           user = User.find(email: identity.username)
           if user.nil?
-            user.create(email: identity.username)
+            user = User.create(email: identity.username)
 
             broadcast(:user_register, target: self, values: { user: user }, details: "IP: #{request.ip}")
           end
@@ -131,7 +131,7 @@ module Ditty
       redirect "#{settings.map_path}/"
     end
 
-    post '/auth/identity/callback'
+    post '/auth/identity/callback' do
       if env['omniauth.auth']
         # Successful Login
         user = User.find(email: env['omniauth.auth']['info']['email'])
@@ -142,6 +142,28 @@ module Ditty
       else
         # Failed Login
         broadcast(:identity_failed_login, target: self, details: "IP: #{request.ip}")
+        flash[:warning] = 'Invalid credentials. Please try again.'
+        redirect "#{settings.map_path}/auth/identity"
+      end
+    end
+
+    get '/auth/:provider/callback' do
+      if env['omniauth.auth']
+        # Successful Login
+        user = User.find(email: env['omniauth.auth']['info']['email'])
+        if user.nil?
+          DB.transaction do
+            user = User.create(email: env['omniauth.auth']['info']['email'])
+            broadcast(:user_register, target: self, values: { user: user }, details: "IP: #{request.ip}")
+          end
+        end
+        self.current_user = user
+        broadcast(:user_login, target: self, details: "IP: #{request.ip}")
+        flash[:success] = 'Logged In'
+        redirect env['omniauth.origin'] || "#{settings.map_path}/"
+      else
+        # Failed Login
+        broadcast(:user_failed_login, target: self, details: "IP: #{request.ip}")
         flash[:warning] = 'Invalid credentials. Please try again.'
         redirect "#{settings.map_path}/auth/identity"
       end

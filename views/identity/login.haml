@@ -18,4 +18,12 @@
             .pull-right
               No account yet?
               %a.btn.btn-default{ href: "#{settings.map_path}/auth/identity/register", tabindex: '4' } Register
+        .row
+          .col-sm-12= "&nbsp"
+        - if Ditty::Services::Authentication.provides? 'google_oauth2'
+          .row
+            .col-sm-8.col-sm-push-2
+              %a.btn.btn-block.btn-default{ href: "#{settings.map_path}/auth/google_oauth2" }
+                %i.fa.fa-google
+                Log in with Google
   .col-sm-3
