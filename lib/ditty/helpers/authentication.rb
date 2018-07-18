@@ -18,8 +18,8 @@ module Ditty
       end
 
       def current_user_id
-        return env['omniauth.auth'].uid if env['omniauth.auth']
-        env['rack.session']['user_id'] if env['rack.session']
+        return env['rack.session']['user_id'] if env['rack.session']
+        env['omniauth.auth'].uid if env['omniauth.auth']
       end
 
       def authenticate

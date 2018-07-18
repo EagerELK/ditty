@@ -8,8 +8,8 @@ module Ditty
   class Listener
     EVENTS = %i[
       component_list component_create component_read component_update component_delete
-      identity_register identity_login identity_logout identity_failed_login identity_update_password
-      identity_update_password_failed
+      user_register user_login user_logout user_failed_login
+      identity_update_password identity_update_password_failed
     ].freeze
 
     def initialize
@@ -28,6 +28,20 @@ module Ditty
 
     def respond_to_missing?(method, _include_private = false)
       EVENTS.include? method
+    end
+
+    def user_register(event)
+      user = event[:values][:user]
+      log_action({
+        user: user,
+        action: action_from(event[:target], :user_register),
+        details: event[:details]
+      }.merge(event[:values] || {}))
+
+      # Create the SA user if none is present
+      sa = Role.find_or_create(name: 'super_admin')
+      return if User.where(roles: sa).count.positive?
+      user.add_role sa
     end
 
     def action_from(target, method)

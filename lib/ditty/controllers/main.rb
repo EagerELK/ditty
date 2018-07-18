@@ -13,8 +13,10 @@ module Ditty
       super(::Ditty::App.view_folder, name, engine, &block) # Basic Plugin
     end
 
+    CHECK_PATHS = [settings.map_path, "#{settings.map_path}/auth/identity"].freeze
+
     before(/.*/) do
-      return if ["#{settings.map_path}/auth/identity/new", "#{settings.map_path}/auth/identity/register"].include? request.path
+      return unless CHECK_PATHS.include? request.path
       # Redirect to the registration page if there's no SA user
       sa = Role.find_or_create(name: 'super_admin')
       if User.where(roles: sa).count == 0
@@ -83,25 +85,9 @@ module Ditty
     end
 
     get '/auth/failure' do
-      broadcast(:identity_failed_login, target: self, details: "IP: #{request.ip}")
+      broadcast(:user_failed_login, target: self, details: "IP: #{request.ip}")
       flash[:warning] = 'Invalid credentials. Please try again.'
       redirect "#{settings.map_path}/auth/identity"
-    end
-
-    post '/auth/identity/callback' do
-      if env['omniauth.auth']
-        # Successful Login
-        user = User.find(email: env['omniauth.auth']['info']['email'])
-        self.current_user = user
-        broadcast(:identity_login, target: self, details: "IP: #{request.ip}")
-        flash[:success] = 'Logged In'
-        redirect env['omniauth.origin'] || "#{settings.map_path}/"
-      else
-        # Failed Login
-        broadcast(:identity_failed_login, target: self, details: "IP: #{request.ip}")
-        flash[:warning] = 'Invalid credentials. Please try again.'
-        redirect "#{settings.map_path}/auth/identity"
-      end
     end
 
     # Register Page
@@ -117,18 +103,20 @@ module Ditty
       authorize ::Ditty::Identity, :register
 
       identity = Identity.new(params['identity'])
-      if identity.valid? && identity.save
-        user = User.find_or_create(email: identity.username)
-        user.add_identity identity
+      begin
+        DB.transaction do
+          identity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
+          user = User.find(email: identity.username)
+          if user.nil?
+            user.create(email: identity.username)
 
-        # Create the SA user if none is present
-        sa = Role.find_or_create(name: 'super_admin')
-        user.add_role sa if User.where(roles: sa).count == 0
-
-        broadcast(:identity_register, target: self, values: { user: user }, details: "IP: #{request.ip}")
-        flash[:info] = 'Successfully Registered. Please log in'
-        redirect "#{settings.map_path}/auth/identity"
-      else
+            broadcast(:user_register, target: self, values: { user: user }, details: "IP: #{request.ip}")
+          end
+          user.add_identity identity
+          flash[:info] = 'Successfully Registered. Please log in'
+          redirect "#{settings.map_path}/auth/identity"
+        end
+      rescue Sequel::ValidationFailed
         flash.now[:warning] = 'Could not complete the registration. Please try again.'
         haml :'identity/register', locals: { identity: identity }
       end
@@ -136,11 +124,27 @@ module Ditty
 
     # Logout Action
     delete '/auth/identity' do
-      broadcast(:identity_logout, target: self, details: "IP: #{request.ip}")
+      broadcast(:user_logout, target: self, details: "IP: #{request.ip}")
       logout
       flash[:info] = 'Logged Out'
 
       redirect "#{settings.map_path}/"
+    end
+
+    post '/auth/identity/callback'
+      if env['omniauth.auth']
+        # Successful Login
+        user = User.find(email: env['omniauth.auth']['info']['email'])
+        self.current_user = user
+        broadcast(:user_login, target: self, details: "IP: #{request.ip}")
+        flash[:success] = 'Logged In'
+        redirect env['omniauth.origin'] || "#{settings.map_path}/"
+      else
+        # Failed Login
+        broadcast(:identity_failed_login, target: self, details: "IP: #{request.ip}")
+        flash[:warning] = 'Invalid credentials. Please try again.'
+        redirect "#{settings.map_path}/auth/identity"
+      end
     end
 
     # Unauthenticated
