@@ -51,8 +51,9 @@ module Ditty
     end
 
     def check_roles
-      return if role?('anonymous')
-      add_role Role.find_or_create(name: 'user') unless role?('user')
+      return if roles_dataset.first(name: 'anonymous')
+      return if roles_dataset.first(name: 'user')
+      add_role Role.find_or_create(name: 'user')
     end
 
     def index_prefix
