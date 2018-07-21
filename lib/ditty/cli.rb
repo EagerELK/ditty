@@ -11,7 +11,7 @@ module Ditty
     include Thor::Actions
 
     desc 'server', 'Start the Ditty server'
-    require './application' if File.exists?('application.rb')
+    require './application' if File.exist?('application.rb')
     def server
       # Ensure the token files are present
       Rake::Task['ditty:generate_tokens'].invoke
