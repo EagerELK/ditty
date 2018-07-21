@@ -2,6 +2,7 @@
 
 require 'active_support'
 require 'active_support/inflector'
+require 'will_paginate/array'
 
 module Ditty
   module Helpers
