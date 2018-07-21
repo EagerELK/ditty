@@ -18,7 +18,7 @@ module Ditty
         end
 
         def setup
-          provides.each do |provider|
+          providers.each do |provider|
             require "omniauth/#{provider}"
           end
         end
