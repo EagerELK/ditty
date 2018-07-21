@@ -18,17 +18,22 @@ module Ditty
       dataset.first(settings.model_class.primary_key => id)
     end
 
-    after do
-      return unless response.successful? || response.redirection?
+    def skip_verify!
+      @skip_verify = true
+    end
 
-      verify_authorized unless settings.environment == 'production'
+    after do
+      return if settings.environment == 'production'
+      if (response.successful? || response.redirection?) && @skip_verify == false
+        verify_authorized if settings.environment != 'production'
+      end
     end
 
     after '/' do
-      return unless request.request_method == 'GET'
-      return unless response.successful? || response.redirection?
-
-      verify_policy_scoped unless settings.environment == 'production'
+      return if settings.environment == 'production' || request.request_method != 'GET'
+      if (response.successful? || response.redirection?) && @skip_verify == false
+        verify_policy_scoped
+      end
     end
 
     # List
