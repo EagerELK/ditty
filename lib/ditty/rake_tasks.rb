@@ -32,6 +32,7 @@ module Ditty
           puts 'Preparing the Ditty public folder'
           Dir.mkdir 'public' unless File.exist?('public')
           ::Ditty::Components.public_folder.each do |path|
+            puts "Checking #{path}"
             FileUtils.cp_r "#{path}/.", 'public' unless File.expand_path("#{path}/.").eql? File.expand_path('public')
           end
 
@@ -41,7 +42,7 @@ module Ditty
             FileUtils.cp_r "#{path}/.", 'migrations' unless File.expand_path("#{path}/.").eql? File.expand_path('migrations')
           end
           puts 'Migrations added:'
-          Dir.foreach('migrations').sort.each { |x| puts x if File.file?("migrations/#{x}") }
+          Dir.foreach('migrations').sort.each { |x| puts x if File.file?("migrations/#{x}") && x[-3..-1] == '.rb' }
         end
 
         desc 'Migrate Ditty database to latest version'
