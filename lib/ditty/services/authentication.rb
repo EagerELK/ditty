@@ -1,6 +1,13 @@
 require 'ditty/models/identity'
 require 'ditty/controllers/main'
 require 'ditty/services/settings'
+require 'ditty/services/logger'
+
+require 'omniauth'
+OmniAuth.config.logger = Ditty::Services::Logger.instance
+OmniAuth.config.on_failure = proc { |env|
+  OmniAuth::FailureEndpoint.new(env).redirect_to_failure
+}
 
 module Ditty
   module Services
@@ -8,6 +15,12 @@ module Ditty
       class << self
         def providers
           config.keys
+        end
+
+        def setup
+          provides.each do |provider|
+            require "omniauth/#{provider}"
+          end
         end
 
         def config
@@ -38,3 +51,5 @@ module Ditty
     end
   end
 end
+
+Ditty::Services::Authentication.setup
