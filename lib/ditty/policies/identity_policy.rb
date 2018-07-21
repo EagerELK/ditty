@@ -15,7 +15,7 @@ module Ditty
     class Scope < ApplicationPolicy::Scope
       def resolve
         if user.super_admin?
-          scope.all
+          scope
         else
           scope.where(id: -1)
         end
