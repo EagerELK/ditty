@@ -36,7 +36,7 @@
       #page-wrapper
         -if defined?(title) || defined?(actions)
           .row
-            %h1.col-md-9= defined?(title) ? title : '&nbsp'
+            %h1.col-md-9= defined?(title) ? title : '&nbsp;'
             .col-md-3.text-left{ style: 'margin-top: 20px' }
               = haml :'partials/actions', locals: { actions: defined?(actions) ? actions : {} }
         -else

@@ -19,7 +19,7 @@
           - if policy(::Ditty::Identity).register?
             %button.btn.btn-primary{ type: 'submit' } Register
         .row
-          .col-sm-12= "&nbsp"
+          .col-sm-12= "&nbsp;"
         - if Ditty::Services::Authentication.provides? 'google_oauth2'
           .row
             .col-sm-8.col-sm-push-2
