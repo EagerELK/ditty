@@ -43,6 +43,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'sinatra', '>= 2.0'
   spec.add_dependency 'sinatra-contrib', '~> 2.0'
   spec.add_dependency 'sinatra-flash', '~> 0.3'
+  spec.add_dependency 'sinatra-param', '~> 1.5'
   spec.add_dependency 'tilt', '>= 2'
   spec.add_dependency 'thor', '>= 0.20'
   spec.add_dependency 'will_paginate', '>= 3.1'

@@ -4,6 +4,7 @@ require 'wisper'
 require 'oga'
 require 'sinatra/base'
 require 'sinatra/flash'
+require 'sinatra/param'
 require 'sinatra/respond_with'
 require 'ditty/helpers/views'
 require 'ditty/helpers/pundit'
@@ -24,11 +25,13 @@ module Ditty
     # The order here is important, since Wisper has a deprecated method respond_with method
     helpers Wisper::Publisher
     helpers Helpers::Pundit, Helpers::Views, Helpers::Authentication
+    helpers Sinatra::Param
 
     register Sinatra::Flash, Sinatra::RespondWith
 
     use Rack::PostBodyContentTypeParser
     use Rack::MethodOverride
+    use Rack::NestedParams
 
     helpers do
       def base_path
