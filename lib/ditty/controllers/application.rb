@@ -140,7 +140,7 @@ module Ditty
     end
 
     after do
-      return if params['layout'].nil?
+      return if params[:layout].nil?
       response.body = response.body.map do |resp|
         document = Oga.parse_html(resp)
         document.css('a').each do |elm|

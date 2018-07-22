@@ -5,7 +5,7 @@
       .panel-body
         %form.form-horizontal{ method: 'post', action: "#{settings.map_path}/auth/identity/reset" }
           %input{ name: '_method', value: 'PUT', type: 'hidden' }
-          %input{ name: 'token', value: params['token'], type: 'hidden' }
+          %input{ name: 'token', value: params[:token], type: 'hidden' }
           - if identity.errors[:password] && identity.errors[:password].include?('is not strong enough')
             .alert.alert-warning
               %p Make sure your password is at least 8 characters long, and including the following

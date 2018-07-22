@@ -42,7 +42,7 @@ module Ditty
     end
 
     post '/auth/identity/forgot' do
-      email = params['email']
+      email = params[:email]
       identity = Identity[username: email]
       if identity
         # Update record
@@ -61,14 +61,14 @@ module Ditty
     end
 
     get '/auth/identity/reset' do
-      identity = Identity[reset_token: params['token']]
+      identity = Identity[reset_token: params[:token]]
       halt 404 unless identity && identity.reset_requested && identity.reset_requested > (Time.now - (24 * 60 * 60))
 
       haml :'identity/reset', locals: { title: 'Reset your password', identity: identity }
     end
 
     put '/auth/identity/reset' do
-      identity = Identity[reset_token: params['token']]
+      identity = Identity[reset_token: params[:token]]
       halt 404 unless identity && identity.reset_requested && identity.reset_requested > (Time.now - (24 * 60 * 60))
 
       identity_params = permitted_attributes(Identity, :update)
@@ -102,7 +102,7 @@ module Ditty
     post '/auth/identity/new' do
       authorize ::Ditty::Identity, :register
 
-      identity = Identity.new(params['identity'])
+      identity = Identity.new(params[:identity])
       begin
         DB.transaction do
           identity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect

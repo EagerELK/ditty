@@ -3,7 +3,7 @@
     - if self.class.const_defined?(:SEARCHABLE)
       .form-group
         .input-group
-          %input.form-control{ name: 'q', type: 'text', placeholder: 'Search...', value: params['q'] }
+          %input.form-control{ name: 'q', type: 'text', placeholder: 'Search...', value: params[:q] }
           .input-group-btn
             %button.btn.btn-primary{ type: 'submit' }
               %span.fa.fa-search

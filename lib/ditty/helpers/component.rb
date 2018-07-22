@@ -14,13 +14,13 @@ module Ditty
       end
 
       def list
-        count = params['count'] || 10
-        page = params['page'] || 1
+        param :page, Integer, min: 0, default: 1
+        param :count, Integer, min: 0, default: 10
 
         ds = dataset.respond_to?(:dataset) ? dataset.dataset : dataset
-        return ds if count == 'all'
+        return ds if params[:count] == 'all'
         # Account for difference between sequel paginate and will paginate
-        ds.is_a?(Array) ? ds.paginate(page: page.to_i, per_page: count.to_i) : ds.paginate(page.to_i, count.to_i)
+        ds.is_a?(Array) ? ds.paginate(page: params[:page], per_page: params[:count]) : ds.paginate(params[:page], params[:count])
       end
 
       def heading(action = nil)
@@ -88,7 +88,7 @@ module Ditty
       end
 
       def search(dataset)
-        return dataset if ['', nil].include?(params['q']) || search_filters == []
+        return dataset if ['', nil].include?(params[:q]) || search_filters == []
         dataset.where Sequel.|(*search_filters)
       end
     end
