@@ -13,3 +13,4 @@ vendor
 .vagrant
 *.db
 /Gemfile.dev.lock
+migrations
