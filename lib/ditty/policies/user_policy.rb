@@ -34,8 +34,10 @@ module Ditty
       def resolve
         if user && user.super_admin?
           scope
-        else
+        elsif user
           scope.where(id: user.id)
+        else
+          scope.where(id: -1)
         end
       end
     end
