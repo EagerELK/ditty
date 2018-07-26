@@ -22,6 +22,8 @@ module Ditty
     set :map_path, nil
     set :view_location, nil
     set :model_class, nil
+    set :raise_sinatra_param_exceptions, true
+
     # The order here is important, since Wisper has a deprecated method respond_with method
     helpers Wisper::Publisher
     helpers Helpers::Pundit, Helpers::Views, Helpers::Authentication
@@ -95,6 +97,19 @@ module Ditty
         end
         format.json do
           json code: 400, errors: errors, full_errors: errors.full_messages
+        end
+      end
+    end
+
+    error Sinatra::Param::InvalidParameterError do
+      respond_to do |format|
+        status 400
+        format.html do
+          flash.now[:danger] = env['sinatra.error'].message
+          haml :'400', locals: { title: '4 oh oh' }, layout: layout
+        end
+        format.json do
+          json code: 400, errors: { env['sinatra.error'].param => env['sinatra.error'].message }, full_errors: [env['sinatra.error'].message]
         end
       end
     end
