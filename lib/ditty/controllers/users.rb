@@ -131,6 +131,7 @@ module Ditty
     # Profile
     get '/profile' do
       entity = current_user
+      halt 404 unless entity
       authorize entity, :read
 
       haml :"#{view_location}/profile", locals: { entity: entity, identity: entity.identity.first, title: 'My Account' }
