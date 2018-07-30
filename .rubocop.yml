@@ -1,13 +1,10 @@
 Metrics/LineLength:
   Max: 120
 
-Style/Documentation:
-  Enabled: false
-
 Style/NumericPredicate:
   Enabled: false
 
-Style/LeadingCommentSpace:
+Layout/LeadingCommentSpace:
   Exclude:
     - 'config.ru'
 
