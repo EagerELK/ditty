@@ -43,7 +43,7 @@ module Ditty
                   on_registration: Ditty::Main,
                   locate_conditions: ->(req) { { username: req['username'] } }
                 }
-              ],
+              ]
             }
           }
         end

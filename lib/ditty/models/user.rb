@@ -15,7 +15,7 @@ module Ditty
     one_to_many :audit_logs
 
     def role?(check)
-      @roles ||= Hash.new do |h,k|
+      @roles ||= Hash.new do |h, k|
         h[k] = !roles_dataset.first(name: k).nil?
       end
       @roles[check]
