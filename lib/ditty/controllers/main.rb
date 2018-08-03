@@ -13,6 +13,12 @@ module Ditty
       super(::Ditty::App.view_folder, name, engine, &block) # Basic Plugin
     end
 
+    def redirect_path
+      return "#{settings.map_path}/" unless env['omniauth.origin']
+      return "#{settings.map_path}/" if env['omniauth.origin'].match %r{/#{settings.map_path}/auth/?}
+      env['omniauth.origin']
+    end
+
     CHECK_PATHS = [settings.map_path, "#{settings.map_path}/auth/identity"].freeze
 
     before(/.*/) do
@@ -138,7 +144,7 @@ module Ditty
         self.current_user = user
         broadcast(:user_login, target: self, details: "IP: #{request.ip}")
         flash[:success] = 'Logged In'
-        redirect env['omniauth.origin'] || "#{settings.map_path}/"
+        redirect redirect_path
       else
         # Failed Login
         broadcast(:identity_failed_login, target: self, details: "IP: #{request.ip}")
@@ -160,7 +166,7 @@ module Ditty
         self.current_user = user
         broadcast(:user_login, target: self, details: "IP: #{request.ip}")
         flash[:success] = 'Logged In'
-        redirect env['omniauth.origin'] || "#{settings.map_path}/"
+        redirect redirect_path
       else
         # Failed Login
         broadcast(:user_failed_login, target: self, details: "IP: #{request.ip}")
