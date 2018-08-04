@@ -149,9 +149,11 @@ module Ditty
       if request.path =~ /.*\.json\Z/
         content_type :json
         request.path_info = request.path_info.gsub(/.json$/, '')
+      elsif request.env['ACCEPT']
+        content_type request.env['ACCEPT']
+      else
+        content_type(:json) if request.accept.count.eql?(1) && request.accept.first.to_s.eql?('*/*')
       end
-      # Ensure the accept header is set. People forget to include it in API requests
-      content_type(:json) if request.accept.count.eql?(1) && request.accept.first.to_s.eql?('*/*')
     end
 
     after do
