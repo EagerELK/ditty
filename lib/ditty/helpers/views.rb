@@ -104,6 +104,16 @@ module Ditty
         }
         haml :'partials/pager', locals: locals
       end
+
+      def display(value, type = :string)
+        if [true, false].include? value || type.to_sym == :boolean
+          value ? 'Yes' : 'No'
+        elsif value.nil? || type.to_sym == :nil
+          '(Empty)'
+        else
+          value
+        end
+      end
     end
   end
 end
