@@ -106,7 +106,7 @@ module Ditty
       end
 
       def display(value, type = :string)
-        if [true, false].include? value || type.to_sym == :boolean
+        if [true, false].include?(value) || type.to_sym == :boolean
           value ? 'Yes' : 'No'
         elsif value.nil? || type.to_sym == :nil
           '(Empty)'
