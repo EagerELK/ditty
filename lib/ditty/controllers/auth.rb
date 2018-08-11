@@ -13,7 +13,7 @@ module Ditty
 
     def redirect_path
       return "#{settings.map_path}/" unless env['omniauth.origin']
-      return "#{settings.map_path}/" if env['omniauth.origin'].match %r{/#{settings.map_path}/auth/?}
+      return "#{settings.map_path}/" if env['omniauth.origin'] =~ %r{/#{settings.map_path}/auth/?}
       env['omniauth.origin']
     end
 
@@ -113,12 +113,11 @@ module Ditty
       logout
       flash[:info] = 'Logged Out'
 
-      redirect (Ditty::Services::Settings[:logout_redirect_path] || "#{settings.map_path}/")
+      redirect(Ditty::Services::Settings[:logout_redirect_path] || "#{settings.map_path}/")
     end
 
     # Unauthenticated
     get '/unauthenticated' do
-      raise 'here'
       redirect back
     end
 
@@ -131,7 +130,7 @@ module Ditty
 
     # Identity
     # LDAP
-    post '/:provider/callback' do |provider|
+    post '/:provider/callback' do |_provider|
       if env['omniauth.auth']
         # Successful Login
         user = User.find(email: env['omniauth.auth']['info']['email'])

@@ -5,7 +5,7 @@ require 'ditty'
 module Ditty
   class App
     def self.load
-      controllers = File.expand_path('../../controllers', __FILE__)
+      controllers = File.expand_path('../controllers', __dir__)
       Dir.glob("#{controllers}/*.rb").each { |f| require f }
 
       require 'ditty/models/user'
@@ -20,11 +20,11 @@ module Ditty
     end
 
     def self.migrations
-      File.expand_path('../../../../migrate', __FILE__)
+      File.expand_path('../../../migrate', __dir__)
     end
 
     def self.view_folder
-      File.expand_path('../../../../views', __FILE__)
+      File.expand_path('../../../views', __dir__)
     end
 
     def self.routes

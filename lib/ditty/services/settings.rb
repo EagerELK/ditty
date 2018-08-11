@@ -7,6 +7,14 @@ require 'active_support/core_ext/hash/keys'
 
 module Ditty
   module Services
+    # This is the central settings service Ditty. It is used to get the settings
+    # for various aspects of Ditty, and can also be used to configure your own
+    # application.
+    #
+    # It has the concept of sections which can either be included in the main
+    # settings.yml file, or as separate files in the `config` folder. The values
+    # in separate files will be used in preference of those in the `settings.yml`
+    # file.
     module Settings
       CONFIG_FOLDER = './config'.freeze
       CONFIG_FILE = "#{CONFIG_FOLDER}/settings.yml".freeze

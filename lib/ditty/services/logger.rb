@@ -9,6 +9,9 @@ require 'active_support/core_ext/object/blank'
 
 module Ditty
   module Services
+    # This is the central logger for Ditty. It can be configured to log to
+    # multiple endpoints through Ditty Settings. The default configuration is to
+    # send logs to $stdout
     class Logger
       include Singleton
 
@@ -21,9 +24,7 @@ module Ditty
           klass = values[:class].constantize
           opts = tr(values[:options]) || nil
           logger = klass.new(opts)
-          if values[:level]
-            logger.level = klass.const_get(values[:level].to_sym)
-          end
+          logger.level = klass.const_get(values[:level].to_sym) if values[:level]
           @loggers << logger
         end
       end
