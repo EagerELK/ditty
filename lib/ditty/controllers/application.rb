@@ -23,6 +23,7 @@ module Ditty
     set :view_location, nil
     set :model_class, nil
     set :raise_sinatra_param_exceptions, true
+    set track_actions: false
 
     # The order here is important, since Wisper has a deprecated method respond_with method
     helpers Wisper::Publisher
@@ -78,7 +79,7 @@ module Ditty
         status 401
         format.html do
           flash[:warning] = 'Please log in first.'
-          redirect with_layout("#{settings.map_path}/auth/identity")
+          redirect with_layout("#{settings.map_path}/auth/login")
         end
         format.json do
           json code: 401, errors: ['Not Authenticated']

@@ -1,5 +1,5 @@
 require 'ditty/models/identity'
-require 'ditty/controllers/main'
+require 'ditty/controllers/auth'
 require 'ditty/services/settings'
 require 'ditty/services/logger'
 
@@ -13,13 +13,21 @@ module Ditty
   module Services
     module Authentication
       class << self
+        def [](key)
+          config[key]
+        end
+
         def providers
-          config.keys
+          config.compact.keys
         end
 
         def setup
           providers.each do |provider|
-            require "omniauth/#{provider}"
+            begin
+              require "omniauth/#{provider}"
+            rescue LoadError
+              require "omniauth-#{provider}"
+            end
           end
         end
 
@@ -37,10 +45,11 @@ module Ditty
               arguments: [
                 {
                   fields: [:username],
-                  callback_path: '/auth/identity/callback',
+                  path_prefix: '/_proxes/auth',
+                  callback_path: '/_proxes/auth/identity/callback',
                   model: Ditty::Identity,
-                  on_login: Ditty::Main,
-                  on_registration: Ditty::Main,
+                  on_login: Ditty::Auth,
+                  on_registration: Ditty::Auth,
                   locate_conditions: ->(req) { { username: req['username'] } }
                 }
               ]

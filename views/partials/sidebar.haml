@@ -27,11 +27,11 @@
                 = item[:text]
     - else
       %li.active
-        %a{ href: "#{settings.map_path}/auth/identity" }
+        %a{ href: "#{settings.map_path}/auth/login" }
           %i.fa.fa-user.fa-fw
           Log In
       - if policy(::Ditty::Identity).register?
         %li
-          %a{ href: "#{settings.map_path}/auth/identity/register" }
+          %a{ href: "#{settings.map_path}/auth/register" }
             %i.fa.fa-pencil-square-o.fa-fw
             Register

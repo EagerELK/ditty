@@ -1,0 +1,19 @@
+.row
+  .col-sm-3
+  .col-sm-6
+    .panel.panel-default
+      .panel-body
+        - if Ditty::Services::Authentication.provides? 'identity'
+          = haml :'auth/identity'
+          .row
+            .col-sm-12= "&nbsp;"
+        .row
+          .col-sm-8.col-sm-push-2
+            - Ditty::Services::Authentication.providers.each do |name|
+              - provider = Ditty::Services::Authentication[name]
+              - next if provider[:description].nil?
+              %a.btn.btn-block.btn-default{ href: "#{settings.map_path}/auth/#{name}" }
+                %i.fa{ class: "fa-#{provider[:icon]}"}
+                = provider[:description]
+
+  .col-sm-3

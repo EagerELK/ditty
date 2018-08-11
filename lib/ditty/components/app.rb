@@ -31,6 +31,7 @@ module Ditty
       load
       {
         '/' => ::Ditty::Main,
+        '/auth' => ::Ditty::Auth,
         '/users' => ::Ditty::Users,
         '/roles' => ::Ditty::Roles,
         '/audit-logs' => ::Ditty::AuditLogs

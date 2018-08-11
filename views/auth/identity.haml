@@ -1,0 +1,15 @@
+= form_tag("#{settings.map_path}/auth/identity/callback") do
+  .form-group
+    %label.control-label Email
+    %input.form-control.border-input{ name: 'username', tabindex: '1' }
+  .form-group
+    %label.control-label{ style: 'display: block' }
+      Password
+      %a{ href: "#{settings.map_path}/auth/forgot-password", style: 'float: right', tabindex: '5' }
+        Forgot?
+    %input.form-control.border-input{ name: 'password', type: 'password', tabindex: '2' }
+  %button.btn.btn-primary{ type: 'submit', tabindex: '3' } Log In
+  - if policy(::Ditty::Identity).register?
+    .pull-right
+      No account yet?
+      %a.btn.btn-default{ href: "#{settings.map_path}/auth/register", tabindex: '4' } Register
