@@ -56,10 +56,6 @@ module Ditty
       add_role Role.find_or_create(name: 'user')
     end
 
-    def index_prefix
-      email
-    end
-
     def username
       identity_dataset.first.username
     end

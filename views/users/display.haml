@@ -27,8 +27,7 @@
               %a.btn.btn-default{ href: "#{base_path}/#{entity.id}/edit" } Edit
           .col-md-6.text-right
             - if policy(entity).delete?
-              %form{ method: 'post', action: "#{base_path}/#{entity.id}" }
-                %input{ name: '_method', value: 'DELETE', type: 'hidden' }
+              = delete_form_tag("#{base_path}/#{entity.id}") do
                 %button.btn.btn-warning{ type: 'submit' } Delete
   .col-md-2
 
@@ -40,8 +39,7 @@
         .panel-heading
           %h4 Change Password
         .panel-body
-          %form.form-horizontal{ method: 'post', action: "#{base_path}/#{entity.id}/identity" }
-            %input{ name: '_method', value: 'PUT', type: 'hidden' }
+          = edit_form_tag("#{base_path}/#{entity.id}/identity") do
             = form_control(:password, entity.identity.first, type: 'password', placeholder: 'Your password', group: 'identity')
             = form_control(:password_confirmation, entity.identity.first, type: 'password', label: 'Confirm Password', placeholder: 'Confirm your password', group: 'identity')
             %button.btn.btn-primary{ type: 'submit' }

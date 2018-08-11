@@ -38,6 +38,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'omniauth-identity', '~> 1.0'
   spec.add_dependency 'pundit', '~> 1.0'
   spec.add_dependency 'rack-contrib', '~> 1.0'
+  spec.add_dependency 'rack_csrf', '~> 1.0'
   spec.add_dependency 'rake', '~> 12.0'
   spec.add_dependency 'sequel', '>= 4.0'
   spec.add_dependency 'sinatra', '>= 2.0'

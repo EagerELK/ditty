@@ -13,6 +13,7 @@ require 'ditty/services/logger'
 require 'active_support'
 require 'active_support/inflector'
 require 'rack/contrib'
+require 'rack/csrf'
 
 module Ditty
   class Application < Sinatra::Base
@@ -32,6 +33,7 @@ module Ditty
 
     register Sinatra::Flash, Sinatra::RespondWith
 
+    use Rack::Csrf, raise: ENV['APP_ENV'] == true
     use Rack::PostBodyContentTypeParser
     use Rack::MethodOverride
     use Rack::NestedParams
