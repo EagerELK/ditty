@@ -145,7 +145,7 @@ module Ditty
     end
 
     before(/.*/) do
-      ::Ditty::Services::Logger.instance.debug "Running with #{self.class}"
+      ::Ditty::Services::Logger.instance.debug "Running with #{self.class} - #{request.path_info}"
       if request.path =~ /.*\.json\Z/
         content_type :json
         request.path_info = request.path_info.gsub(/.json$/, '')
