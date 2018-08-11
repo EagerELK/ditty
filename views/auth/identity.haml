@@ -1,4 +1,4 @@
-= form_tag("#{settings.map_path}/auth/identity/callback") do
+= form_tag("#{settings.map_path}/auth/identity/callback", attributes: { class: '' }) do
   .form-group
     %label.control-label Email
     %input.form-control.border-input{ name: 'username', tabindex: '1' }
