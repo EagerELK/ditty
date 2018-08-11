@@ -15,8 +15,4 @@
             %tr
               %td.text-center{ colspan: 1 } No records
 
-      - if policy(::Ditty::Role).create?
-        .panel-body.text-right
-          %a.btn.btn-primary{ href: "#{base_path}/new" } New Role
-
 =pagination(list, base_path)

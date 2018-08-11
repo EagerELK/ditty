@@ -43,6 +43,7 @@ module Ditty
           format.html do
             actions = {}
             actions["#{base_path}/#{entity.id}/edit"] = "Edit #{heading}" if policy(entity).update?
+            actions["#{base_path}/new"] = "New #{heading}" if policy(entity).create?
             title = heading(:read) + (entity.respond_to?(:name) ? ": #{entity.name}" : '')
             haml :"#{view_location}/display",
                  locals: { entity: entity, title: title, actions: actions },

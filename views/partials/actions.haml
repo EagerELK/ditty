@@ -1,12 +1,14 @@
 - if actions.count > 1
-  .dropdown
-    %button.btn.btn-default.btn-block.dropdown-toggle{ type: 'button', id: 'actions-toggle', data: { toggle: 'dropdown' } }
-      Actions
+  - link, text = actions.shift
+  .btn-group.text-right
+    %a.btn.btn-primary{ href: link }= text
+    %button.btn.btn-primary.dropdown-toggle{ type: 'button', id: 'actions-toggle', data: { toggle: 'dropdown' } }
       %span.caret
+      %span.sr-only Toggle Dropdown
     %ul.dropdown-menu{ 'aria-labelledby': 'actions-toggle' }
       -actions.each do |k, v|
         %li
           %a{ href: k }= v
 - elsif actions.count > 0
   -actions.each do |k, v|
-    %a.btn.btn-primary.btn-block{ href: k }= v
+    %a.btn.btn-primary{ href: k }= v

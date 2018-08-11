@@ -12,16 +12,17 @@
             %th Roles
             %th Signed Up
         %tbody
-          - list.all.each do |entity|
+          - if list.count > 0
+            - list.all.each do |entity|
+              %tr
+                %td
+                  %a{ href: "#{base_path}/#{entity.id}" }= entity.email
+                %td= entity.name
+                %td= entity.surname
+                %td= entity.roles_dataset.map(:name).map(&:titlecase).join(', ')
+                %td= entity.created_at.strftime('%Y-%m-%d')
+          - else
             %tr
-              %td
-                %a{ href: "#{base_path}/#{entity.id}" }= entity.email
-              %td= entity.name
-              %td= entity.surname
-              %td= entity.roles_dataset.map(:name).map(&:titlecase).join(', ')
-              %td= entity.created_at.strftime('%Y-%m-%d')
-      - if policy(::Ditty::User).create?
-        .panel-body.text-right
-          %a.btn.btn-primary{ href: "#{base_path}/new" } New User
+              %td.text-center{ colspan: 5 } No records
 
 =pagination(list, base_path)
