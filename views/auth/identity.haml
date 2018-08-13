@@ -9,7 +9,7 @@
         Forgot?
     %input.form-control.border-input{ name: 'password', type: 'password', tabindex: '2' }
   %button.btn.btn-primary{ type: 'submit', tabindex: '3' } Log In
-  - if policy(::Ditty::Identity).register?
+  - if policy(::Ditty::User).register?
     .pull-right
       No account yet?
       %a.btn.btn-default{ href: "#{settings.map_path}/auth/register", tabindex: '4' } Register

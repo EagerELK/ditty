@@ -3,7 +3,7 @@
   .col-md-8
     .panel.panel-default
       .panel-body
-        = form_tag("#{settings.map_path}/auth/register") do
+        = form_tag("#{settings.map_path}/auth/register/identity") do
           = form_control(:username, identity, label: 'Email', placeholder: 'your@email.com')
           = form_control(:password, identity, label: 'Password', type: :password)
           = form_control(:password_confirmation, identity, label: 'Confirm Password', type: :password)
@@ -16,7 +16,7 @@
                 %li Numbers
                 %li Special Characters
 
-          - if policy(::Ditty::Identity).register?
+          - if policy(::Ditty::User).register?
             %button.btn.btn-primary{ type: 'submit' } Register
         .row
           .col-sm-12= "&nbsp;"

@@ -4,8 +4,16 @@ require 'ditty/policies/application_policy'
 
 module Ditty
   class IdentityPolicy < ApplicationPolicy
-    def register?
-      !['1', 1, 'true', true, 'yes'].include? ENV['DITTY_REGISTERING_DISABLED']
+    def login?
+      true
+    end
+
+    def forgot_password?
+      true
+    end
+
+    def reset_password?
+      true
     end
 
     def permitted_attributes
