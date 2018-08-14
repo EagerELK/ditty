@@ -1,29 +1,19 @@
+/ TODO: How can we detect a google registration? Extra parameter to the callback? Or a custom callback page?
 .row
   .col-md-2
   .col-md-8
     .panel.panel-default
       .panel-body
-        = form_tag("#{settings.map_path}/auth/register/identity") do
-          = form_control(:username, identity, label: 'Email', placeholder: 'your@email.com')
-          = form_control(:password, identity, label: 'Password', type: :password)
-          = form_control(:password_confirmation, identity, label: 'Confirm Password', type: :password)
-
-          - if identity.errors[:password] && identity.errors[:password].include?('is not strong enough')
-            .alert.alert-warning
-              %p Make sure your password is at least 8 characters long, and including the following
-              %ul
-                %li Upper- and lowercase letters
-                %li Numbers
-                %li Special Characters
-
-          - if policy(::Ditty::User).register?
-            %button.btn.btn-primary{ type: 'submit' } Register
-        .row
-          .col-sm-12= "&nbsp;"
-        - if Ditty::Services::Authentication.provides? 'google_oauth2'
+        - if Ditty::Services::Authentication.provides? 'identity'
+          = haml :'auth/register_identity', locals: { identity: identity }
           .row
-            .col-sm-8.col-sm-push-2
-              %a.btn.btn-block.btn-default{ href: "#{settings.map_path}/auth/google_oauth2" }
-                %i.fa.fa-google
-                Register with Google
+            .col-sm-12= "&nbsp;"
+        .row
+          .col-sm-8.col-sm-push-2
+            - Ditty::Services::Authentication.providers.each do |name|
+              - provider = Ditty::Services::Authentication[name]
+              - next if provider[:register_prompt].nil?
+              %a.btn.btn-block.btn-default{ href: "#{settings.map_path}/auth/#{name}" }
+                %i.fa{ class: "fa-#{provider[:icon] || 'key'}"}
+                = provider[:register_prompt]
   .col-md-2

@@ -1,0 +1,14 @@
+= form_tag("#{settings.map_path}/auth/register/identity") do
+  = form_control(:username, identity, label: 'Email', placeholder: 'your@email.com')
+  = form_control(:password, identity, label: 'Password', type: :password)
+  = form_control(:password_confirmation, identity, label: 'Confirm Password', type: :password)
+
+  - if identity.errors[:password] && identity.errors[:password].include?('is not strong enough')
+    .alert.alert-warning
+      %p Make sure your password is at least 8 characters long, and including the following
+      %ul
+        %li Upper- and lowercase letters
+        %li Numbers
+        %li Special Characters
+
+  %button.btn.btn-primary{ type: 'submit' } Register

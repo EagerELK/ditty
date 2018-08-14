@@ -1,6 +1,6 @@
 .row
-  .col-sm-3
-  .col-sm-6
+  .col-sm-2
+  .col-sm-8
     .panel.panel-default
       .panel-body
         - if Ditty::Services::Authentication.provides? 'identity'
@@ -11,9 +11,8 @@
           .col-sm-8.col-sm-push-2
             - Ditty::Services::Authentication.providers.each do |name|
               - provider = Ditty::Services::Authentication[name]
-              - next if provider[:description].nil?
+              - next if provider[:login_prompt].nil?
               %a.btn.btn-block.btn-default{ href: "#{settings.map_path}/auth/#{name}" }
-                %i.fa{ class: "fa-#{provider[:icon]}"}
-                = provider[:description]
-
-  .col-sm-3
+                %i.fa{ class: "fa-#{provider[:icon] || 'key'}"}
+                = provider[:login_prompt]
+  .col-sm-2

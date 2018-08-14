@@ -17,17 +17,32 @@ module Ditty
       env['omniauth.origin']
     end
 
+    def omniauth_callback(provider)
+      return failed_login unless env['omniauth.auth']
+      user = User.first(email: env['omniauth.auth']['info']['email'])
+      user = register_user if user.nil? && ['ldap', 'google_oauth2'].include?(provider)
+      return failed_login if user.nil?
+      successful_login(user)
+    end
+
     def failed_login
       broadcast(:user_failed_login, target: self, details: "IP: #{request.ip}")
       flash[:warning] = 'Invalid credentials. Please try again.'
       redirect "#{settings.map_path}/auth/login"
     end
 
-    def successful_login
+    def successful_login(user)
       self.current_user = user
       broadcast(:user_login, target: self, details: "IP: #{request.ip}")
       flash[:success] = 'Logged In'
       redirect redirect_path
+    end
+
+    def register_user
+      user = User.create(email: env['omniauth.auth']['info']['email'])
+      broadcast(:user_register, target: self, values: { user: user }, details: "IP: #{request.ip}")
+      flash[:info] = 'Successfully Registered.'
+      user
     end
 
     before '/login' do
@@ -52,6 +67,7 @@ module Ditty
     post '/forgot-password' do
       authorize ::Ditty::Identity, :forgot_password
 
+      param :email, String, required: true
       email = params[:email]
       identity = Identity[username: email]
       if identity
@@ -71,8 +87,9 @@ module Ditty
     end
 
     get '/reset-password' do
-      authorize ::Ditty::Identity, :reset_password
+      authorize ::Ditty::Identity.new, :reset_password
 
+      param :token, String, required: true
       identity = Identity[reset_token: params[:token]]
       halt 404 unless identity && identity.reset_requested && identity.reset_requested > (Time.now - (24 * 60 * 60))
 
@@ -80,13 +97,13 @@ module Ditty
     end
 
     put '/reset-password' do
-      authorize ::Ditty::Identity, :reset_password
-
+      param :token, String, required: true
       identity = Identity[reset_token: params[:token]]
-      halt 404 unless identity && identity.reset_requested && identity.reset_requested > (Time.now - (24 * 60 * 60))
+
+      halt 404 unless identity
+      authorize identity, :reset_password
 
       identity_params = permitted_attributes(Identity, :update)
-
       identity.set identity_params.merge(reset_token: nil, reset_requested: nil)
       if identity.valid? && identity.save
         broadcast(:identity_update_password, target: self, details: "IP: #{request.ip}")
@@ -100,7 +117,7 @@ module Ditty
 
     # Register Page
     get '/register' do
-      authorize ::Ditty::User, :register
+      authorize ::Ditty::User.new, :register
 
       identity = Identity.new
       haml :'auth/register', locals: { title: 'Register', identity: identity }
@@ -108,6 +125,7 @@ module Ditty
 
     # Register Action
     post '/register/identity' do
+      param :identity, Hash, required: true
       identity = Identity.new(params[:identity])
       user = User.new(email: identity.username)
       authorize user, :register
@@ -147,19 +165,13 @@ module Ditty
 
     # Identity
     # LDAP
-    post '/:provider/callback' do |_provider|
-      return failed_login unless env['omniauth.auth']
-      user = User.first(email: env['omniauth.auth']['info']['email'])
-      return failed_login if user.nil?
-      successful_login
+    post '/:provider/callback' do |provider|
+      omniauth_callback provider
     end
 
     # Google OAuth login
-    get '/:provider/callback' do
-      return failed_login unless env['omniauth.auth']
-      user = User.first(email: env['omniauth.auth']['info']['email'])
-      return failed_login if user.nil?
-      successful_login
+    get '/:provider/callback' do |provider|
+      omniauth_callback provider
     end
   end
 end

@@ -13,7 +13,7 @@ module Ditty
     end
 
     def reset_password?
-      true
+      record.new? || (record.reset_requested && record.reset_requested > (Time.now - (24 * 60 * 60)))
     end
 
     def permitted_attributes
