@@ -5,6 +5,7 @@ require 'ditty/services/logger'
 
 require 'omniauth'
 OmniAuth.config.logger = Ditty::Services::Logger.instance
+OmniAuth.config.path_prefix = "#{Ditty::Application.map_path}/auth"
 OmniAuth.config.on_failure = proc { |env|
   OmniAuth::FailureEndpoint.new(env).redirect_to_failure
 }
@@ -45,8 +46,6 @@ module Ditty
               arguments: [
                 {
                   fields: [:username],
-                  path_prefix: '/_proxes/auth',
-                  callback_path: '/_proxes/auth/identity/callback',
                   model: Ditty::Identity,
                   on_login: Ditty::Auth,
                   on_registration: Ditty::Auth,
