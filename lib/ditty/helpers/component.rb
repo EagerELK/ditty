@@ -9,18 +9,30 @@ module Ditty
     module Component
       include ActiveSupport::Inflector
 
+      # param :count, Integer, min: 1, default: 10 # Can't do this, since count can be `all`
+      def check_count
+        return 10 if params[:count].nil?
+        count = params[:count].to_i
+        return count if count >= 1
+        excp = Sinatra::Param::InvalidParameterError.new 'Parameter cannot be less than 1'
+        excp.param = :count
+        raise excp
+      end
+
       def dataset
         search(filtered(policy_scope(settings.model_class)))
       end
 
       def list
-        param :page, Integer, min: 0, default: 1
-        param :count, Integer, min: 0, default: 10
+        param :page, Integer, min: 1, default: 1
 
         ds = dataset.respond_to?(:dataset) ? dataset.dataset : dataset
         return ds if params[:count] == 'all'
+        params[:count] = check_count
+
         # Account for difference between sequel paginate and will paginate
-        ds.is_a?(Array) ? ds.paginate(page: params[:page], per_page: params[:count]) : ds.paginate(params[:page], params[:count])
+        return ds.paginate(page: params[:page], per_page: params[:count]) if ds.is_a?(Array)
+        ds.paginate(params[:page], params[:count])
       end
 
       def heading(action = nil)
