@@ -17,7 +17,7 @@ module Ditty
     end
 
     def method_missing(method, *args)
-      return unless args[0].is_a?(Hash) && args[0][:target] && args[0][:target].settings.track_actions
+      return unless args[0].is_a?(Hash) && args[0][:target].is_a?(Sinatra::Base) && args[0][:target].settings.track_actions
 
       log_action({
         user: args[0][:target].current_user,
