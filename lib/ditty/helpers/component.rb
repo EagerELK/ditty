@@ -2,6 +2,7 @@
 
 require 'active_support'
 require 'active_support/inflector'
+require 'active_support/core_ext/object/blank'
 require 'will_paginate/array'
 
 module Ditty
@@ -20,11 +21,18 @@ module Ditty
       end
 
       def dataset
-        search(filtered(policy_scope(settings.model_class)))
+        ds = policy_scope(settings.model_class)
+        ds = ds.where Sequel.|(*search_filters) unless search_filters.blank?
+        ds = ds.order ordering unless ordering.blank?
+        filtered(ds)
       end
 
       def list
+        param :q, String
         param :page, Integer, min: 1, default: 1
+        param :sort, String
+        param :order, String, in: %w[asc desc], transform: :downcase, default: 'asc'
+        # TODO: Can we dynamically validate the search / filter fields?
 
         ds = dataset.respond_to?(:dataset) ? dataset.dataset : dataset
         return ds if params[:count] == 'all'
@@ -51,7 +59,7 @@ module Ditty
         settings.dehumanized || underscore(heading)
       end
 
-      def filters
+      def filter_fields
         self.class.const_defined?('FILTERS') ? self.class::FILTERS : []
       end
 
@@ -61,16 +69,27 @@ module Ditty
 
       def filtered(dataset)
         filters.each do |filter|
-          next if [nil, ''].include? params[filter[:name].to_s]
-          filter[:field] ||= filter[:name]
-          filter[:modifier] ||= :to_s
           dataset = apply_filter(dataset, filter)
         end
         dataset
       end
 
+      def filters
+        filter_fields.map do |filter|
+          next if params[filter[:name]].blank?
+          filter[:field] ||= filter[:name]
+          filter[:modifier] ||= :to_s # TODO: Do this with Sinatra Param?
+          filter
+        end.compact
+      end
+
+      def ordering
+        return if params[:sort].blank?
+        Sequel.send(params[:order].to_sym, params[:sort].to_sym)
+      end
+
       def apply_filter(dataset, filter)
-        value = params[filter[:name].to_s].send(filter[:modifier])
+        value = params[filter[:name]].send(filter[:modifier])
         return dataset.where(filter[:field] => value) unless filter[:field].to_s.include? '.'
 
         dataset.where(filter_field(filter) => filter_value(filter))
@@ -96,12 +115,8 @@ module Ditty
       end
 
       def search_filters
+        return [] if params[:q].blank?
         searchable_fields.map { |f| Sequel.ilike(f.to_sym, "%#{params[:q]}%") }
-      end
-
-      def search(dataset)
-        return dataset if ['', nil].include?(params[:q]) || search_filters == []
-        dataset.where Sequel.|(*search_filters)
       end
     end
   end
