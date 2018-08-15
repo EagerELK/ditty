@@ -133,8 +133,8 @@ module Ditty
       broadcast(:user_logout, target: self, details: "IP: #{request.ip}")
       logout
       flash[:info] = 'Logged Out'
-
-      redirect "#{settings.map_path}/"
+      halt 200 if request.xhr?
+      redirect("#{settings.map_path}/")
     end
 
     post '/auth/identity/callback' do
@@ -143,6 +143,7 @@ module Ditty
         user = User.find(email: env['omniauth.auth']['info']['email'])
         self.current_user = user
         broadcast(:user_login, target: self, details: "IP: #{request.ip}")
+        halt 200 if request.xhr?
         flash[:success] = 'Logged In'
         redirect redirect_path
       else
@@ -165,6 +166,7 @@ module Ditty
         end
         self.current_user = user
         broadcast(:user_login, target: self, details: "IP: #{request.ip}")
+        halt 200 if request.xhr?
         flash[:success] = 'Logged In'
         redirect redirect_path
       else
