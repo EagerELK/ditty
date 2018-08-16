@@ -32,6 +32,7 @@ module Ditty
     end
 
     def successful_login(user)
+      halt 200 if request.xhr?
       self.current_user = user
       broadcast(:user_login, target: self, details: "IP: #{request.ip}")
       flash[:success] = 'Logged In'
@@ -148,8 +149,9 @@ module Ditty
     delete '/' do
       broadcast(:user_logout, target: self, details: "IP: #{request.ip}")
       logout
-      flash[:info] = 'Logged Out'
 
+      halt 200 if request.xhr?
+      flash[:info] = 'Logged Out'
       redirect(Ditty::Services::Settings[:logout_redirect_path] || "#{settings.map_path}/")
     end
 

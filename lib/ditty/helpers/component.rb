@@ -34,7 +34,8 @@ module Ditty
         param :order, String, in: %w[asc desc], transform: :downcase, default: 'asc'
         # TODO: Can we dynamically validate the search / filter fields?
 
-        ds = dataset.respond_to?(:dataset) ? dataset.dataset : dataset
+        ds = dataset
+        ds = ds.dataset if ds.respond_to?(:dataset)
         return ds if params[:count] == 'all'
         params[:count] = check_count
 
@@ -67,11 +68,11 @@ module Ditty
         self.class.const_defined?('SEARCHABLE') ? self.class::SEARCHABLE : []
       end
 
-      def filtered(dataset)
+      def filtered(ds)
         filters.each do |filter|
-          dataset = apply_filter(dataset, filter)
+          ds = apply_filter(ds, filter)
         end
-        dataset
+        ds
       end
 
       def filters
@@ -88,11 +89,11 @@ module Ditty
         Sequel.send(params[:order].to_sym, params[:sort].to_sym)
       end
 
-      def apply_filter(dataset, filter)
+      def apply_filter(ds, filter)
         value = params[filter[:name]].send(filter[:modifier])
-        return dataset.where(filter[:field] => value) unless filter[:field].to_s.include? '.'
+        return ds.where(filter[:field] => value) unless filter[:field].to_s.include? '.'
 
-        dataset.where(filter_field(filter) => filter_value(filter))
+        ds.where(filter_field(filter) => filter_value(filter))
       end
 
       def filter_field(filter)
