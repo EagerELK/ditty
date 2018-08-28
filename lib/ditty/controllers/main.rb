@@ -2,6 +2,7 @@
 
 require 'ditty/controllers/application'
 require 'ditty/services/email'
+require 'ditty/services/authentication'
 require 'securerandom'
 
 module Ditty
