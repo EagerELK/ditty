@@ -68,7 +68,11 @@ module Ditty
           haml :'404', locals: { title: '4 oh 4' }, layout: layout
         end
         format.json do
-          json code: 404, errors: ['Not Found']
+          if response.body.empty?
+            json code: 404, errors: ['Not Found']
+          else
+            [404, response.body]
+          end
         end
       end
     end
@@ -81,7 +85,11 @@ module Ditty
           redirect with_layout("#{settings.map_path}/auth/identity")
         end
         format.json do
-          json code: 401, errors: ['Not Authenticated']
+          if response.body.empty?
+            json code: 401, errors: ['Not Authenticated']
+          else
+            [401, response.body]
+          end
         end
       end
     end
