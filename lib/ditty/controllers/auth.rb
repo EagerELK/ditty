@@ -62,7 +62,7 @@ module Ditty
     get '/forgot-password' do
       authorize ::Ditty::Identity, :forgot_password
 
-      haml :'auth/forgot', locals: { title: 'Forgot your password?' }
+      haml :'auth/forgot_password', locals: { title: 'Forgot your password?' }
     end
 
     post '/forgot-password' do
