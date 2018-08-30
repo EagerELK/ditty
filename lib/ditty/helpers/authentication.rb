@@ -9,12 +9,13 @@ module Ditty
     module Authentication
       def current_user
         return anonymous_user if current_user_id.nil?
-        User[current_user_id]
+        @current_user ||= User[current_user_id]
       end
 
       def current_user=(user)
         env['rack.session'] = {} if env['rack.session'].nil?
         env['rack.session']['user_id'] = user.id if user
+        @current_user = user
       end
 
       def current_user_id
