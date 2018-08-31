@@ -40,8 +40,8 @@ module Ditty
                   fields: [:username],
                   callback_path: '/auth/identity/callback',
                   model: Ditty::Identity,
-                  on_login: Ditty::Main,
-                  on_registration: Ditty::Main,
+                  on_login: ::Ditty::Main,
+                  on_registration: ::Ditty::Main,
                   locate_conditions: ->(req) { { username: req['username'] } }
                 }
               ]
