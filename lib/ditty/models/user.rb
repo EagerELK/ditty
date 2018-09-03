@@ -59,5 +59,12 @@ module Ditty
     def username
       identity_dataset.first.username
     end
+
+    class << self
+      def anonymous_user
+        role = ::Ditty::Role.find_or_create(name: 'anonymous')
+        ::Ditty::User.where(roles: role).first
+      end
+    end
   end
 end

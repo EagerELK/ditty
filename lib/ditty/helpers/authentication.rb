@@ -8,7 +8,7 @@ module Ditty
   module Helpers
     module Authentication
       def current_user
-        return anonymous_user if current_user_id.nil?
+        return nil if current_user_id.nil?
         @current_user ||= User[current_user_id]
       end
 
@@ -39,11 +39,6 @@ module Ditty
       def logout
         env['rack.session'].delete('user_id') unless env['rack.session'].nil?
         env.delete('omniauth.auth')
-      end
-
-      def anonymous_user
-        role = ::Ditty::Role.where(name: 'anonymous').first
-        ::Ditty::User.where(roles: role).first unless role.nil?
       end
     end
 
