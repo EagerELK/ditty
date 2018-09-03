@@ -65,6 +65,14 @@ module Ditty
         role = ::Ditty::Role.find_or_create(name: 'anonymous')
         ::Ditty::User.where(roles: role).first
       end
+
+      def create_anonymous_user(email = 'anonymous@ditty.io')
+        return if anonymous_user
+
+        user = ::Ditty::User.find_or_create(email: email)
+        user.remove_role ::Ditty::Role.find_or_create(name: 'user')
+        user.add_role ::Ditty::Role.find_or_create(name: 'anonymous') unless user.role?('anonymous')
+      end
     end
   end
 end

@@ -62,13 +62,7 @@ module Ditty
 
         ::Ditty::Role.find_or_create(name: 'super_admin')
         ::Ditty::Role.find_or_create(name: 'admin')
-        user_role = ::Ditty::Role.find_or_create(name: 'user')
-
-        # Anonymous User
-        anon = ::Ditty::User.find_or_create(email: 'anonymous@ditty.io')
-        anon.remove_role user_role
-        anon_role = ::Ditty::Role.find_or_create(name: 'anonymous')
-        anon.add_role anon_role unless anon.role?('anonymous')
+        ::Ditty::Role.find_or_create(name: 'user')
       end
     end
   end
