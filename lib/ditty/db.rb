@@ -18,7 +18,7 @@ elsif ENV['DATABASE_URL'].blank? == false
   )
 
   DB.sql_log_level = (ENV['SEQUEL_LOGGING_LEVEL'] || :debug).to_sym
-  DB.loggers << Ditty::Services::Logger.instance
+  DB.loggers << Ditty::Services::Logger.instance if ENV['DB_DEBUG'].to_i == 1
   DB.extension(:pagination)
 
   Sequel::Model.plugin :validation_helpers
