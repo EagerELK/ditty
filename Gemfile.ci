@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'rubocop'
+gem 'rubocop-rspec'
 gem 'simplecov', '~> 0.13.0'
 gem 'sqlite3'
 

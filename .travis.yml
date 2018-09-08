@@ -2,9 +2,9 @@ sudo: false
 language: ruby
 rvm:
   - 2.5.1
-  - 2.4.0
-  - 2.3.3
-  - 2.2.6
+  - 2.4.3
+  - 2.3.6
+  - 2.2.9
 gemfile: Gemfile.ci
 env:
   global:
@@ -21,7 +21,7 @@ before_script:
   - bundle exec rake ditty:prep
 script:
   - bundle exec rake
-  - bundle exec rubocop --fail-level W lib views
+  - bundle exec rubocop --fail-level W lib views specs
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 after_success:
