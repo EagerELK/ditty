@@ -37,6 +37,10 @@ module Ditty
     def each_with_object(memo, &block)
       @mutex.synchronize { @hash.each_with_object(memo, &block) }
     end
+
+    def has_key?(key)
+      @hash.has_key? key
+    end
   end
 
   # Ripped off from Roda - https://github.com/jeremyevans/roda
@@ -55,6 +59,10 @@ module Ditty
         raise ComponentError, "Component #{name} did not register itself correctly in Ditty::Components" unless (component = h[name])
       end
       component
+    end
+
+    def self.has_component?(name)
+      @components.has_key? name
     end
 
     # Register the given component with Component, so that it can be loaded using #component
