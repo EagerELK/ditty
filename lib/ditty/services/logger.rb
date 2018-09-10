@@ -53,6 +53,16 @@ module Ditty
       def default
         { loggers: [{ name: 'default', class: 'Logger' }] }
       end
+
+      class << self
+        def method_missing(method, *args, &block)
+          instance.send(method, *args, &block)
+        end
+
+        def respond_to_missing?(method, _include_private)
+          instance.respond_to? method
+        end
+      end
     end
   end
 end
