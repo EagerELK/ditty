@@ -57,7 +57,9 @@ module Ditty
     end
 
     def username
-      identity_dataset.first.username
+      identity = identity_dataset.first
+      return identity.username if identity
+      email
     end
 
     class << self
