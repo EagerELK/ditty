@@ -1,4 +1,7 @@
 namespace :ditty do
+  desc 'Prepare Ditty'
+  task prep: ['generate_tokens', 'prep:folders', 'prep:public', 'prep:migrations']
+
   desc 'Generate the needed tokens'
   task :generate_tokens do
     puts 'Generating the Ditty tokens'
@@ -13,29 +16,39 @@ namespace :ditty do
     require 'ditty/seed'
   end
 
-  desc 'Prepare Ditty'
-  task :prep do
-    puts 'Prepare the Ditty folders'
-    Dir.mkdir 'pids' unless File.exist?('pids')
-
-    puts 'Preparing the Ditty public folder'
-    Dir.mkdir 'public' unless File.exist?('public')
-    ::Ditty::Components.public_folder.each do |path|
-      puts "Checking #{path}"
-      FileUtils.cp_r "#{path}/.", 'public' unless File.expand_path("#{path}/.").eql? File.expand_path('public')
+  namespace :prep do
+    desc 'Check that the required Ditty folders are present'
+    task :folders do
+      puts 'Prepare the Ditty folders'
+      Dir.mkdir 'pids' unless File.exist?('pids')
     end
 
-    puts 'Preparing the Ditty migrations folder'
-    Dir.mkdir 'migrations' unless File.exist?('migrations')
-    ::Ditty::Components.migrations.each do |path|
-      FileUtils.cp_r "#{path}/.", 'migrations' unless File.expand_path("#{path}/.").eql? File.expand_path('migrations')
+    desc 'Check that the public folder is present and populated'
+    task :public do
+      puts 'Preparing the Ditty public folder'
+      Dir.mkdir 'public' unless File.exist?('public')
+      ::Ditty::Components.public_folder.each do |path|
+        puts "Checking #{path}"
+        path = "#{path}/."
+        FileUtils.cp_r path, 'public' unless File.expand_path(path).eql? File.expand_path('public')
+      end
     end
-    puts 'Migrations added:'
-    Dir.foreach('migrations').sort.each { |x| puts x if File.file?("migrations/#{x}") && x[-3..-1] == '.rb' }
+
+    desc 'Check that the migrations folder is present and populated'
+    task :migrations do
+      puts 'Preparing the Ditty migrations folder'
+      Dir.mkdir 'migrations' unless File.exist?('migrations')
+      ::Ditty::Components.migrations.each do |path|
+        path = "#{path}/."
+        FileUtils.cp_r path, 'migrations' unless File.expand_path(path).eql? File.expand_path('migrations')
+      end
+      puts 'Migrations added:'
+      Dir.foreach('migrations').sort.each { |x| puts x if File.file?("migrations/#{x}") && x[-3..-1] == '.rb' }
+    end
   end
 
   desc 'Migrate Ditty database to latest version'
-  task :migrate do
+  task migrate: ['prep:migrations'] do
     puts 'Running the Ditty migrations'
     Rake::Task['ditty:migrate:up'].invoke
   end
