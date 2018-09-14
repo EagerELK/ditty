@@ -19,9 +19,11 @@ module Ditty
 
     def omniauth_callback(provider)
       return failed_login unless env['omniauth.auth']
+      broadcast("before_#{provider}_login".to_sym, env['omniauth.auth'])
       user = User.first(email: env['omniauth.auth']['info']['email'])
       user = register_user if user.nil? && ['ldap', 'google_oauth2'].include?(provider)
       return failed_login if user.nil?
+      broadcast("#{provider}_login".to_sym, user)
       successful_login(user)
     end
 

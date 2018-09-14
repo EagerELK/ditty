@@ -30,6 +30,10 @@ module Ditty
       @mutex.synchronize { @hash.map(&block) }
     end
 
+    def each(&block)
+      @mutex.synchronize { @hash.each(&block) }
+    end
+
     def inject(memo, &block)
       @mutex.synchronize { @hash.inject(memo, &block) }
     end
@@ -116,6 +120,15 @@ module Ditty
     def self.workers
       components.each_with_object([]) do |comp, memo|
         memo.concat comp[1].workers if comp[1].respond_to?(:workers)
+      end
+    end
+
+    def self.tasks
+      require 'rake'
+      require 'rake/tasklib'
+      require 'ditty/db' unless defined? DB
+      components.each do |_name, comp|
+        comp.tasks if comp.respond_to?(:tasks)
       end
     end
 

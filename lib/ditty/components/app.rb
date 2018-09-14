@@ -65,6 +65,12 @@ module Ditty
         ::Ditty::Role.find_or_create(name: 'user')
       end
     end
+
+    def self.tasks
+      require 'ditty/services/authentication'
+
+      Kernel.load 'ditty/tasks/ditty.rake'
+    end
   end
 end
 

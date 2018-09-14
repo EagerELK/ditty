@@ -2,7 +2,7 @@
 
 require 'rake'
 require 'bundler/gem_tasks'
-require 'ditty/rake_tasks'
+Ditty::Components.tasks
 
 require 'ditty'
 require 'ditty/components/app'
