@@ -28,8 +28,11 @@ module Ditty
     end
 
     def failed_login
-      broadcast(:user_failed_login, target: self, details: "IP: #{request.ip}")
-      flash[:warning] = 'Invalid credentials. Please try again.'
+      details = "IP: #{request.ip} / #{params[:message] ? 'None' : params[:message]}"
+      logger.warn "Invalid Login: #{details}"
+      broadcast(:user_failed_login, target: self, details: details)
+      flash[:warning] = 'Invalid credentials. Please try again'
+      headers 'X-Authentication-Failure' => params[:message] if params[:message]
       redirect "#{settings.map_path}/auth/login"
     end
 
@@ -59,6 +62,12 @@ module Ditty
       authorize ::Ditty::Identity, :login
 
       haml :'auth/login', locals: { title: 'Log In' }
+    end
+
+    # Custom login form for LDAP to allow CSRF checks. Set the `request_path` for
+    # the omniauth-ldap provider to another path so that this gest triggered
+    get '/ldap' do
+      haml :'auth/ldap', locals: { title: 'Company Log In' }
     end
 
     get '/forgot-password' do
