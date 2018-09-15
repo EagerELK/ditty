@@ -39,6 +39,10 @@ module Ditty
     use Rack::NestedParams
 
     helpers do
+      def logger
+        Ditty::Services::Logger.instance
+      end
+
       def base_path
         settings.base_path || "#{settings.map_path}/#{dasherize(view_location)}"
       end
@@ -77,14 +81,28 @@ module Ditty
     end
 
     error Helpers::NotAuthenticated, ::Pundit::NotAuthorizedError do
-      respond_to do |format|
-        status 401
-        format.html do
-          flash[:warning] = 'Please log in first.'
-          redirect with_layout("#{settings.map_path}/auth/login")
+      # TODO: Check if this is logged / tracked
+      if authenticated?
+        respond_to do |format|
+          status 403
+          format.html do
+            flash.now[:danger] = 'Cannot perform that action at the moment.'
+            haml :'403', locals: { title: 'Forbidden' }, layout: layout
+          end
+          format.json do
+            json code: 403, errors: ['Forbidden']
+          end
         end
-        format.json do
-          json code: 401, errors: ['Not Authenticated']
+      else
+        respond_to do |format|
+          format.html do
+            flash[:warning] = 'Please log in first.'
+            redirect with_layout("#{settings.map_path}/auth/login")
+          end
+          format.json do
+            status 401
+            json code: 401, errors: ['Not Authenticated']
+          end
         end
       end
     end
@@ -120,7 +138,7 @@ module Ditty
     error ::Sequel::ForeignKeyConstraintViolation do
       error = env['sinatra.error']
       broadcast(:application_error, error)
-      ::Ditty::Services::Logger.instance.error error
+      logger.error error
       respond_to do |format|
         status 400
         format.html do
@@ -135,7 +153,7 @@ module Ditty
     error do
       error = env['sinatra.error']
       broadcast(:application_error, error)
-      ::Ditty::Services::Logger.instance.error error
+      logger.error error
       respond_to do |format|
         status 500
         format.html do
@@ -148,7 +166,7 @@ module Ditty
     end
 
     before(/.*/) do
-      ::Ditty::Services::Logger.instance.debug "Running with #{self.class} - #{request.path_info}"
+      logger.info "Running with #{self.class} - #{request.path_info}"
       if request.path =~ /.*\.json\Z/
         content_type :json
         request.path_info = request.path_info.gsub(/.json$/, '')

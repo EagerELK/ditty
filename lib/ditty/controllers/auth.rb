@@ -12,6 +12,7 @@ module Ditty
     end
 
     def redirect_path
+      return nil if current_user
       return "#{settings.map_path}/" unless env['omniauth.origin']
       return "#{settings.map_path}/" if env['omniauth.origin'] =~ %r{/#{settings.map_path}/auth/?}
       env['omniauth.origin']
@@ -19,9 +20,11 @@ module Ditty
 
     def omniauth_callback(provider)
       return failed_login unless env['omniauth.auth']
+
       broadcast("before_#{provider}_login".to_sym, env['omniauth.auth'])
       user = User.first(email: env['omniauth.auth']['info']['email'])
-      user = register_user if user.nil? && ['ldap', 'google_oauth2'].include?(provider)
+      Pundit.authorize current_user, [:ditty, provider.to_sym], :register? if user.nil?
+      user = register_user if user.nil?
       return failed_login if user.nil?
       broadcast("#{provider}_login".to_sym, user)
       successful_login(user)
