@@ -30,8 +30,6 @@ module Ditty
               require "omniauth/#{provider}"
             rescue LoadError
               require "omniauth-#{provider}"
-            ensure
-              require "ditty/policies/#{provider}_policy"
             end
           end
         end
