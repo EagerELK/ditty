@@ -6,6 +6,8 @@ require 'ditty/policies/role_policy'
 
 module Ditty
   class Roles < Ditty::Component
+    SEARCHABLE = %i[name].freeze
+
     set model_class: Role
 
     def find_template(views, name, engine, &block)
