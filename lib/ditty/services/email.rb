@@ -21,6 +21,7 @@ module Ditty
         def deliver(email, to = nil, options = {})
           config!
           options[:to] ||= to unless to.nil?
+          options[:from] ||= config[:from] unless config[:from].nil?
           email = from_symbol(email, options) if email.is_a? Symbol
           email.deliver!
         end
@@ -28,11 +29,14 @@ module Ditty
         private
 
         def config
-          default.merge Ditty::Services::Settings.values(:email) || {}
+          @config ||= default.merge Ditty::Services::Settings.values(:email) || {}
         end
 
         def default
-          { delivery_method: :logger, logger: Ditty::Services::Logger.instance }
+          {
+            delivery_method: :logger,
+            logger: Ditty::Services::Logger.instance,
+          }
         end
 
         def from_symbol(email, options)
