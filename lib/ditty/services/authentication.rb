@@ -1,4 +1,3 @@
-require 'ditty/models/identity'
 require 'ditty/controllers/auth'
 require 'ditty/services/settings'
 require 'ditty/services/logger'
@@ -45,6 +44,7 @@ module Ditty
         end
 
         def default
+          require 'ditty/models/identity'
           {
             identity: {
               arguments: [
