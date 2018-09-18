@@ -35,7 +35,7 @@ module Ditty
         def default
           {
             delivery_method: :logger,
-            logger: Ditty::Services::Logger.instance,
+            logger: Ditty::Services::Logger.instance
           }
         end
 

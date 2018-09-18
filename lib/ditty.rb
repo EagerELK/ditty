@@ -43,7 +43,7 @@ module Ditty
     end
 
     def has_key?(key)
-      @hash.has_key? key
+      @hash.key? key
     end
   end
 
@@ -66,7 +66,7 @@ module Ditty
     end
 
     def self.has_component?(name)
-      @components.has_key? name
+      @components.key? name
     end
 
     # Register the given component with Component, so that it can be loaded using #component
