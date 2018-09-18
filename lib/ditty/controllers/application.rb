@@ -157,6 +157,9 @@ module Ditty
       if request.path =~ /.*\.json\Z/
         content_type :json
         request.path_info = request.path_info.gsub(/.json$/, '')
+      elsif request.path =~ /.*\.csv\Z/
+        content_type :csv
+        request.path_info = request.path_info.gsub(/.csv$/, '')
       elsif request.env['ACCEPT']
         content_type request.env['ACCEPT']
       else

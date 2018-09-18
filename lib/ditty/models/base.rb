@@ -5,5 +5,7 @@ module Ditty
     def for_json
       values
     end
+
+    alias for_csv for_json
   end
 end

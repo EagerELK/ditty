@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'csv'
 
 module Ditty
   module Helpers
@@ -21,6 +22,14 @@ module Ditty
               'count' => result.count,
               'total' => total
             )
+          end
+          format.csv do
+            CSV.generate do |csv|
+              csv << result.first.for_csv.keys
+              result.all.each do |r|
+                csv << r.for_csv.values
+              end
+            end
           end
         end
       end
@@ -52,6 +61,12 @@ module Ditty
           format.json do
             # TODO: Add links defined by actions (Edit #{heading})
             json entity.for_json
+          end
+          format.csv do
+            CSV.generate do |csv|
+              csv << entity.for_csv.keys
+              csv << entity.for_csv.values
+            end
           end
         end
       end
