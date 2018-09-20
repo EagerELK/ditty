@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'ditty'
+require 'ditty/services/settings'
 
 module Ditty
   class App
@@ -68,9 +69,7 @@ module Ditty
 
     def self.tasks
       Kernel.load 'ditty/tasks/ditty.rake'
-
-      require 'ditty/services/authentication'
-      Kernel.load 'ditty/tasks/omniauth-ldap.rake' if Ditty::Services::Authentication.providers.include? :ldap
+      Kernel.load 'ditty/tasks/omniauth-ldap.rake' if Ditty::Services::Settings[:authentication].keys.include? :ldap
     end
   end
 end
