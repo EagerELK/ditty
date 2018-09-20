@@ -69,7 +69,8 @@ module Ditty
 
     def self.tasks
       Kernel.load 'ditty/tasks/ditty.rake'
-      Kernel.load 'ditty/tasks/omniauth-ldap.rake' if Ditty::Services::Settings[:authentication].keys.include? :ldap
+      auth_settings = Ditty::Services::Settings[:authentication] || {}
+      Kernel.load 'ditty/tasks/omniauth-ldap.rake' if auth_settings.keys.include? :ldap
     end
   end
 end
