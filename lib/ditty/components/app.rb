@@ -67,9 +67,9 @@ module Ditty
     end
 
     def self.tasks
-      require 'ditty/services/authentication'
-
       Kernel.load 'ditty/tasks/ditty.rake'
+
+      require 'ditty/services/authentication'
       Kernel.load 'ditty/tasks/omniauth-ldap.rake' if Ditty::Services::Authentication.providers.include? :ldap
     end
   end

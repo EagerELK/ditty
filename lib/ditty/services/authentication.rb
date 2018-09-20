@@ -1,4 +1,4 @@
-require 'ditty/controllers/auth'
+require 'ditty/controllers/application'
 require 'ditty/services/settings'
 require 'ditty/services/logger'
 require 'backports/2.4.0/hash/compact'
@@ -45,6 +45,7 @@ module Ditty
 
         def default
           require 'ditty/models/identity'
+          require 'ditty/controllers/auth'
           {
             identity: {
               arguments: [
