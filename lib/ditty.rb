@@ -42,7 +42,7 @@ module Ditty
       @mutex.synchronize { @hash.each_with_object(memo, &block) }
     end
 
-    def has_key?(key)
+    def key?(key)
       @hash.key? key
     end
   end
@@ -65,7 +65,7 @@ module Ditty
       component
     end
 
-    def self.has_component?(name)
+    def self.component?(name)
       @components.key? name
     end
 
