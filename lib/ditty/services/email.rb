@@ -11,6 +11,8 @@ module Ditty
       class << self
         include ActiveSupport::Inflector
 
+        attr_writer :config
+
         def config!
           cfg = config
           Mail.defaults do
