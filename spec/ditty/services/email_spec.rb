@@ -4,6 +4,10 @@ require 'spec_helper'
 require 'ditty/services/email'
 
 describe Ditty::Services::Email do
+  after(:each) do
+    described_class.config = nil
+  end
+
   context 'config!' do
     it 'configurs the Mail gem' do
       expect(Mail).to receive(:defaults)
