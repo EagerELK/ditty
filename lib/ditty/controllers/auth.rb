@@ -12,10 +12,13 @@ module Ditty
     end
 
     def redirect_path
-      return nil if current_user
-      return "#{settings.map_path}/" unless env['omniauth.origin']
-      return "#{settings.map_path}/" if env['omniauth.origin'] =~ %r{/#{settings.map_path}/auth/?}
-      env['omniauth.origin']
+      return "#{settings.map_path}/" if omniauth_redirect_path.nil?
+      return "#{settings.map_path}/" if omniauth_redirect_path =~ %r{/#{settings.map_path}/auth/?}
+      omniauth_redirect_path
+    end
+
+    def omniauth_redirect_path
+      env['omniauth.origin'] || request.session['omniauth.origin']
     end
 
     def omniauth_callback(provider)
@@ -62,6 +65,7 @@ module Ditty
     # TODO: Make this work for both LDAP and Identity
     get '/login' do
       authorize ::Ditty::Identity, :login
+      redirect settings.map_path if authenticated?
 
       haml :'auth/login', locals: { title: 'Log In' }
     end
@@ -69,6 +73,9 @@ module Ditty
     # Custom login form for LDAP to allow CSRF checks. Set the `request_path` for
     # the omniauth-ldap provider to another path so that this gest triggered
     get '/ldap' do
+      authorize ::Ditty::Identity, :login
+      redirect settings.map_path if authenticated?
+
       haml :'auth/ldap', locals: { title: 'Company Log In' }
     end
 
