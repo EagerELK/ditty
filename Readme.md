@@ -33,12 +33,33 @@ gem install ditty
 
 1. Add the components to your rack config file. See the included [`config.ru`](https://github.com/EagerELK/ditty/blob/master/config.ru) file for an example setup
 2. Set the DB connection as the `DATABASE_URL` ENV variable: `DATABASE_URL=sqlite://development.db`
+3. Prepare the Ditty folder: `bundle exec ditty prep`
 3. Run the Ditty migrations: `bundle exec ditty migrate`
 4. Run the Ditty server: `bundle exec ditty server`
 
-## Components
+### Components
 
-The application can now be further extended by creating components.
+The application can now be further extended by creating [components](https://github.com/EagerELK/ditty/wiki/Creating-a-Component).
+
+### Rubocop Cops
+
+Ditty provides a number of [Rubocop](https://github.com/rubocop-hq/rubocop) cops
+to ensure that the Ditty framework is used correctly. Enable this by adding the
+following to your `.rubocop.yml` file:
+
+```yaml
+require: ditty/rubocop
+```
+
+You can run Ditty specific cops as follows:
+
+```bash
+bundle exec rubocop --only Ditty
+```
+
+Adding the `-a` flag to the invocation will automatically fix some of the issues
+for you, but, as always, ensure you have a working copy of your code before
+running this.
 
 ## Development
 
