@@ -14,6 +14,7 @@ module Ditty
     def redirect_path
       return "#{settings.map_path}/" if omniauth_redirect_path.nil?
       return "#{settings.map_path}/" if omniauth_redirect_path =~ %r{/#{settings.map_path}/auth/?}
+
       omniauth_redirect_path
     end
 
@@ -28,6 +29,7 @@ module Ditty
       user = User.first(email: env['omniauth.auth']['info']['email'])
       user = register_user if user.nil? && authorize(current_user, :register?)
       return failed_login if user.nil?
+
       broadcast("#{provider}_login".to_sym, user)
       successful_login(user)
     end
@@ -58,6 +60,7 @@ module Ditty
 
     before '/login' do
       return if User.where(roles: Role.find_or_create(name: 'super_admin')).count.positive?
+
       flash[:info] = 'Please register the super admin user.'
       redirect "#{settings.map_path}/auth/register"
     end

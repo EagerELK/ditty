@@ -41,6 +41,7 @@ module Ditty
     def validate
       validates_presence :email
       return if email.blank?
+
       validates_unique :email
       validates_format(/\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :email)
     end
@@ -53,12 +54,14 @@ module Ditty
     def check_roles
       return if roles_dataset.first(name: 'anonymous')
       return if roles_dataset.first(name: 'user')
+
       add_role Role.find_or_create(name: 'user')
     end
 
     def username
       identity = identity_dataset.first
       return identity.username if identity
+
       email
     end
 

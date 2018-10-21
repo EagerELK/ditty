@@ -45,6 +45,7 @@ module Ditty
           identity.save
         rescue Sequel::ValidationFailed
           raise unless request.accept? 'text/html'
+
           status 400
           locals = { title: heading(:new), entity: user, identity: identity }
           return haml(:"#{view_location}/new", locals: locals)

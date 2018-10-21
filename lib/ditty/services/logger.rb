@@ -20,6 +20,7 @@ module Ditty
       def initialize
         @loggers = []
         return if config[:loggers].blank?
+
         config[:loggers].each do |values|
           klass = values[:class].constantize
           opts = tr(values[:options]) || nil

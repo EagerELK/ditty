@@ -15,6 +15,7 @@ module Ditty
 
     before '/' do
       return if User.where(roles: Role.find_or_create(name: 'super_admin')).count.positive?
+
       flash[:info] = 'Please register the super admin user.'
       redirect "#{settings.map_path}/auth/register"
     end

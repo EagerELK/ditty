@@ -8,6 +8,7 @@ namespace :ditty do
       ldap = Net::LDAP.new host: settings[:host], port: settings[:port]
       ldap.authenticate settings[:bind_dn], settings[:password] if settings[:bind_dn]
       raise 'Could not bind to LDAP server' unless ldap.bind
+
       puts 'LDAP Binding Successful'
     end
 

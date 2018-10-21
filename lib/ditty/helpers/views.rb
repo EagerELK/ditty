@@ -7,6 +7,7 @@ module Ditty
     module Views
       def layout
         return :embedded if request.params['layout'] == 'embedded'
+
         :layout
       end
 
@@ -14,6 +15,7 @@ module Ditty
         uri = URI.parse(url)
         # Don't set the layout if there's none. Don't set the layout for external URIs
         return url if params['layout'].nil? || uri.host
+
         qs = { 'layout' => params['layout'] }.merge(uri.query ? CGI.parse(uri.query) : {})
         uri.query = Rack::Utils.build_query qs
         uri.to_s
@@ -41,6 +43,7 @@ module Ditty
       def filter_control(filter, opts = {})
         meth = "#{filter[:name]}_options".to_sym
         return unless respond_to? meth
+
         haml :'partials/filter_control', locals: {
           name: filter[:name],
           label: opts[:label] || filter[:name].to_s.titlecase,
@@ -50,6 +53,7 @@ module Ditty
 
       def flash_messages(key = :flash)
         return '' if flash(key).empty?
+
         id = (key == :flash ? 'flash' : "flash_#{key}")
         messages = flash(key).collect do |message|
           "  <div class='alert alert-#{message[0]} alert-dismissable' role='alert'>#{message[1]}</div>\n"
@@ -93,6 +97,7 @@ module Ditty
 
       def pagination(list, base_path, qp = {})
         return unless list.respond_to?(:pagination_record_count) || list.respond_to?(:total_entries)
+
         list = Ditty::Services::PaginationWrapper.new(list)
         locals = {
           first_link: "#{base_path}?" + query_string(qp.merge(page: 1)),

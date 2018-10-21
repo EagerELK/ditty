@@ -13,8 +13,10 @@ module Ditty
       # param :count, Integer, min: 1, default: 10 # Can't do this, since count can be `all`
       def check_count
         return 10 if params[:count].nil?
+
         count = params[:count].to_i
         return count if count >= 1
+
         excp = Sinatra::Param::InvalidParameterError.new 'Parameter cannot be less than 1'
         excp.param = :count
         raise excp
@@ -37,10 +39,12 @@ module Ditty
         ds = dataset
         ds = ds.dataset if ds.respond_to?(:dataset)
         return ds if params[:count] == 'all'
+
         params[:count] = check_count
 
         # Account for difference between sequel paginate and will paginate
         return ds.paginate(page: params[:page], per_page: params[:count]) if ds.is_a?(Array)
+
         ds.paginate(params[:page], params[:count])
       end
 
@@ -78,6 +82,7 @@ module Ditty
       def filters
         filter_fields.map do |filter|
           next if params[filter[:name]].blank?
+
           filter[:field] ||= filter[:name]
           filter[:modifier] ||= :to_s # TODO: Do this with Sinatra Param?
           filter
@@ -86,6 +91,7 @@ module Ditty
 
       def ordering
         return if params[:sort].blank?
+
         Sequel.send(params[:order].to_sym, params[:sort].to_sym)
       end
 
@@ -112,11 +118,13 @@ module Ditty
         assoc = filter[:field].to_s.split('.').first.to_sym
         assoc = settings.model_class.association_reflection(assoc)
         raise "Unknown association #{assoc}" if assoc.nil?
+
         assoc
       end
 
       def search_filters
         return [] if params[:q].blank?
+
         searchable_fields.map { |f| Sequel.ilike(f.to_sym, "%#{params[:q]}%") }
       end
     end

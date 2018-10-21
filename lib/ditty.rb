@@ -142,6 +142,7 @@ module Ditty
         #   Component.component :csrf
         def component(component, *args, &block)
           raise ComponentError, 'Cannot add a component to a frozen Component class' if frozen?
+
           component = Components.load_component(component) if component.is_a?(Symbol)
           include(component::InstanceMethods) if defined?(component::InstanceMethods)
           extend(component::ClassMethods) if defined?(component::ClassMethods)

@@ -41,11 +41,13 @@ module Ditty
       # Create the SA user if none is present
       sa = Role.find_or_create(name: 'super_admin')
       return if User.where(roles: sa).count.positive?
+
       user.add_role sa
     end
 
     def action_from(target, method)
       return method unless method.to_s.start_with? 'component_'
+
       target.class.to_s.demodulize.underscore + '_' + method.to_s.gsub(/^component_/, '')
     end
 

@@ -50,6 +50,7 @@ module Ditty
       def view_location
         return settings.view_location if settings.view_location
         return underscore(pluralize(demodulize(settings.model_class))) if settings.model_class
+
         underscore(demodulize(self.class))
       end
     end
@@ -182,6 +183,7 @@ module Ditty
 
     after do
       return if params[:layout].nil?
+
       response.body = response.body.map do |resp|
         document = Oga.parse_html(resp)
         document.css('a').each do |elm|

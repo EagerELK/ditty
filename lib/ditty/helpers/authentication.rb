@@ -7,6 +7,7 @@ module Ditty
     module Authentication
       def current_user
         return nil if current_user_id.nil?
+
         @current_user ||= User[current_user_id]
       end
 
@@ -18,6 +19,7 @@ module Ditty
 
       def current_user_id
         return env['rack.session']['user_id'] if env['rack.session'] && env['rack.session']['user_id']
+
         env['omniauth.auth'].uid if env['omniauth.auth']
       end
 
@@ -31,6 +33,7 @@ module Ditty
 
       def authenticate!
         raise NotAuthenticated unless authenticated?
+
         true
       end
 

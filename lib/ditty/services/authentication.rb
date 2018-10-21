@@ -8,6 +8,7 @@ OmniAuth.config.logger = Ditty::Services::Logger.instance
 OmniAuth.config.path_prefix = "#{Ditty::Application.map_path}/auth"
 OmniAuth.config.on_failure = proc { |env|
   next [400, {}, []] if env['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
+
   OmniAuth::FailureEndpoint.new(env).redirect_to_failure
 }
 

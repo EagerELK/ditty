@@ -24,6 +24,7 @@ module Ditty
 
     after do
       return if settings.environment == 'production'
+
       if (response.successful? || response.redirection?) && @skip_verify == false
         verify_authorized if settings.environment != 'production'
       end
@@ -31,6 +32,7 @@ module Ditty
 
     after '/' do
       return if settings.environment == 'production' || request.request_method != 'GET'
+
       verify_policy_scoped if (response.successful? || response.redirection?) && @skip_verify == false
     end
 
