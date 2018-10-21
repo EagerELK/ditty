@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/EagerELK/ditty.svg?branch=master)](https://travis-ci.org/EagerELK/ditty)
 [![Code Climate](https://codeclimate.com/github/EagerELK/ditty/badges/gpa.svg)](https://codeclimate.com/github/EagerELK/ditty)
 [![Test Coverage](https://codeclimate.com/github/EagerELK/ditty/badges/coverage.svg)](https://codeclimate.com/github/EagerELK/ditty/coverage)
+[![Inline docs](http://inch-ci.org/github/EagerELK/ditty.svg?branch=master)](http://inch-ci.org/github/EagerELK/ditty)
 
 # Ditty
 
