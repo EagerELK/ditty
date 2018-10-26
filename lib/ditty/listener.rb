@@ -51,6 +51,7 @@ module Ditty
 
     def log_action(values)
       values[:user] ||= values[:target].current_user if values[:target]
+      values[:user] = nil unless values[:user].is_a? Ditty::User
       @mutex.synchronize { Ditty::AuditLog.create values }
     end
   end

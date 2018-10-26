@@ -134,7 +134,7 @@ module Ditty
       logout
       flash[:info] = 'Logged Out'
       halt 200 if request.xhr?
-      redirect("#{settings.map_path}/")
+      redirect("#{settings.map_path}/auth/identity")
     end
 
     post '/auth/identity/callback' do
