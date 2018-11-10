@@ -1,7 +1,8 @@
 %div{ class: "form-group#{model.errors[field] ? ' has-error' : ''}" }
-  %label.col-sm-3.control-label{ for: attributes[:id] }= label
+  - type = attributes.delete(:type)
+  - if type != 'file'
+    %label.col-sm-3.control-label{ for: attributes[:id] }= label
   .col-sm-9
-    - type = attributes.delete(:type)
     - if type == 'select'
       - options = attributes.delete(:options)
       %select{attributes}
@@ -13,7 +14,7 @@
           - options.each do |k,v| k ||= v;  v ||= k;
             %option{ value: k, selected: [model[field].to_s, default].include?(k.to_s)}= v
     - elsif type == 'textarea'
-      %textarea{attributes}= preserve(model[field])
+      %textarea{attributes}= preserve(model[field] || default)
     - else
       %input{attributes, type: type, value: model[field] || default}
     - if model.errors[field]
