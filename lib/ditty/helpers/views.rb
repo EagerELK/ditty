@@ -119,6 +119,20 @@ module Ditty
           value
         end
       end
+
+      def url_for(options = nil)
+        return options if options.is_a? String
+        return request.env['HTTP_REFERER'] if options == :back && request.env['HTTP_REFERER']
+        raise 'Unimplemented'
+      end
+
+      def link_to(name = nil, options = nil, html_options = {})
+        html_options[:href] ||= url_for(options)
+
+        capture_haml do
+          haml_tag :a, name, html_options
+        end
+      end
     end
   end
 end
