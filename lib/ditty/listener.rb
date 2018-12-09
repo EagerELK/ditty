@@ -19,11 +19,12 @@ module Ditty
     def method_missing(method, *args)
       return unless args[0].is_a?(Hash) && args[0][:target].is_a?(Sinatra::Base) && args[0][:target].settings.track_actions
 
-      log_action({
-        user: args[0][:target].current_user,
-        action: action_from(args[0][:target], method),
-        details: args[0][:details]
-      }.merge(args[0][:values] || {}))
+      log_action(
+        user_traits(args[0][:target]).merge(
+          action: action_from(args[0][:target], method),
+          details: args[0][:details]
+        ).merge(args[0][:values] || {})
+      )
     end
 
     def respond_to_missing?(method, _include_private = false)
@@ -31,35 +32,27 @@ module Ditty
     end
 
     def user_login(event)
-      user = event[:target].current_user
-      log_action({
-        user: user,
-        action: action_from(event[:target], :user_login),
-        details: event[:details]
-      }.merge(event[:values] || {}))
+      log_action(
+        user_traits(event[:target]).merge(
+          action: action_from(event[:target], :user_login),
+          details: event[:details]
+        ).merge(event[:values] || {})
+      )
 
-      request = event[:target].request
       @mutex.synchronize do
-        UserLoginTrait.update_or_create(
-          {
-            user_id: user.id,
-            platform: event[:target].browser.platform.name,
-            device: event[:target].browser.device.name,
-            browser: event[:target].browser.name,
-            ip_address: request.ip
-          },
-          updated_at: Time.now
-        )
+        UserLoginTrait.update_or_create(user_traits(event[:target]), updated_at: Time.now)
       end
     end
 
     def user_register(event)
       user = event[:values][:user]
-      log_action({
-        user: user,
-        action: action_from(event[:target], :user_register),
-        details: event[:details]
-      }.merge(event[:values] || {}))
+      log_action(
+        user_traits(event[:target]).merge(
+          user_id: user.id,
+          action: action_from(event[:target], :user_register),
+          details: event[:details]
+        ).merge(event[:values] || {})
+      )
 
       # Create the SA user if none is present
       sa = Role.find_or_create(name: 'super_admin')
@@ -77,6 +70,16 @@ module Ditty
     def log_action(values)
       values[:user] ||= values[:target].current_user if values[:target]
       @mutex.synchronize { Ditty::AuditLog.create values }
+    end
+
+    def user_traits(target)
+      {
+        user_id: target.current_user.id,
+        platform: target.browser.platform.name,
+        device: target.browser.device.name,
+        browser: target.browser.name,
+        ip_address: target.request.ip
+      }
     end
   end
 end

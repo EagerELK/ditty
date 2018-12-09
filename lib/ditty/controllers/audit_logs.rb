@@ -8,6 +8,7 @@ module Ditty
   class AuditLogs < Ditty::Component
     set model_class: AuditLog
 
+    SEARCHABLE = %i[details platform device browser ip_address].freeze
     FILTERS = [
       { name: :user, field: 'user.email' },
       { name: :action }

@@ -37,7 +37,7 @@ module Ditty
     end
 
     def failed_login
-      details = "IP: #{request.ip} / #{params[:message] ? 'None' : params[:message]}"
+      details = params[:message] || 'None'
       logger.warn "Invalid Login: #{details}"
       broadcast(:user_failed_login, target: self, details: details)
       flash[:warning] = 'Invalid credentials. Please try again'
@@ -48,14 +48,14 @@ module Ditty
     def successful_login(user)
       halt 200 if request.xhr?
       self.current_user = user
-      broadcast(:user_login, target: self, details: "IP: #{request.ip}")
+      broadcast(:user_login, target: self)
       flash[:success] = 'Logged In'
       redirect redirect_path
     end
 
     def register_user
       user = User.create(email: env['omniauth.auth']['info']['email'])
-      broadcast(:user_register, target: self, values: { user: user }, details: "IP: #{request.ip}")
+      broadcast(:user_register, target: self, values: { user: user })
       flash[:info] = 'Successfully Registered.'
       user
     end
@@ -132,11 +132,11 @@ module Ditty
       identity_params = permitted_attributes(Identity, :update)
       identity.set identity_params.merge(reset_token: nil, reset_requested: nil)
       if identity.valid? && identity.save
-        broadcast(:identity_update_password, target: self, details: "IP: #{request.ip}")
+        broadcast(:identity_update_password, target: self)
         flash[:success] = 'Password Updated'
         redirect "#{settings.map_path}/auth/login"
       else
-        broadcast(:identity_update_password_failed, target: self, details: "IP: #{request.ip}")
+        broadcast(:identity_update_password_failed, target: self)
         haml :'auth/reset_password', locals: { title: 'Reset your password', identity: identity }
       end
     end
@@ -160,7 +160,7 @@ module Ditty
         DB.transaction do
           user.save
           user.add_identity identity
-          broadcast(:user_register, target: self, values: { user: user }, details: "IP: #{request.ip}")
+          broadcast(:user_register, target: self, values: { user: user })
           flash[:info] = 'Successfully Registered. Please log in'
           redirect "#{settings.map_path}/auth/login"
         end
@@ -172,7 +172,7 @@ module Ditty
 
     # Logout Action
     delete '/' do
-      broadcast(:user_logout, target: self, details: "IP: #{request.ip}")
+      broadcast(:user_logout, target: self)
       logout
 
       halt 200 if request.xhr?

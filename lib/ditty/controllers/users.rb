@@ -2,6 +2,7 @@
 
 require 'ditty/controllers/component'
 require 'ditty/models/user'
+require 'ditty/models/user_login_trait'
 require 'ditty/policies/user_policy'
 require 'ditty/models/identity'
 require 'ditty/policies/identity_policy'
