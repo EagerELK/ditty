@@ -30,6 +30,29 @@ module Ditty
       EVENTS.include? method
     end
 
+    def user_login(event)
+      user = event[:target].current_user
+      log_action({
+        user: user,
+        action: action_from(event[:target], :user_login),
+        details: event[:details]
+      }.merge(event[:values] || {}))
+
+      request = event[:target].request
+      @mutex.synchronize do
+        UserLoginTrait.update_or_create(
+          {
+            user_id: user.id,
+            platform: event[:target].browser.platform.name,
+            device: event[:target].browser.device.name,
+            browser: event[:target].browser.name,
+            ip_address: request.ip
+          },
+          updated_at: Time.now
+        )
+      end
+    end
+
     def user_register(event)
       user = event[:values][:user]
       log_action({

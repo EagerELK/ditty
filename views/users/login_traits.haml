@@ -1,0 +1,27 @@
+.row
+  .col-md-2
+  .col-md-8
+    .panel.panel-default
+      .panel-heading
+        %h4 Logins
+      %table.table
+        %thead
+          %tr
+            %th IP Address
+            %th Device
+            %th Platform
+            %th Browser
+            %th Last Seen
+        %tbody
+          - if user_login_traits.count.positive?
+            - user_login_traits.each do |trait|
+              %tr
+                %td= trait.ip_address
+                %td= trait.device
+                %td= trait.platform
+                %td= trait.browser
+                %td= trait.updated_at.strftime('%F %T')
+          - else
+            %tr
+              %td.text-center{ colspan: 5 } No Records
+  .col-md-2
