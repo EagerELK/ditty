@@ -4,7 +4,7 @@ shared_examples 'a CRUD Controller' do |route|
   context 'GET' do
     it '/doesnotexist' do
       get '/doesnotexist'
-      expect(last_response).to_not be_ok
+      expect(last_response).not_to be_ok
       expect(last_response.status).to eq 404
     end
 
@@ -15,7 +15,7 @@ shared_examples 'a CRUD Controller' do |route|
       if Pundit.policy(user, app.model_class).list?
         expect(last_response).to be_ok
       else
-        expect(last_response).to_not be_ok
+        expect(last_response).not_to be_ok
       end
     end
 
@@ -26,7 +26,7 @@ shared_examples 'a CRUD Controller' do |route|
       if Pundit.policy(user, app.model_class).list?
         expect(last_response).to be_ok
       else
-        expect(last_response).to_not be_ok
+        expect(last_response).not_to be_ok
       end
     end
 
@@ -36,7 +36,7 @@ shared_examples 'a CRUD Controller' do |route|
       if Pundit.policy(user, app.model_class).list?
         expect(last_response).to be_ok
       else
-        expect(last_response).to_not be_ok
+        expect(last_response).not_to be_ok
       end
     end
 
@@ -46,7 +46,7 @@ shared_examples 'a CRUD Controller' do |route|
       if Pundit.policy(user, app.model_class).list?
         expect(last_response).to be_ok
       else
-        expect(last_response).to_not be_ok
+        expect(last_response).not_to be_ok
       end
     end
 
@@ -56,7 +56,7 @@ shared_examples 'a CRUD Controller' do |route|
       if Pundit.policy(user, app.model_class).list?
         expect(last_response).to be_ok
       else
-        expect(last_response).to_not be_ok
+        expect(last_response).not_to be_ok
       end
     end
   end
@@ -65,7 +65,7 @@ shared_examples 'a CRUD Controller' do |route|
     it '/doesnotexist' do
       header 'Accept', 'text/html'
       post '/doesnotexist'
-      expect(last_response).to_not be_ok
+      expect(last_response).not_to be_ok
       expect(last_response.status).to eq 404
     end
 
@@ -76,7 +76,7 @@ shared_examples 'a CRUD Controller' do |route|
       if Pundit.policy(user, app.model_class).list?
         expect(last_response.status).to eq 302
       else
-        expect(last_response).to_not be_ok
+        expect(last_response).not_to be_ok
       end
     end
 
@@ -88,7 +88,7 @@ shared_examples 'a CRUD Controller' do |route|
       if Pundit.policy(user, app.model_class).list?
         expect(last_response.status).to eq 400
       else
-        expect(last_response).to_not be_ok
+        expect(last_response).not_to be_ok
       end
     end
   end
@@ -97,7 +97,7 @@ shared_examples 'a CRUD Controller' do |route|
     it '/doesnotexist' do
       header 'Accept', 'text/html'
       put '/doesnotexist'
-      expect(last_response).to_not be_ok
+      expect(last_response).not_to be_ok
       expect(last_response.status).to eq 404
     end
 
@@ -108,7 +108,7 @@ shared_examples 'a CRUD Controller' do |route|
       if Pundit.policy(user, app.model_class).list?
         expect(last_response.status).to eq 302
       else
-        expect(last_response).to_not be_ok
+        expect(last_response).not_to be_ok
       end
     end
 
@@ -119,7 +119,7 @@ shared_examples 'a CRUD Controller' do |route|
       if Pundit.policy(user, app.model_class).list?
         expect(last_response.status).to eq 400
       else
-        expect(last_response).to_not be_ok
+        expect(last_response).not_to be_ok
       end
     end
   end
@@ -127,7 +127,7 @@ shared_examples 'a CRUD Controller' do |route|
   context 'DELETE' do
     it '/doesnotexist' do
       delete '/doesnotexist'
-      expect(last_response).to_not be_ok
+      expect(last_response).not_to be_ok
       expect(last_response.status).to eq 404
     end
 
@@ -138,7 +138,7 @@ shared_examples 'a CRUD Controller' do |route|
       if Pundit.policy(user, app.model_class).list?
         expect(last_response.status).to eq 302
       else
-        expect(last_response).to_not be_ok
+        expect(last_response).not_to be_ok
       end
     end
   end

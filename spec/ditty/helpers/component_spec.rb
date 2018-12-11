@@ -41,7 +41,7 @@ describe Ditty::Helpers::Component do
     { group => { email: 'invalidemail' } }
   end
 
-  before(:each) do
+  before do
     env 'rack.session', 'user_id' => user.id
     create(:user, email: 'bruce@wayne.com')
     create(:user, email: 'tony@stark.com')

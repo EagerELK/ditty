@@ -17,7 +17,7 @@ describe Ditty::Services::Settings do
   end
 
   context '#[]' do
-    before(:each) do
+    before do
       setup_files
       described_class.values = nil
     end
@@ -33,7 +33,7 @@ describe Ditty::Services::Settings do
 
   context '#values' do
     context 'uses the global file' do
-      before(:each) do
+      before do
         setup_files
       end
 
@@ -47,7 +47,7 @@ describe Ditty::Services::Settings do
     end
 
     context 'uses the sectional file' do
-      before(:each) do
+      before do
         setup_files
       end
 

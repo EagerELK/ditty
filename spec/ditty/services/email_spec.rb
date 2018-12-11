@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'ditty/services/email'
 
 describe Ditty::Services::Email do
-  after(:each) do
+  after do
     described_class.config = nil
   end
 

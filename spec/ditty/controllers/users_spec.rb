@@ -34,7 +34,7 @@ describe Ditty::Users do
       { group => { email: 'invalidemail' } }
     end
 
-    before(:each) do
+    before do
       # Log in
       env 'rack.session', 'user_id' => user.id
     end
@@ -62,7 +62,7 @@ describe Ditty::Users do
       { group => { email: 'invalidemail' } }
     end
 
-    before(:each) do
+    before do
       # Log in
       env 'rack.session', 'user_id' => user.id
     end

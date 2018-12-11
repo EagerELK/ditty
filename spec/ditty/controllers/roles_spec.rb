@@ -29,7 +29,7 @@ describe Ditty::Roles do
       { group => { name: '' } }
     end
 
-    before(:each) do
+    before do
       # Log in
       env 'rack.session', 'user_id' => user.id
     end
@@ -57,7 +57,7 @@ describe Ditty::Roles do
       { group => { name: '' } }
     end
 
-    before(:each) do
+    before do
       # Log in
       env 'rack.session', 'user_id' => user.id
     end
