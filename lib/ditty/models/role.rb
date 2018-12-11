@@ -9,6 +9,7 @@ module Ditty
     many_to_many :users
 
     def validate
+      super
       validates_presence [:name]
       validates_unique [:name]
     end

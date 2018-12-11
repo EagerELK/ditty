@@ -8,6 +8,7 @@ module Ditty
     many_to_one :user
 
     def validate
+      super
       validates_presence [:action]
     end
   end

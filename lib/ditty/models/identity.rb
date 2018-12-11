@@ -39,6 +39,7 @@ module Ditty
 
     # Validation
     def validate
+      super
       validates_presence :username
       unless username.blank?
         validates_unique :username
@@ -65,6 +66,7 @@ module Ditty
 
     # Callbacks
     def before_save
+      super
       encrypt_password unless password == '' || password.nil?
     end
 
