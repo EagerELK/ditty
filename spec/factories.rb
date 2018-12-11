@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'faker'
 require 'ditty/models/user'
 require 'ditty/models/identity'
 require 'ditty/models/role'
@@ -31,5 +32,13 @@ FactoryBot.define do
 
   factory :role, class: Ditty::Role, aliases: [:'Ditty::Role'] do
     name { "Role #{generate(:name)}" }
+  end
+
+  factory :user_login_trait, class: Ditty::UserLoginTrait, aliases: [:'Ditty::UserLoginTrait'] do
+    user
+    ip_address { Faker::Internet.ip_v4_address }
+    platform { Faker::Device.platform }
+    device { Faker::Device.model_name }
+    browser { 'Firefox' }
   end
 end

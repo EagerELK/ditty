@@ -1,0 +1,32 @@
+.row
+  .col-md-2
+  .col-md-8
+    .panel.panel-default
+      .panel-body
+        %p.description
+          %label User:
+          = entity.user&.email || 'Unknown'
+        %p.description
+          %label IP Address:
+          = entity.ip_address || 'Unknown'
+        %p.description
+          %label Device:
+          = entity.device || 'Unknown'
+        %p.description
+          %label Platform:
+          = entity.platform || 'Unknown'
+        %p.description
+          %label Browser:
+          = entity.browser || 'Unknown'
+        %p.description
+          %label Last Seen:
+          = entity.updated_at.strftime('%F %T')
+
+        .row
+          .col-md-6
+            %a.btn.btn-default{ href: "#{base_path}/#{entity.id}/edit" } Edit
+          .col-md-6.text-right
+            - if policy(entity).delete?
+              = delete_form_tag("#{base_path}/#{entity.id}") do
+                %button.btn.btn-warning{ type: 'submit' } Delete
+  .col-md-2

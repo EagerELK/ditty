@@ -13,6 +13,7 @@ module Ditty
       require 'ditty/models/role'
       require 'ditty/models/identity'
       require 'ditty/models/audit_log'
+      require 'ditty/models/user_login_trait'
     end
 
     def self.configure(_container)
@@ -35,7 +36,8 @@ module Ditty
         '/auth' => ::Ditty::Auth,
         '/users' => ::Ditty::Users,
         '/roles' => ::Ditty::Roles,
-        '/audit-logs' => ::Ditty::AuditLogs
+        '/audit-logs' => ::Ditty::AuditLogs,
+        '/login-traits' => ::Ditty::UserLoginTraits
       }
     end
 
