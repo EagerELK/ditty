@@ -1,14 +1,11 @@
 require: rubocop-rspec
 
+AllCops:
+  TargetRubyVersion: 2.3
 Metrics/LineLength:
   Max: 120
-
 Style/NumericPredicate:
   Enabled: false
-
 Layout/LeadingCommentSpace:
   Exclude:
     - 'config.ru'
-
-AllCops:
-  TargetRubyVersion: 2.2
