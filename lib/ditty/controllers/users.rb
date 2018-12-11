@@ -53,10 +53,8 @@ module Ditty
         user.save
         user.add_identity identity
 
-        if roles
-          roles.each do |role_id|
-            user.add_role(role_id) unless user.roles.map(&:id).include? role_id.to_i
-          end
+        roles&.each do |role_id|
+          user.add_role(role_id) unless user.roles.map(&:id).include? role_id.to_i
         end
         user.check_roles
       end

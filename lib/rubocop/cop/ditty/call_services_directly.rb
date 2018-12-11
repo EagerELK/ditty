@@ -18,7 +18,7 @@ module RuboCop
       #   # good
       #   Ditty::Services::Logger.info 'This is a log message'
       class CallServicesDirectly < RuboCop::Cop::Cop
-        MSG = 'Do not use `.instance` on services. Call the method directly instead'.freeze
+        MSG = 'Do not use `.instance` on services. Call the method directly instead'
 
         def_node_matcher :service_instance_call?, <<-PATTERN
           (send (const (const (const ... :Ditty) :Services) _) :instance)

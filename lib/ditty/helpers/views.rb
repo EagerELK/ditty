@@ -123,6 +123,7 @@ module Ditty
       def url_for(options = nil)
         return options if options.is_a? String
         return request.env['HTTP_REFERER'] if options == :back && request.env['HTTP_REFERER']
+
         raise 'Unimplemented'
       end
 

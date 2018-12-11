@@ -16,8 +16,8 @@ module Ditty
     # in separate files will be used in preference of those in the `settings.yml`
     # file.
     module Settings
-      CONFIG_FOLDER = './config'.freeze
-      CONFIG_FILE = "#{CONFIG_FOLDER}/settings.yml".freeze
+      CONFIG_FOLDER = './config'
+      CONFIG_FILE = "#{CONFIG_FOLDER}/settings.yml"
 
       class << self
         def [](key)

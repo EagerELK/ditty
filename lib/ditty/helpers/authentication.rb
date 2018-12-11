@@ -20,7 +20,7 @@ module Ditty
       def current_user_id
         return env['rack.session']['user_id'] if env['rack.session'] && env['rack.session']['user_id']
 
-        env['omniauth.auth'].uid if env['omniauth.auth']
+        env['omniauth.auth']&.uid
       end
 
       def authenticate
@@ -38,7 +38,7 @@ module Ditty
       end
 
       def logout
-        env['rack.session'].delete('user_id') unless env['rack.session'].nil?
+        env['rack.session']&.delete('user_id')
         env.delete('omniauth.auth')
       end
     end

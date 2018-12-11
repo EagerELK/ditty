@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ditty/services/logger'
 
 module Ditty

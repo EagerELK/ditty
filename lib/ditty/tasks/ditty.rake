@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :ditty do
   desc 'Prepare Ditty'
   task prep: ['generate_tokens', 'prep:folders', 'prep:public', 'prep:migrations']

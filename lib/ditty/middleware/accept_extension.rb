@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ditty
   module Middleware
     # Allow requests to be responded to in JSON if the URL has .json at the end.

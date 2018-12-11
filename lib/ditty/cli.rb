@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # https://nandovieira.com/creating-generators-and-executables-with-thor
 require 'dotenv/load'
 require 'thor'

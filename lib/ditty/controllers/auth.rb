@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ditty/controllers/application'
 require 'ditty/services/email'
 require 'securerandom'
@@ -115,7 +117,7 @@ module Ditty
 
       param :token, String, required: true
       identity = Identity[reset_token: params[:token]]
-      halt 404 unless identity && identity.reset_requested && identity.reset_requested > (Time.now - (24 * 60 * 60))
+      halt 404 unless identity&.reset_requested && identity.reset_requested > (Time.now - (24 * 60 * 60))
 
       haml :'auth/reset_password', locals: { title: 'Reset your password', identity: identity }
     end

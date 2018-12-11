@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ditty/controllers/application'
 require 'ditty/services/settings'
 require 'ditty/services/logger'
