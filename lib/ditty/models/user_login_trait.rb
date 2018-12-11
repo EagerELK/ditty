@@ -11,6 +11,7 @@ module Ditty
 
     def validate
       super
+      validates_presence :user_id
     end
   end
 end
