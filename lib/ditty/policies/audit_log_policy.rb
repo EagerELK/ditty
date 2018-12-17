@@ -5,23 +5,23 @@ require 'ditty/policies/application_policy'
 module Ditty
   class AuditLogPolicy < ApplicationPolicy
     def create?
-      user&.super_admin?
+      false
     end
 
     def list?
-      create?
+      user&.super_admin?
     end
 
     def read?
-      create?
+      user&.super_admin?
     end
 
     def update?
-      read?
+      false
     end
 
     def delete?
-      create?
+      false
     end
 
     def permitted_attributes
