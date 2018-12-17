@@ -1,4 +1,9 @@
-%h2 Whoops!
+- if ENV['APP_ENV'] != 'production'
+  %p.lead
+    = error.class
+    %br
+    %small
+      = error.message
 
-%p.lead
-  = error.class
+  %pre
+    = error.backtrace.join("\n")

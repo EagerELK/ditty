@@ -8,11 +8,6 @@ module Ditty
   class Main < Application
     set track_actions: true
 
-    def find_template(views, name, engine, &block)
-      super(views, name, engine, &block) # Root
-      super(::Ditty::App.view_folder, name, engine, &block) # Basic Plugin
-    end
-
     before '/' do
       return if User.where(roles: Role.find_or_create(name: 'super_admin')).count.positive?
 

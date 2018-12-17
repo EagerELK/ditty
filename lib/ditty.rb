@@ -6,6 +6,8 @@ require 'ditty/services/logger'
 module Ditty
   class ComponentError < StandardError; end
 
+  class TemplateNotFoundError < StandardError; end
+
   # A thread safe cache class, offering only #[] and #[]= methods,
   # each protected by a mutex.
   # Ripped off from Roda - https://github.com/jeremyevans/roda

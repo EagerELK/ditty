@@ -24,11 +24,6 @@ module Ditty
       end
     end
 
-    def find_template(views, name, engine, &block)
-      super(views, name, engine, &block) # Root
-      super(::Ditty::App.view_folder, name, engine, &block) # Ditty
-    end
-
     def list
       super.order(:created_at).reverse
     end

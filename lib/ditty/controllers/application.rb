@@ -23,6 +23,7 @@ module Ditty
     set :root, ENV['APP_ROOT'] || ::File.expand_path(::File.dirname(__FILE__) + '/../../../')
     set :map_path, nil
     set :view_location, nil
+    set :view_folder, nil
     set :model_class, nil
     set :raise_sinatra_param_exceptions, true
     set track_actions: false
@@ -58,6 +59,22 @@ module Ditty
       def browser
         Browser.new(request.user_agent, accept_language: request.env['HTTP_ACCEPT_LANGUAGE'])
       end
+    end
+
+    def view_folders
+      folders = ['./views']
+      folders << settings.view_folder if settings.view_folder
+      folders << Ditty::App.view_folder
+    end
+
+    def find_template(views, name, engine, &block)
+      # Backwards compatability
+      return super(views, name, engine, &block) if settings.view_folder.nil? && self.class.name.split('::').first != 'Ditty'
+
+      view_folders.each do |folder|
+        super(folder, name, engine, &block) # Root
+      end
+      raise Ditty::TemplateNotFoundError, "Could not find template `#{name}`"
     end
 
     configure :production do
@@ -152,6 +169,19 @@ module Ditty
         end
         format.json do
           json code: 400, errors: ['Invalid Relation Specified']
+        end
+      end
+    end
+
+    error Ditty::TemplateNotFoundError do
+      # TODO: Display a better error message
+      error = env['sinatra.error']
+      broadcast(:application_error, error)
+      logger.error error
+      respond_to do |format|
+        status 500
+        format.html do
+          haml :error, locals: { title: 'Template not found', error: error }, layout: layout
         end
       end
     end

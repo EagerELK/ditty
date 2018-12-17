@@ -13,12 +13,6 @@ module Ditty
 
     set base_path: 'login-traits'
     set model_class: UserLoginTrait
-
     # set track_actions: true
-
-    def find_template(views, name, engine, &block)
-      super(views, name, engine, &block) # Root
-      super(::Ditty::App.view_folder, name, engine, &block) # Ditty
-    end
   end
 end

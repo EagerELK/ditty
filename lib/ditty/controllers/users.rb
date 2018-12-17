@@ -14,11 +14,6 @@ module Ditty
     set model_class: User
     set track_actions: true
 
-    def find_template(views, name, engine, &block)
-      super(views, name, engine, &block) # Root
-      super(::Ditty::App.view_folder, name, engine, &block) # Ditty
-    end
-
     # New
     get '/new' do
       authorize settings.model_class, :create

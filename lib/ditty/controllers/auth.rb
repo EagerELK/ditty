@@ -8,11 +8,6 @@ module Ditty
   class Auth < Application
     set track_actions: true
 
-    def find_template(views, name, engine, &block)
-      super(views, name, engine, &block) # Root
-      super(::Ditty::App.view_folder, name, engine, &block) # Basic Plugin
-    end
-
     def redirect_path
       return "#{settings.map_path}/" if omniauth_redirect_path.nil?
       return "#{settings.map_path}/" if omniauth_redirect_path =~ %r{/#{settings.map_path}/auth/?}

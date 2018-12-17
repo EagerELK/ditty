@@ -9,10 +9,5 @@ module Ditty
     SEARCHABLE = %i[name].freeze
 
     set model_class: Role
-
-    def find_template(views, name, engine, &block)
-      super(views, name, engine, &block) # Root
-      super(::Ditty::App.view_folder, name, engine, &block) # Ditty
-    end
   end
 end
