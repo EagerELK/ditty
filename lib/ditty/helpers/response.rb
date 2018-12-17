@@ -48,12 +48,17 @@ module Ditty
         end
       end
 
+      def actions(entity = nil)
+        actions = {}
+        actions["#{base_path}/#{entity.id}/edit"] = "Edit #{heading}" if entity && policy(entity).update?
+        actions["#{base_path}/new"] = "New #{heading}" if policy(settings.model_class).create?
+        actions
+      end
+
       def read_response(entity)
+        actions = actions(entity)
         respond_to do |format|
           format.html do
-            actions = {}
-            actions["#{base_path}/#{entity.id}/edit"] = "Edit #{heading}" if policy(entity).update?
-            actions["#{base_path}/new"] = "New #{heading}" if policy(entity).create?
             title = heading(:read) + (entity.respond_to?(:name) ? ": #{entity.name}" : '')
             haml :"#{view_location}/display",
                  locals: { entity: entity, title: title, actions: actions },
