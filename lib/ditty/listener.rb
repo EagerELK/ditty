@@ -74,7 +74,7 @@ module Ditty
 
     def user_traits(target)
       {
-        user_id: target.current_user.id,
+        user_id: target.current_user&.id,
         platform: target.browser.platform.name,
         device: target.browser.device.name,
         browser: target.browser.name,
