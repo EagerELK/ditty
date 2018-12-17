@@ -3,8 +3,6 @@
 # https://nandovieira.com/creating-generators-and-executables-with-thor
 require 'dotenv/load'
 require 'thor'
-require 'ditty'
-require 'ditty/rake_tasks'
 require 'rack'
 require 'rake'
 
@@ -14,6 +12,7 @@ module Ditty
 
     desc 'server', 'Start the Ditty server'
     require './application' if File.exist?('application.rb')
+    Ditty::Components.tasks
     def server
       # Ensure the token files are present
       Rake::Task['ditty:generate_tokens'].invoke
