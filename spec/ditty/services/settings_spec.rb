@@ -29,6 +29,10 @@ describe Ditty::Services::Settings do
     it 'allows access to sectional settings' do
       expect(described_class[:no_file_section]).to include(section_1: 2, section_2: 'set')
     end
+
+    it 'allows using dots to travers' do
+      expect(described_class['nested.option']).to eq 'value'
+    end
   end
 
   context '#values' do

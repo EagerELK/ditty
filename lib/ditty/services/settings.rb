@@ -21,7 +21,8 @@ module Ditty
 
       class << self
         def [](key)
-          values(key.to_sym)
+          keys = key.to_s.split('.').map(&:to_sym)
+          values.dig(*keys)
         end
 
         def values(scope = :settings)
