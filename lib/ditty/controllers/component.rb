@@ -22,6 +22,12 @@ module Ditty
       @skip_verify = true
     end
 
+    def trigger(event, attribs = {})
+      attribs[:target] ||= self
+      send(event, attribs) if self.respond_to? event
+      broadcast(event, attribs)
+    end
+
     after do
       return if settings.environment == 'production'
 
@@ -42,7 +48,8 @@ module Ditty
 
       result = list
 
-      broadcast(:component_list, target: self)
+      trigger :component_list
+
       list_response(result)
     end
 
@@ -64,7 +71,7 @@ module Ditty
 
       entity.db.transaction do
         entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
-        broadcast(:component_create, target: self, entity: entity)
+        trigger :component_create, entity: entity
       end
 
       create_response(entity)
@@ -76,7 +83,7 @@ module Ditty
       halt 404 unless entity
       authorize entity, :read
 
-      broadcast(:component_read, target: self, entity: entity)
+      trigger :component_read, entity: entity
       read_response(entity)
     end
 
@@ -100,7 +107,7 @@ module Ditty
       entity.db.transaction do
         entity.set(permitted_attributes(settings.model_class, :update))
         entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
-        broadcast(:component_update, target: self, entity: entity)
+        trigger :component_update, entity: entity
       end
 
       update_response(entity)
@@ -113,7 +120,7 @@ module Ditty
 
       entity.db.transaction do
         entity.destroy
-        broadcast(:component_delete, target: self, entity: entity)
+        trigger :component_delete, entity: entity
       end
 
       delete_response(entity)
