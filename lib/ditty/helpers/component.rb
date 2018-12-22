@@ -50,7 +50,7 @@ module Ditty
 
       def heading(action = nil)
         @headings ||= begin
-          heading = settings.model_class.to_s.demodulize.titleize
+          heading = settings.heading || settings.model_class.to_s.demodulize.singularize.titleize
           h = Hash.new(heading)
           h[:new] = "New #{heading}"
           h[:list] = pluralize heading

@@ -13,6 +13,7 @@ module Ditty
     set dehumanized: nil
     set view_location: nil
     set track_actions: false
+    set heading: nil
 
     def read(id)
       dataset.first(settings.model_class.primary_key => id)
