@@ -59,6 +59,10 @@ module Ditty
       def browser
         Browser.new(request.user_agent, accept_language: request.env['HTTP_ACCEPT_LANGUAGE'])
       end
+
+      def config(name, default = '')
+        Ditty::Services::Settings[name] || default
+      end
     end
 
     def view_folders

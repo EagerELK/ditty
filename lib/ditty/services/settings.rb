@@ -22,7 +22,13 @@ module Ditty
       class << self
         def [](key)
           keys = key.to_s.split('.').map(&:to_sym)
-          values[key.to_sym] || values.dig(*keys)
+          from = values
+          if keys.count > 1 && scope?(keys.first)
+            from = values(keys.first)
+            keys = keys[1..-1]
+            key = keys.join('.')
+          end
+          from[key.to_sym] || from.dig(*keys)
         end
 
         def values(scope = :settings)
@@ -39,6 +45,10 @@ module Ditty
             v
           end
           @values[scope]
+        end
+
+        def scope?(name)
+          @values.key?(name.to_sym) || File.file?("#{CONFIG_FOLDER}/#{name}.yml")
         end
 
         attr_writer :values
