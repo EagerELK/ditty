@@ -18,6 +18,14 @@ namespace :ditty do
     require 'ditty/seed'
   end
 
+  desc 'Dump the Ditty DB Schema'
+  task :dump_schema do
+    Ditty::Components.components.each do |_name, comp|
+      comp.load if comp.respond_to?(:load)
+    end.compact
+    DB.dump_schema_cache('./config/schema.dump')
+  end
+
   namespace :prep do
     desc 'Check that the required Ditty folders are present'
     task :folders do

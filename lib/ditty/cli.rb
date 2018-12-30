@@ -40,6 +40,9 @@ module Ditty
       # Run the migrations
       Rake::Task['ditty:migrate:up'].invoke
       puts 'Ditty Migrations Executed'
+
+      Rake::Task['ditty:dump_schema'].invoke
+      puts 'Ditty DB Schema Dumped'
     end
   end
 end
