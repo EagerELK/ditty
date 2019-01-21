@@ -47,6 +47,7 @@ module Ditty
 
     # Add the basic roles and identity
     def after_create
+      super
       check_roles
     end
 

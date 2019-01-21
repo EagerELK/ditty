@@ -64,6 +64,7 @@ module Ditty
 
     # Callbacks
     def before_save
+      super
       encrypt_password unless password == '' || password.nil?
     end
 
