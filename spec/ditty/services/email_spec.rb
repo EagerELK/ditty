@@ -4,6 +4,10 @@ require 'spec_helper'
 require 'ditty/services/email'
 
 describe Ditty::Services::Email do
+  before(:each) do
+    described_class.remove_instance_variable :@config if described_class.instance_variable_defined? :@config
+  end
+
   context 'config!' do
     it 'configures the Mail gem' do
       expect(Mail).to receive(:defaults)
