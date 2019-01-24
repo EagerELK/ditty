@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   spec.executables   = ['ditty']
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1.12'
+  spec.add_development_dependency 'bundler', '>= 1'
   spec.add_development_dependency 'database_cleaner'
   spec.add_development_dependency 'factory_bot'
   spec.add_development_dependency 'rack-test'
