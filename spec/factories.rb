@@ -4,6 +4,7 @@ require 'faker'
 require 'ditty/models/user'
 require 'ditty/models/identity'
 require 'ditty/models/role'
+require 'ditty/models/user_login_trait'
 
 FactoryBot.define do
   to_create(&:save)
@@ -32,6 +33,7 @@ FactoryBot.define do
 
   factory :role, class: Ditty::Role, aliases: [:'Ditty::Role'] do
     name { "Role #{generate(:name)}" }
+    parent_id { nil }
   end
 
   factory :user_login_trait, class: Ditty::UserLoginTrait, aliases: [:'Ditty::UserLoginTrait'] do
