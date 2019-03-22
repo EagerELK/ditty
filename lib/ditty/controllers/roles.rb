@@ -9,5 +9,13 @@ module Ditty
     SEARCHABLE = %i[name].freeze
 
     set model_class: Role
+
+    helpers do
+      def parent_options(entity)
+        policy_scope(Ditty::Role)
+          .exclude(id: [entity.id] + entity.descendants.map(&:id))
+          .order(:name)
+      end
+    end
   end
 end

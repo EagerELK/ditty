@@ -7,12 +7,15 @@
         %thead
           %tr
             %th Name
+            %th Parent
         %tbody
           - if list.count > 0
             - list.all.each do |entity|
               %tr
                 %td
                   %a{ href: "#{base_path}/#{entity.id}" }= entity.name
+                %td
+                  %a{ href: "#{base_path}/#{entity.parent_id}" }= entity.parent&.name || '(None)'
           - else
             %tr
               %td.text-center{ colspan: 1 } No records

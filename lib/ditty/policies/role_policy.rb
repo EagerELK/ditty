@@ -25,7 +25,7 @@ module Ditty
     end
 
     def permitted_attributes
-      [:name]
+      %i[parent_id name]
     end
 
     class Scope < ApplicationPolicy::Scope
