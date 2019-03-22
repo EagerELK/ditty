@@ -17,7 +17,10 @@ module Ditty
 
     def role?(check)
       @roles ||= Hash.new do |h, k|
-        h[k] = !roles_dataset.first(name: k).nil?
+        role_or_descendant = roles.find do |role|
+          role.name == k || role.descendants.map(&:name).include?(k)
+        end
+        h[k] = !role_or_descendant.nil?
       end
       @roles[check]
     end

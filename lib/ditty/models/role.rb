@@ -5,6 +5,7 @@ require 'ditty/models/base'
 module Ditty
   class Role < ::Sequel::Model
     include ::Ditty::Base
+    plugin :tree
 
     many_to_many :users
 
