@@ -37,7 +37,7 @@ FactoryBot.define do
   end
 
   factory :user_login_trait, class: Ditty::UserLoginTrait, aliases: [:'Ditty::UserLoginTrait'] do
-    user
+    association :user, strategy: :create, factory: :user
     ip_address { Faker::Internet.ip_v4_address }
     platform { Faker::Device.platform }
     device { Faker::Device.model_name }
