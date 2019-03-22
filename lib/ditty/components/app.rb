@@ -63,9 +63,9 @@ module Ditty
       proc do
         load
 
-        ::Ditty::Role.find_or_create(name: 'super_admin')
-        ::Ditty::Role.find_or_create(name: 'admin')
-        ::Ditty::Role.find_or_create(name: 'user')
+        sa = ::Ditty::Role.find_or_create(name: 'super_admin')
+        admin = ::Ditty::Role.find_or_create(name: 'admin', parent: sa)
+        ::Ditty::Role.find_or_create(name: 'user', parent: admin)
       end
     end
 

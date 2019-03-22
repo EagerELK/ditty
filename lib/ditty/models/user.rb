@@ -25,6 +25,12 @@ module Ditty
       @roles[check]
     end
 
+    def all_roles
+      roles.inject([]) do |memo, role|
+        memo + [role] + role.descendants
+      end.uniq
+    end
+
     def method_missing(method_sym, *arguments, &block)
       if respond_to_missing?(method_sym)
         role?(method_sym[0..-2])

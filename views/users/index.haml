@@ -16,11 +16,18 @@
             - list.all.each do |entity|
               %tr
                 %td
-                  %a{ href: "#{base_path}/#{entity.id}" }= entity.email
+                  - if policy(entity).read?
+                    %a{ href: "#{base_path}/#{entity.id}" }= entity.email
+                  - else
+                    = entity.email
                 %td= entity.name
                 %td= entity.surname
-                %td= entity.roles_dataset.map(:name).map(&:titlecase).join(', ')
+                %td= entity.all_roles.map(&:name).map(&:titlecase).join(', ')
                 %td= entity.created_at.strftime('%Y-%m-%d')
+                - if policy(entity).update?
+                  %td
+                    %a{ href: "#{base_path}/#{entity.id}/edit", title: 'Edit' }
+                      %i.fa.fa-pencil
           - else
             %tr
               %td.text-center{ colspan: 5 } No records

@@ -5,7 +5,10 @@
       .panel-body
         %p.description
           %label Name:
-          = entity.name
+          = entity.name.titlecase
+        %p.description
+          %label Parent:
+          %a{ href: "#{base_path}/#{entity.parent_id}" }= entity.parent&.name&.titlecase || '(None)'
 
         .row
           .col-md-6
@@ -15,3 +18,21 @@
               = delete_form_tag("#{base_path}/#{entity.id}") do
                 %button.btn.btn-warning{ type: 'submit' } Delete
   .col-md-2
+
+.row
+  .col-md-2
+  .col-md-8
+    .panel.panel-default
+      .panel-heading
+        %h4 Included Roles
+      %table.table.table-striped
+        %tbody
+          - if entity.descendants.count > 0
+            - entity.descendants.each do |role|
+              %tr
+                %td
+                  %a.btn-block{ href: "#{settings.map_path}/role/#{role.id}" }
+                    = p.name.titlecase
+          - else
+            %tr
+              %td.text-center No records
