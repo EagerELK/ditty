@@ -169,14 +169,21 @@ module Ditty
 
     after do
       return if params[:layout].nil?
-      response.body = response.body.map do |resp|
-        document = Oga.parse_html(resp)
-        document.css('a').each do |elm|
-          unless (href = elm.get('href')).nil?
-            elm.set 'href', with_layout(href)
+      return unless response.body.respond_to?(:map)
+
+      begin
+        orig = response.body
+        response.body = response.body.map do |resp|
+          document = Oga.parse_html(resp)
+          document.css('a').each do |elm|
+            unless (href = elm.get('href')).nil?
+              elm.set 'href', with_layout(href)
+            end
           end
+          document.to_xml
         end
-        document.to_xml
+      rescue StandardError => _e
+        orig
       end
     end
   end
