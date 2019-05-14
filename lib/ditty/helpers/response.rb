@@ -17,7 +17,7 @@ module Ditty
             # TODO: Add links defined by actions (New #{heading})
             total = result.respond_to?(:pagination_record_count) ? result.pagination_record_count : result.count
             json(
-              'items' => result.all.map(&:for_json),
+              'items' => result.all.map { |e| permitted_response_attributes(e, :for_json) },
               'page' => (params['page'] || 1).to_i,
               'count' => result.count,
               'total' => total
@@ -60,7 +60,7 @@ module Ditty
           end
           format.json do
             # TODO: Add links defined by actions (Edit #{heading})
-            json entity.for_json
+            json permitted_response_attributes(entity, :for_json)
           end
           format.csv do
             CSV.generate do |csv|
