@@ -26,7 +26,7 @@ FactoryBot.define do
 
   factory :identity, class: Ditty::Identity, aliases: [:'Ditty::Identity'] do
     username { generate :email }
-    crypted_password 'som3Password!'
+    crypted_password { 'som3Password!' }
   end
 
   factory :role, class: Ditty::Role, aliases: [:'Ditty::Role'] do
