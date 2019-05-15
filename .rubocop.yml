@@ -7,6 +7,3 @@ Style/NumericPredicate:
 Layout/LeadingCommentSpace:
   Exclude:
     - 'config.ru'
-
-AllCops:
-  TargetRubyVersion: 2.2
