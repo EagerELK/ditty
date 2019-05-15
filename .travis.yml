@@ -4,7 +4,6 @@ rvm:
   - 2.5.1
   - 2.4.0
   - 2.3.3
-  - 2.2.6
 gemfile: Gemfile.ci
 env:
   global:
