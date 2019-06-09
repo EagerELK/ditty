@@ -1,0 +1,18 @@
+.row
+  .col-md-2
+  .col-md-8
+    .panel.panel-default
+      .panel-body
+        %p.description
+          %label Name:
+          = entity.name
+
+        .row
+          .col-md-6
+            - if policy(entity).update?
+              %a.btn.btn-default{ href: "#{base_path}/#{entity.id}/edit" } Edit
+          .col-md-6.text-right
+            - if policy(entity).delete?
+              = delete_form_tag("#{base_path}/#{entity.id}") do
+                %button.btn.btn-warning{ type: 'submit' } Delete
+  .col-md-2

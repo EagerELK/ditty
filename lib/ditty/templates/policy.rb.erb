@@ -1,0 +1,43 @@
+# frozen_string_literal: true
+
+require 'ditty/policies/application_policy'
+
+module <%= namespace %>
+  class <%= model_name %>Policy < Ditty::ApplicationPolicy
+    def create?
+      user
+    end
+
+    def list?
+      create?
+    end
+
+    def read?
+      # This assumes that the model has a user_id field
+      user && (record.user_id == user.id || user.super_admin?)
+    end
+
+    def update?
+      read?
+    end
+
+    def delete?
+      user&.super_admin?
+    end
+
+    def permitted_attributes
+      # Be sure to set these to your model properties
+      %i[name user_id]
+    end
+
+    class Scope < Ditty::ApplicationPolicy::Scope
+      def resolve
+        return scope if user&.super_admin?
+        # This assumes that the model has a user_id field
+        return scope.where(user_id: user.id) if user
+
+        scope.where(id: -1)
+      end
+    end
+  end
+end

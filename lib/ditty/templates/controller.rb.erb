@@ -1,0 +1,24 @@
+# frozen_string_literal: true
+
+require 'ditty/controllers/component'
+require '<%= folder %>/models/<%= model_name.underscore %>'
+require '<%= folder %>/policies/<%= policy_name.underscore %>'
+
+module <%= namespace %>
+  class <%= controller_name %> < Ditty::Component
+    set model_class: <%= model_name %>
+    set view_folder: '<%= views_folder %>'
+
+    # Add fields that are searchable here
+    SEARCHABLE = %i[name].freeze
+    # Add field filter definitions here
+    FILTERS = [{ name: :user, field: 'user.email' }].freeze
+
+    helpers do
+      # filter_options helpers that return options for filter dropdowns
+      def relation_options
+        policy_scope(Relation).as_hash(:id, :name)
+      end
+    end
+  end
+end

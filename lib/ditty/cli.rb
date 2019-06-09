@@ -5,10 +5,14 @@ require 'dotenv/load'
 require 'thor'
 require 'rack'
 require 'rake'
+require 'ditty/generators/crud_generator'
+require 'ditty/components/app'
 
 module Ditty
   class CLI < Thor
     include Thor::Actions
+
+    register Ditty::Generators::CrudGenerator, 'crud', 'crud NAME', 'Generate a CRUD endpoint'
 
     desc 'server', 'Start the Ditty server'
     require './application' if File.exist?('application.rb')

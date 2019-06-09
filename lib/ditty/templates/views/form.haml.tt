@@ -1,0 +1,3 @@
+/ Add your model's properties as form controls here
+= form_control(:name, entity)
+= form_control(:user_id, entity, type: 'select', options: policy_scope(Ditty::User).order(:email).as_hash(:id, :email))

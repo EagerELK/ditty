@@ -1,0 +1,9 @@
+# frozen_string_literal: true
+
+require 'ditty/models/base'
+
+module <%= namespace %>
+  class <%= model_name %> < ::Sequel::Model
+    include ::Ditty::Base
+  end
+end
