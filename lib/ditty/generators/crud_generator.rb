@@ -50,6 +50,24 @@ module Ditty
 
         directory '../templates/views', views_folder
       end
+
+      private
+
+      def columns
+        require "#{folder}/models/#{model_name.underscore}"
+        name.constantize.columns - %i[id created_at updated_at]
+      rescue StandardError
+        []
+      end
+
+      def many_to_ones
+        DB.foreign_key_list(model_name.underscore.pluralize)
+      end
+
+      def name_column(table)
+        candidates = DB.schema(table.to_sym).to_h.keys - DB.foreign_key_list(table.to_sym).map { |e| e[:columns] }.flatten
+        (candidates - %i[id slug]).first
+      end
     end
   end
 end

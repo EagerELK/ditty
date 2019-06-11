@@ -13,8 +13,11 @@ module <%= namespace %>
     end
 
     def read?
-      # This assumes that the model has a user_id field
+      <%- if columns.include? :user_id -%>
       user && (record.user_id == user.id || user.super_admin?)
+      <%- else -%>
+      user
+      <%- end -%>
     end
 
     def update?
@@ -26,15 +29,17 @@ module <%= namespace %>
     end
 
     def permitted_attributes
-      # Be sure to set these to your model properties
-      %i[name user_id]
+      %i[<%= columns.join(' ') %>]
     end
 
     class Scope < Ditty::ApplicationPolicy::Scope
       def resolve
+        <%- if columns.include? :user_id -%>
         return scope if user&.super_admin?
-        # This assumes that the model has a user_id field
         return scope.where(user_id: user.id) if user
+        <%- else -%>
+        return scope if user
+        <%- end -%>
 
         scope.where(id: -1)
       end

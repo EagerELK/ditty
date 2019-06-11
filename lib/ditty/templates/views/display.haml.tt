@@ -3,9 +3,11 @@
   .col-md-8
     .panel.panel-default
       .panel-body
+        <%- columns.each do |col| -%>
         %p.description
-          %label Name:
-          = entity.name
+          %label <%= col.to_s.titleize %>:
+          = entity.<%= col %>
+        <%- end %>
 
         .row
           .col-md-6

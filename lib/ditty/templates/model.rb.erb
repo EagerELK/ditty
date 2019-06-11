@@ -5,5 +5,9 @@ require 'ditty/models/base'
 module <%= namespace %>
   class <%= model_name %> < ::Sequel::Model
     include ::Ditty::Base
+
+    <%- many_to_ones.each do |key| -%>
+    many_to_one :<%= key[:table].to_s.singularize %>
+    <%- end -%>
   end
 end

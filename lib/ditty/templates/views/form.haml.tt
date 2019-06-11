@@ -1,3 +1,7 @@
-/ Add your model's properties as form controls here
-= form_control(:name, entity)
+<%- columns.each do |col| -%>
+<%- if col == :user_id -%>
 = form_control(:user_id, entity, type: 'select', options: policy_scope(Ditty::User).order(:email).as_hash(:id, :email))
+<%- else -%>
+= form_control(:<%= col %>, entity)
+<%- end -%>
+<%- end -%>

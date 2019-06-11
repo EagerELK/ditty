@@ -6,13 +6,17 @@
       %table.table.table-striped
         %thead
           %tr
-            %th Name
+            <%- columns.each do |col| -%>
+            %th <%= col.to_s.titleize %>
+            <%- end %>
             %th
         %tbody
           - if list.count > 0
             - list.all.each do |entity|
               %tr
-                %td= entity.name
+                <%- columns.each do |col| -%>
+                %td= entity.<%= col %>
+                <%- end %>
                 %td
                   %a{ href: "#{base_path}/#{entity.id}", title: 'Show' }
                     %i.fa.fa-magnify
@@ -21,7 +25,7 @@
                       %i.fa.fa-pencil
           - else
             %tr
-              %td.text-center{ colspan: 2 } No <%= model_name.pluralize %>
+              %td.text-center{ colspan: <%= columns.count + 1 %> } No <%= model_name.pluralize %>
 
 - if list.count > 0
   =pagination(list, base_path)
