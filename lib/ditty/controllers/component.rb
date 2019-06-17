@@ -16,7 +16,7 @@ module Ditty
     set heading: nil
 
     def read(id)
-      dataset.first(settings.model_class.primary_key => id)
+      dataset.with_pk(id)
     end
 
     def skip_verify!
