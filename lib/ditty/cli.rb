@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 # https://nandovieira.com/creating-generators-and-executables-with-thor
-require 'dotenv/load'
+require 'dotenv/load' rescue LoadError # rubocop:disable Style/RescueModifier - Ignore dotenv/load errors
 require 'thor'
 require 'rack'
 require 'rake'
+require 'ditty/db' if ENV['DATABASE_URL']
 require 'ditty/generators/crud_generator'
 require 'ditty/components/app'
 
@@ -47,6 +48,11 @@ module Ditty
 
       Rake::Task['ditty:dump_schema'].invoke
       puts 'Ditty DB Schema Dumped'
+    end
+
+    desc 'console', 'Open a fully loaded console'
+    def console
+      Rake::Task['ditty:console'].invoke
     end
   end
 end

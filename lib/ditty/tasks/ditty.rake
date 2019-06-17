@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 namespace :ditty do
+  desc 'Run the ditty console'
+  task :console do
+    require 'irb'
+    ARGV.clear
+    IRB.start
+  end
+
   desc 'Prepare Ditty'
   task prep: ['generate_tokens', 'prep:folders', 'prep:public', 'prep:migrations']
 
