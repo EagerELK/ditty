@@ -85,8 +85,8 @@ module Ditty
             redirect with_layout("#{base_path}/#{entity.id}")
           end
           format.json do
-            headers 'Location' => "#{base_path}/#{entity.id}"
-            json body entity.for_json
+            content_type :json
+            redirect "#{base_path}/#{entity.id}", 200, json(entity.for_json)
           end
         end
       end
@@ -99,8 +99,7 @@ module Ditty
           end
           format.json do
             content_type :json
-            headers 'Location' => base_path.to_s
-            status 204
+            redirect base_path.to_s, 204
           end
         end
       end
