@@ -8,6 +8,10 @@ module Ditty
       values
     end
 
+    def display_id
+      self[:slug] || self[:guid] || self[:id]
+    end
+
     alias for_csv for_json
   end
 end

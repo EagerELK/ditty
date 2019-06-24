@@ -39,18 +39,18 @@ module Ditty
         respond_to do |format|
           format.html do
             flash[:success] = "#{heading} Created"
-            redirect with_layout("#{base_path}/#{entity.id}")
+            redirect with_layout("#{base_path}/#{entity.display_id}")
           end
           format.json do
             content_type :json
-            redirect "#{base_path}/#{entity.id}", 201
+            redirect "#{base_path}/#{entity.display_id}", 201
           end
         end
       end
 
       def actions(entity = nil)
         actions = {}
-        actions["#{base_path}/#{entity.id}/edit"] = "Edit #{heading}" if entity && policy(entity).update?
+        actions["#{base_path}/#{entity.display_id}/edit"] = "Edit #{heading}" if entity && policy(entity).update?
         actions["#{base_path}/new"] = "New #{heading}" if policy(settings.model_class).create?
         actions
       end
@@ -82,11 +82,11 @@ module Ditty
           format.html do
             # TODO: Ability to customize the return path and message?
             flash[:success] = "#{heading} Updated"
-            redirect with_layout("#{base_path}/#{entity.id}")
+            redirect with_layout("#{base_path}/#{entity.display_id}")
           end
           format.json do
             content_type :json
-            redirect "#{base_path}/#{entity.id}", 200, json(entity.for_json)
+            redirect "#{base_path}/#{entity.display_id}", 200, json(entity.for_json)
           end
         end
       end
