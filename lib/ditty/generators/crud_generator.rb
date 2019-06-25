@@ -9,7 +9,7 @@ module Ditty
       include Thor::Actions
       attr_reader :namespace, :folder, :views_folder, :controller_name, :model_name, :policy_name # , :file_name
 
-      desc 'Create a CRUD Endpoint including the Model, Controller, Policy and Views'
+      desc 'Create a CRUD Endpoint including the Model, Controller, Policy, Views and GraphQL Types'
       argument :name, type: :string, desc: 'Name of the Model, eg. MyApp::User'
 
       # --no-views make views optional
@@ -45,6 +45,11 @@ module Ditty
         template '../templates/policy.rb.erb', filename
       end
 
+      def create_type
+        filename = File.join("lib/#{folder}/types", "#{model_name.underscore}_type.rb")
+        template '../templates/type.rb.erb', filename
+      end
+
       def create_views
         return unless options[:views]
 
@@ -53,10 +58,21 @@ module Ditty
 
       private
 
+      def meta_columns
+        %i[id guid slug created_at updated_at]
+      end
+
       def columns
         require "#{folder}/models/#{model_name.underscore}"
-        name.constantize.columns - %i[id created_at updated_at]
+        name.constantize.columns
       rescue StandardError
+        []
+      end
+
+      def schema
+        require "#{folder}/models/#{model_name.underscore}"
+        name.constantize.db_schema
+      rescue StandardError => e
         []
       end
 
@@ -66,7 +82,22 @@ module Ditty
 
       def name_column(table)
         candidates = DB.schema(table.to_sym).to_h.keys - DB.foreign_key_list(table.to_sym).map { |e| e[:columns] }.flatten
-        (candidates - %i[id slug]).first
+        (candidates - meta_columns).first
+      end
+
+      def graphql_types
+        @graphql_types ||= Hash.new('String').merge(
+          integer: 'Integer',
+          boolean: 'Boolean',
+          datetime: 'GraphQL::Types::ISO8601DateTime'
+        )
+      end
+
+      def input_types
+        @input_types ||= Hash.new('text').merge(
+          integer: 'number',
+          datetime: 'date'
+        )
       end
     end
   end

@@ -1,7 +1,11 @@
-<%- columns.each do |col| -%>
-<%- if col == :user_id -%>
+<%- if columns.include? :user_id -%>
 = form_control(:user_id, entity, type: 'select', options: policy_scope(Ditty::User).order(:email).as_hash(:id, :email))
-<%- else -%>
-= form_control(:<%= col %>, entity)
 <%- end -%>
+<%- many_to_ones.each do |rel| -%>
+<%- next if %i[users].include?(rel[:tablename]) -%>
+= form_control(:<%= rel[:columns].first %>, entity, type: 'select', options: policy_scope(<%= namespace %>::<%= rel[:table].to_s.classify %>).order(:<%= name_column(rel[:table]) %>).as_hash(:id, :<%= name_column(rel[:table]) %>))
+<%- end -%>
+<%- (columns - meta_columns).each do |col| -%>
+<%- next if %i[id guid].include?(name) || (name.to_s =~ /_id/ && info[:type] == :integer) -%>
+= form_control(:<%= col %>, entity, type: '<%= input_types[schema[col][:type]] %>)'
 <%- end -%>

@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require 'ditty/models/base'
+<%- if columns.include? :guid -%>
+require 'securerandom'
+<%- end -%>
 
 module <%= namespace %>
   class <%= model_name %> < ::Sequel::Model
@@ -9,5 +12,15 @@ module <%= namespace %>
     <%- many_to_ones.each do |key| -%>
     many_to_one :<%= key[:table].to_s.singularize %>
     <%- end -%>
+
+    def before_validation
+      super
+      <%- if columns.include? :guid -%>
+      self.guid ||= SecureRandom.uuid
+      <%- end -%>
+      <%- if columns.include? :slug -%>
+      self.slug ||= name.parameterize
+      <%- end -%>
+    end
   end
 end

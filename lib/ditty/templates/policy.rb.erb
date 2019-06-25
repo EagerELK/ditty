@@ -29,7 +29,7 @@ module <%= namespace %>
     end
 
     def permitted_attributes
-      %i[<%= columns.join(' ') %>]
+      %i[<%= (columns - meta_columns).join(' ') %>]
     end
 
     class Scope < Ditty::ApplicationPolicy::Scope

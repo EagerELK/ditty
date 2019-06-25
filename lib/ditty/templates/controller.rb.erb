@@ -27,5 +27,32 @@ module <%= namespace %>
       end
 <% end -%>
     end
+    <%- if columns.include?(:guid) || columns.include?(:slug) -%>
+
+    def read(id)
+      if id =~ /\A\d+\z/
+        dataset.with_pk(id)
+      <%- if columns.include?(:guid) -%>
+      elsif id =~ /\A[0-9a-fA-F]{8}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{12}\z/
+        dataset.first(guid: id)
+      <%- end -%>
+      <%- if columns.include?(:slug) -%>
+      else
+        dataset.first(slug: id)
+      <%- end -%>
+      end
+    end
+    <%- end -%>
+    <%- if many_to_ones.count.positive? -%>
+
+    before '*', provides: 'html' do
+      <%- many_to_ones.each do |key| -%>
+      if <%= key[:table].to_s.classify %>.count.zero?
+        flash[:info] = 'Please add a <%= key[:table].to_s.classify %> first.'
+        redirect "#{settings.map_path}/<%= key[:table] %>/new"
+      end
+      <%- end -%>
+    end
+    <%- end -%>
   end
 end

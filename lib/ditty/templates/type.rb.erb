@@ -1,0 +1,21 @@
+# frozen_string_literal: true
+
+require '<%= folder %>/types/base_object'
+
+module <%= namespace %>
+  module Types
+    class <%= model_name %>Type < BaseObject
+      description 'A <%= model_name %>.'
+      <%- if columns.include? :guid -%>
+      field :id, ID, 'The unique GUID', null: false, resolver_method: :guid
+      <%- end -%>
+      <%- many_to_ones.each do |rel| -%>
+      field :<%= rel[:table].to_s.singularize %>, '<%= namespace %>::Types::<%= rel[:table].to_s.classify %>Type', null: <%= schema[rel[:columns].first][:allow_null] %>
+      <%- end -%>
+      <%- schema.each do |name, info| -%>
+      <%- next if %i[id guid].include?(name) || (name.to_s =~ /_id/ && info[:type] == :integer) -%>
+      field :<%= name %>, <%= graphql_types[info[:type]] %>, null: <%= info[:allow_null] %>
+      <%- end -%>
+    end
+  end
+end
