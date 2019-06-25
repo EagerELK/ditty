@@ -7,6 +7,7 @@ require 'rack'
 require 'rake'
 require 'ditty/db' if ENV['DATABASE_URL']
 require 'ditty/generators/crud_generator'
+require 'ditty/generators/project_generator'
 require 'ditty/components/app'
 
 module Ditty
@@ -14,6 +15,8 @@ module Ditty
     include Thor::Actions
 
     register Ditty::Generators::CrudGenerator, 'crud', 'crud NAME', 'Generate a CRUD endpoint'
+
+    register Ditty::Generators::ProjectGenerator, 'init', 'init', 'Initialize a Ditty Project'
 
     desc 'server', 'Start the Ditty server'
     require './application' if File.exist?('application.rb')

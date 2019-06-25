@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+
+require 'dotenv/load'
+
+require 'rake'
+require 'ditty'
+require 'ditty/db' if ENV['DATABASE_URL']
+
+require './application'
+
+Ditty::Components.tasks

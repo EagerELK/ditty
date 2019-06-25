@@ -1,0 +1,5 @@
+.token_secret
+.session_secret
+gems
+logs/*
+migrations

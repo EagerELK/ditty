@@ -1,0 +1,6 @@
+logger:
+  loggers:
+    - name: files
+      class: Logger
+      level: DEBUG
+      options: logs/<%= ENV['APP_ENV'] %>.log
