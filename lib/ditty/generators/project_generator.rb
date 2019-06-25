@@ -14,8 +14,8 @@ module Ditty
 
       def setup
         name = File.basename(Dir.getwd)
-        @namespace = name.classify
-        @folder    = namespace.underscore
+        @folder    = name.underscore
+        @namespace = folder.classify
       end
 
       def self.source_root
