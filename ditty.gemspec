@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'activesupport', '>= 3'
   spec.add_dependency 'bcrypt', '~> 3.1'
   spec.add_dependency 'browser', '~> 2.5'
+  spec.add_dependency 'dotenv', '>= 2'
   spec.add_dependency 'haml', '~> 5.0'
   spec.add_dependency 'logger', '~> 1.0'
   spec.add_dependency 'mail', '>= 1.7'
