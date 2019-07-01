@@ -20,12 +20,16 @@ module Ditty
           end
         end
 
-        def deliver(email, to = nil, options = {})
+        def generate(email, to = nil, options = {})
           config!
           options[:to] ||= to unless to.nil?
           options[:from] ||= config[:from] unless config[:from].nil?
           email = from_symbol(email, options) if email.is_a? Symbol
-          email.deliver!
+          email
+        end
+
+        def deliver(email, to = nil, options = {})
+          generate(email, to, options).deliver!
         end
 
         private
