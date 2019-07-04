@@ -23,7 +23,10 @@ module Ditty
           @locals[param] ||= options[param]
           mail.send(param, options[param])
         end
-        mail.body content
+        html = content
+        mail.html_part do
+          body html
+        end
         mail.deliver!
       end
 
@@ -59,7 +62,7 @@ module Ditty
       end
 
       def base_options
-        { subject: '(No Subject)', from: 'no-reply@ditty.io', view: :base, content_type: 'text/html; charset=UTF-8' }
+        { subject: '(No Subject)', from: 'no-reply@ditty.io', view: :base }
       end
 
       def find_template(file)
