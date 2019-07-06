@@ -72,7 +72,7 @@ module Ditty
       def schema
         require "#{folder}/models/#{model_name.underscore}"
         name.constantize.db_schema
-      rescue StandardError => e
+      rescue StandardError
         []
       end
 

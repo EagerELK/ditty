@@ -8,6 +8,7 @@ require 'rake'
 require 'ditty/db' if ENV['DATABASE_URL']
 require 'ditty/generators/crud_generator'
 require 'ditty/generators/project_generator'
+require 'ditty/generators/migration_generator'
 require 'ditty/components/ditty'
 
 module Ditty
@@ -17,6 +18,8 @@ module Ditty
     register ::Ditty::Generators::CrudGenerator, 'crud', 'crud NAME', 'Generate a CRUD endpoint'
 
     register ::Ditty::Generators::ProjectGenerator, 'init', 'init', 'Initialize a Ditty Project'
+
+    register ::Ditty::Generators::MigrationGenerator, 'migration', 'migration NAME', 'Create a new Sequel migration'
 
     desc 'server', 'Start the Ditty server'
     require './application' if File.exist?('application.rb')
