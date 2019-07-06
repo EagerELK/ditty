@@ -67,7 +67,7 @@ module Ditty
       authorize ::Ditty::Identity, :login
       redirect settings.map_path if authenticated?
 
-      haml :'auth/login', locals: { title: 'Log In' }
+      haml :'auth/login', locals: { title: 'Log In' }, layout: :blank
     end
 
     # Custom login form for LDAP to allow CSRF checks. Set the `request_path` for
@@ -76,13 +76,13 @@ module Ditty
       authorize ::Ditty::Identity, :login
       redirect settings.map_path if authenticated?
 
-      haml :'auth/ldap', locals: { title: 'Company Log In' }
+      haml :'auth/ldap', locals: { title: 'Company Log In' }, layout: :blank
     end
 
     get '/forgot-password' do
       authorize ::Ditty::Identity, :forgot_password
 
-      haml :'auth/forgot_password', locals: { title: 'Forgot your password?' }
+      haml :'auth/forgot_password', locals: { title: 'Forgot your password?' }, layout: :blank
     end
 
     post '/forgot-password' do
@@ -114,7 +114,7 @@ module Ditty
       identity = Identity[reset_token: params[:token]]
       halt 404 unless identity&.reset_requested && identity.reset_requested > (Time.now - (24 * 60 * 60))
 
-      haml :'auth/reset_password', locals: { title: 'Reset your password', identity: identity }
+      haml :'auth/reset_password', locals: { title: 'Reset your password', identity: identity }, layout: :blank
     end
 
     put '/reset-password' do
@@ -132,7 +132,7 @@ module Ditty
         redirect "#{settings.map_path}/auth/login"
       else
         broadcast(:identity_update_password_failed, target: self)
-        haml :'auth/reset_password', locals: { title: 'Reset your password', identity: identity }
+        haml :'auth/reset_password', locals: { title: 'Reset your password', identity: identity }, layout: :blank
       end
     end
 
@@ -141,7 +141,7 @@ module Ditty
       authorize ::Ditty::User.new, :register
 
       identity = Identity.new
-      haml :'auth/register', locals: { title: 'Register', identity: identity }
+      haml :'auth/register', locals: { title: 'Register', identity: identity }, layout: :blank
     end
 
     # Register Action
@@ -152,6 +152,7 @@ module Ditty
       authorize user, :register
 
       begin
+        identity.valid?
         DB.transaction do
           user.save
           user.add_identity identity
@@ -161,7 +162,7 @@ module Ditty
         end
       rescue Sequel::ValidationFailed
         flash.now[:warning] = 'Could not complete the registration. Please try again.'
-        haml :'auth/register', locals: { identity: identity }
+        haml :'auth/register', locals: { identity: identity }, layout: :blank
       end
     end
 

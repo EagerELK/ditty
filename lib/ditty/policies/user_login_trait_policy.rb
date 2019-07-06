@@ -13,7 +13,7 @@ module Ditty
     end
 
     def read?
-      user && (record.user_id || user.super_admin?)
+      user && (record.user_id == user.id || user.super_admin?)
     end
 
     def update?

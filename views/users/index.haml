@@ -1,35 +1,35 @@
 .row
   .col-md-12
-    .panel.panel-default
-      .panel-body
-        = haml :'partials/search'
-      %table.table.table-striped
-        %thead
-          %tr
-            %th Email
-            %th Name
-            %th Surname
-            %th Roles
-            %th Signed Up
-        %tbody
-          - if list.count > 0
-            - list.all.each do |entity|
-              %tr
-                %td
-                  - if policy(entity).read?
-                    %a{ href: "#{base_path}/#{entity.id}" }= entity.email
-                  - else
-                    = entity.email
-                %td= entity.name
-                %td= entity.surname
-                %td= entity.all_roles.map(&:name).map(&:titlecase).join(', ')
-                %td= entity.created_at.strftime('%Y-%m-%d')
-                - if policy(entity).update?
-                  %td
-                    %a{ href: "#{base_path}/#{entity.id}/edit", title: 'Edit' }
-                      %i.fa.fa-pencil
-          - else
+    = haml :'partials/search'
+    %table.table.table-striped.table-bordered.table-hover
+      %thead.thead-dark
+        %tr
+          %th Email
+          %th Name
+          %th Surname
+          %th Roles
+          %th Signed Up
+          %th
+      %tbody
+        - if list.count > 0
+          - list.all.each do |entity|
             %tr
-              %td.text-center{ colspan: 5 } No records
+              %td
+                - if policy(entity).read?
+                  %a{ href: "#{base_path}/#{entity.id}" }= entity.email
+                - else
+                  = entity.email
+              %td= entity.name
+              %td= entity.surname
+              %td= entity.all_roles.map(&:name).map(&:titlecase).join(', ')
+              %td= entity.created_at.strftime('%Y-%m-%d')
+              %td
+                - if policy(entity).update?
+                  %a{ href: "#{base_path}/#{entity.id}/edit", title: 'Edit' }
+                    %i.fa.fa-pencil
+        - else
+          %tr
+            %td.text-center{ colspan: 6 } No records
 
-=pagination(list, base_path)
+- if list.count > 0
+  =pagination(list, base_path)

@@ -13,6 +13,7 @@ module Ditty
 
     set base_path: 'login-traits'
     set model_class: UserLoginTrait
+    set heading: 'Login'
     # set track_actions: true
   end
 end

@@ -53,7 +53,8 @@ module Ditty
           items: [
             { order: 10, link: '/users/', text: 'Users', target: ::Ditty::User, icon: 'user' },
             { order: 20, link: '/roles/', text: 'Roles', target: ::Ditty::Role, icon: 'check-square' },
-            { order: 30, link: '/audit-logs/', text: 'Audit Logs', target: ::Ditty::AuditLog, icon: 'history' }
+            { order: 30, link: '/audit-logs/', text: 'Audit Logs', target: ::Ditty::AuditLog, icon: 'history' },
+            { order: 40, link: '/login-traits/', text: 'User Login Traits', target: ::Ditty::UserLoginTrait, icon: 'list' }
           ]
         }
       ]

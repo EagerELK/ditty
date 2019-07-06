@@ -1,26 +1,26 @@
 %nav{"aria-label" => "Page navigation"}
   - if list.pagination_record_count > 0
     %p.text-center Showing #{list.current_page_record_range} of #{list.pagination_record_count} records
-    %ul.pager
+    %ul.pagination.justify-content-center
       - if list.first_page?
-        %li.disabled
-          %span First
-        %li.disabled
-          %span Previous
+        %li.page-item.disabled
+          %span.page-link First
+        %li.page-item.disabled
+          %span.page-link Previous
       - else
-        %li
-          %a{href: first_link} First
-        %li
-          %a{href: prev_link} Previous
+        %li.page-item
+          %a.page-link{href: first_link} First
+        %li.page-item
+          %a.page-link{href: prev_link} Previous
       - if list.last_page?
-        %li.disabled
-          %span Next
-        %li.disabled
-          %span Last
+        %li.page-item.disabled
+          %span.page-link Next
+        %li.page-item.disabled
+          %span.page-link Last
       - else
-        %li
-          %a{href: next_link} Next
-        %li
-          %a{href: last_link} Last
+        %li.page-item
+          %a.page-link{href: next_link} Next
+        %li.page-item
+          %a.page-link{href: last_link} Last
   - else
     %p.text-center No records to show

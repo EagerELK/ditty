@@ -1,14 +1,29 @@
-= form_tag("#{settings.map_path}/auth/register/identity") do
-  = form_control(:username, identity, label: 'Email', placeholder: 'your@email.com')
-  = form_control(:password, identity, label: 'Password', type: :password)
-  = form_control(:password_confirmation, identity, label: 'Confirm Password', type: :password)
+- if identity.errors[:password] && identity.errors[:password].include?('is not strong enough')
+  .alert.alert-warning
+    %p Make sure your password is at least 8 characters long, and including the following
+    %ul
+      %li Upper- and lowercase letters
+      %li Numbers
+      %li Special Characters
 
-  - if identity.errors[:password] && identity.errors[:password].include?('is not strong enough')
-    .alert.alert-warning
-      %p Make sure your password is at least 8 characters long, and including the following
-      %ul
-        %li Upper- and lowercase letters
-        %li Numbers
-        %li Special Characters
+= form_tag("#{settings.map_path}/auth/register/identity", attributes: { class: 'user' }) do
+  .form-group
+    %input.form-control.form-control-user{ name: 'identity[username]', type: 'email', placeholder: 'Email Address', class: identity.errors[:username] ? 'is-invalid' : 'is-valid' }
+    - if identity.errors[:username]
+      .invalid-feedback= identity.errors[:username].join(', ')
+  .form-group.row
+    .col-sm-6.mb-3.mb-sm-0
+      %input.form-control.form-control-user{ name: 'identity[password]', type: 'password', placeholder: 'Password', class: identity.errors[:password] ? 'is-invalid' : 'is-valid' }
+      - if identity.errors[:password]
+        .invalid-feedback= identity.errors[:password].join(', ')
+    .col-sm-6
+      %input.form-control.form-control-user{ name: 'identity[password_confirmation]', type: 'password', placeholder: 'Repeat Password', class: identity.errors[:password_confirmation] ? 'is-invalid' : 'is-valid' }
+      - if identity.errors[:password_confirmation]
+        .invalid-feedback= identity.errors[:password_confirmation].join(', ')
 
-  %button.btn.btn-primary{ type: 'submit' } Register
+  %button.btn.btn-primary.btn-user.btn-block{ type: 'submit' } Register
+%hr
+.text-center
+  %a.small{ href: "#{settings.map_path}/auth/forgot-password" } Forgot Password?
+.text-center
+  %a.small{ href: "#{settings.map_path}/auth/login" } Already have an account? Login!

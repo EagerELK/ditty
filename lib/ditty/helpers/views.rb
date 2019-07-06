@@ -24,6 +24,7 @@ module Ditty
       def form_control(name, model, opts = {})
         label = opts.delete(:label) || name.to_s.titlecase
         klass = opts.delete(:class) || 'form-control' unless opts[:type] == 'file'
+        klass = "#{klass} is-invalid" if model.errors[name]
         group = opts.delete(:group) || model.class.to_s.demodulize.underscore
         field = opts.delete(:field) || name
         default = opts.delete(:default) || nil

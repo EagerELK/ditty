@@ -22,35 +22,8 @@
     / Le styles
     %link{ rel: 'stylesheet', href: '/css/sb-admin-2.min.css', media: 'screen' }
     %link{ rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', media: 'screen' }
-  %body#page-top
-    / Page Wrapper
-    #wrapper
-      = haml :'partials/sidebar', locals: { title: (defined?(title) ? title : 'Ditty') }
-
-      #content-wrapper.d-flex.flex-column
-        #content
-          = haml :'partials/topbar'
-          .container-fluid
-            / TODO
-            / .row
-            /   .col-md-12
-            = haml :'partials/notifications'
-            - if defined?(title) || defined?(actions)
-              .row
-                .col-md-9
-                  %h1.text-dark.mb-2= defined?(title) ? title : '&nbsp;'
-                .col-md-3.text-right.mt-1
-                  = haml :'partials/actions', locals: { actions: defined?(actions) ? actions : {} }
-            - else
-              %div{ style: 'padding-top: 20px' }
-
-            = yield
-
-        = haml :'partials/footer'
-
-    / Scroll to Top Button
-    %a.scroll-to-top.rounded{ href: '#page-top' }
-      %i.fas.fa-angle-up
+  %body.bg-gradient-primary
+    = yield
 
     / Placed at the end of the document so the pages load faster
     %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js' }

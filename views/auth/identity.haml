@@ -1,15 +1,16 @@
-= form_tag("#{settings.map_path}/auth/identity/callback", attributes: { class: '' }) do
+= form_tag("#{settings.map_path}/auth/identity/callback", attributes: { class: 'user' }) do
   .form-group
-    %label.control-label Email
-    %input.form-control.border-input{ name: 'username', tabindex: '1' }
+    %input.form-control.form-control-user{ name: 'username', type: 'email', 'aria-describedby': 'emailHelp', placeholder: 'Enter Email Address...' }
   .form-group
-    %label.control-label{ style: 'display: block' }
-      Password
-      %a{ href: "#{settings.map_path}/auth/forgot-password", style: 'float: right', tabindex: '5' }
-        Forgot?
-    %input.form-control.border-input{ name: 'password', type: 'password', tabindex: '2' }
-  %button.btn.btn-primary{ type: 'submit', tabindex: '3' } Log In
-  - if policy(::Ditty::User).register?
-    .pull-right
-      No account yet?
-      %a.btn.btn-default{ href: "#{settings.map_path}/auth/register", tabindex: '4' } Register
+    %input.form-control.form-control-user{ name: 'password', type: 'password', placeholder: 'Password' }
+  / .form-group
+  /   .custom-control.custom-checkbox.small
+  /     <input type="checkbox" class="custom-control-input" id="customCheck">
+  /     <label class="custom-control-label" for="customCheck">Remember Me</label>
+  %button.btn.btn-primary.btn-user.btn-block{ type: 'submit' } Log In
+%hr
+.text-center
+  %a.small{ href: "#{settings.map_path}/auth/forgot-password" } Forgot Password?
+- if policy(::Ditty::User).register?
+  .text-center
+    %a.small{ href: "#{settings.map_path}/auth/register" } Create an Account!

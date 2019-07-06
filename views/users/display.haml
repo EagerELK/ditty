@@ -1,10 +1,10 @@
-.row
+.row.mb-4
   .col-md-2
   .col-md-8
-    .panel.panel-default
-      .panel-body
+    .card.card-default
+      .card-body
         .author
-          %img.pull-right.thumbnail{ src: entity.gravatar }
+          %img.float-right.img-thumbnail{ src: entity.gravatar }
           %h4= entity.email
 
         %hr
@@ -24,7 +24,7 @@
         .row
           .col-md-6
             - if policy(entity).update?
-              %a.btn.btn-default{ href: "#{base_path}/#{entity.id}/edit" } Edit
+              %a.btn.btn-secondary{ href: "#{base_path}/#{entity.id}/edit" } Edit
           .col-md-6.text-right
             - if policy(entity).delete?
               = delete_form_tag("#{base_path}/#{entity.id}") do
@@ -32,13 +32,12 @@
   .col-md-2
 
 - if entity.identity.first
-  .row
+  .row.mb-4
     .col-md-2
     .col-md-8
-      .panel.panel-default
-        .panel-heading
-          %h4 Change Password
-        .panel-body
+      .card.card-default
+        .card-body
+          %h4.card-title Change Password
           = edit_form_tag("#{base_path}/#{entity.id}/identity") do
             = form_control(:password, entity.identity.first, type: 'password', placeholder: 'Your password', group: 'identity')
             = form_control(:password_confirmation, entity.identity.first, type: 'password', label: 'Confirm Password', placeholder: 'Confirm your password', group: 'identity')

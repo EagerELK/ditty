@@ -77,6 +77,10 @@ module Ditty
       email
     end
 
+    def display_name
+      name || username
+    end
+
     class << self
       def anonymous_user
         role = ::Ditty::Role.find_or_create(name: 'anonymous')

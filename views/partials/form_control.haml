@@ -2,10 +2,9 @@
 - if type == 'hidden'
   %input{attributes, type: type, value: model[field] || default}
 - else
-  %div{ class: "form-group#{model.errors[field] ? ' has-error' : ''}" }
+  .form-group
     - if type != 'file'
-      %label.col-sm-3.control-label{ for: attributes[:id] }= label
-    .col-sm-9
+      %label{ for: attributes[:id] }= label
       - if type == 'select'
         - options = attributes.delete(:options)
         %select{attributes}
@@ -21,4 +20,4 @@
       - else
         %input{attributes, type: type, value: model[field] || default}
       - if model.errors[field]
-        %p.help-block.text-danger= model.errors[field].join(', ')
+        .invalid-feedback= model.errors[field].join(', ')

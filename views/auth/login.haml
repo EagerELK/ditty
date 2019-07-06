@@ -1,18 +1,23 @@
-.row
-  .col-sm-2
-  .col-sm-8
-    .panel.panel-default
-      .panel-body
-        - if Ditty::Services::Authentication.provides? 'identity'
-          = haml :'auth/identity'
+.container
+  / Outer Row
+  .row.justify-content-center
+    .col-xl-10.col-lg-12.col-md-9
+      .card.o-hidden.border-0.shadow-lg.my-5
+        .card-body.p-0
+          / Nested Row within Card Body
           .row
-            .col-sm-12= "&nbsp;"
-        .row
-          .col-sm-8.col-sm-push-2
-            - Ditty::Services::Authentication.providers.each do |name|
-              - provider = Ditty::Services::Authentication[name]
-              - next if provider[:login_prompt].nil?
-              %a.btn.btn-block.btn-default{ href: "#{settings.map_path}/auth/#{name}" }
-                %i.fa{ class: "fa-#{provider[:icon] || 'key'}"}
-                = provider[:login_prompt]
-  .col-sm-2
+            .col-lg-6.d-none.d-lg-block.bg-login-image
+            .col-lg-6
+              .p-5
+                .text-center
+                  %h1.h4.text-gray-900.mb-4 Welcome Back!
+                - Ditty::Services::Authentication.providers.each do |name|
+                  - provider = Ditty::Services::Authentication[name]
+                  - next if provider[:login_prompt].nil?
+                  %p
+                    %a.btn.btn-block.btn-secondary{ href: "#{settings.map_path}/auth/#{name}" }
+                      %i.fab.fw{ class: "fa-#{provider[:icon] || 'key'}"}
+                      = provider[:login_prompt]
+                = haml :'partials/notifications'
+                - if Ditty::Services::Authentication.provides? 'identity'
+                  = haml :'auth/identity'

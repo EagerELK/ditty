@@ -1,0 +1,68 @@
+/ Logout Modal
+#logoutModal.modal.fade{ tabindex: -1, role: 'dialog', 'aria-hidden': 'true' }
+  .modal-dialog{ role: 'document' }
+    .modal-content
+      .modal-header
+        %h5.modal-title Ready to Leave?
+        %button.close{ type: 'button', 'data-dismiss': 'modal', 'aria-label': 'Close' }
+          %span{ 'aria-hidden': 'true' } ×
+      .modal-body
+        Select "Logout" below if you are ready to end your current session.
+      .modal-footer
+        %button.btn.btn-secondary{ type: 'button', 'data-dismiss': 'modal' } Cancel
+        = delete_form_tag("#{settings.map_path}/auth") do
+          %button.btn.btn-primary{ type: 'submit' } Logout
+
+%nav.navbar.navbar-expand.navbar-light.bg-white.topbar.mb-4.static-top.shadow
+  / Sidebar Toggle
+  %button#sidebarToggleTop.btn.btn-link.d-md-none.rounded-circle.mr-3
+    %i.fa.fa-bars
+
+  /  Topbar Search
+  %form.d-none.d-sm-inline-block.form-inline.mr-auto.ml-md-3.my-2.my-md-0.mw-100.navbar-search
+    .input-group
+      %input.form-control.bg-light.border-0.small{ type: 'text', placeholder: 'Search for...', 'aria-label': 'Search', 'aria-describedby': 'basic-addon2' }
+      .input-group-append
+        %button.btn.btn-primary{ type: 'button' }
+          %i.fas.fa-search.fa-sm
+
+  / Topbar Navbar
+  %ul.navbar-nav.ml-auto
+    / Nav Item - Search Dropdown (Visible Only XS)
+    %li.nav-item.dropdown.no-arrow.d-sm-none
+      %a#searchDropdown.nav-link.dropdown-toggle{ href: '#', role: 'button', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' }
+        %i.fas.fa-search.fa-fw
+      / Dropdown - Messages
+      .dropdown-menu.dropdown-menu-right.p-3.shadow.animated--grow-in{ :'aria-labelledby' => 'searchDropdown' }
+        %form.form-inline.mr-auto.w-100.navbar-search
+          .input-group
+            %input.form-control.bg-light.border-0.small{ type: 'text', placeholder: 'Search for...', :'aria-label' => 'Search', :'aria-describedby' => 'basic-addon2' }
+            .input-group-append
+              %button.btn.btn-primary{ type: 'button' }
+                %i.fas.fa-.fa-sm
+
+
+    .topbar-divider.d-none.d-sm-block
+
+    / Nav Item - User Information
+    - if authenticated?
+      %li.nav-item.dropdown.no-arrow
+        %a#userDropdown.nav-link.dropdown-toggle{ href: '#', role: 'button', 'aria-haspopup': 'true', 'area-expanded': 'false', 'data-toggle': 'dropdown' }
+          %span.mr-2.d-none.d-lg-inline.text-gray-600.small= current_user.display_name
+          %img.img-profile.rounded-circle{ src: current_user.gravatar }
+        / Dropdown - User Information
+        .dropdown-menu.dropdown-menu-right.shadow.animated--grow-in{ 'aria-labelledby': 'userDropdown' }
+          %a.dropdown-item{ href: "#{settings.map_path}/users/profile" }
+            %i.fas.fa-user.fa-sm.fa-fw.mr-2.text-gray-400
+            Profile
+          / %a.dropdown-item{ href: '#' }
+          /   %i.fas.fa-cogs.fa-sm.fa-fw.mr-2.text-gray-400
+          /   Settings
+          %a.dropdown-item{ href: "#{settings.map_path}/login-traits" }
+            %i.fas.fa-list.fa-sm.fa-fw.mr-2.text-gray-400
+            Past Logins
+          .dropdown-divider
+          %a.dropdown-item{ href: '#', data: { toggle: 'modal', target: '#logoutModal' } }
+            %i.fas.fa-sign-out-alt.fa-sm.fa-fw.mr-2.text-gray-400
+            Logout
+    - else

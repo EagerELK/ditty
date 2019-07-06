@@ -1,8 +1,8 @@
-.row
+.row.mb-4
   .col-md-2
   .col-md-8
-    .panel.panel-default
-      .panel-body
+    .card.card-default
+      .card-body
         %p.description
           %label Name:
           = entity.name.titlecase
@@ -12,7 +12,7 @@
 
         .row
           .col-md-6
-            %a.btn.btn-default{ href: "#{base_path}/#{entity.id}/edit" } Edit
+            %a.btn.btn-secondary{ href: "#{base_path}/#{entity.id}/edit" } Edit
           .col-md-6.text-right
             - if policy(entity).delete?
               = delete_form_tag("#{base_path}/#{entity.id}") do
@@ -22,9 +22,9 @@
 .row
   .col-md-2
   .col-md-8
-    .panel.panel-default
-      .panel-heading
-        %h4 Included Roles
+    .card.card-default
+      .card-body
+        %h4.card-title Included Roles
       %table.table.table-striped
         %tbody
           - if entity.descendants.count > 0
@@ -32,7 +32,7 @@
               %tr
                 %td
                   %a.btn-block{ href: "#{settings.map_path}/role/#{role.id}" }
-                    = p.name.titlecase
+                    = role.name.titlecase
           - else
             %tr
               %td.text-center No records

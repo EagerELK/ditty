@@ -12,6 +12,8 @@ module Ditty
 
     helpers do
       def parent_options(entity)
+        return policy_scope(Ditty::Role) if entity.new?
+
         policy_scope(Ditty::Role)
           .exclude(id: [entity.id] + entity.descendants.map(&:id))
           .order(:name)

@@ -1,19 +1,20 @@
-/ TODO: How can we detect a google registration? Extra parameter to the callback? Or a custom callback page?
-.row
-  .col-md-2
-  .col-md-8
-    .panel.panel-default
-      .panel-body
-        - if Ditty::Services::Authentication.provides? 'identity'
-          = haml :'auth/register_identity', locals: { identity: identity }
-          .row
-            .col-sm-12= "&nbsp;"
-        .row
-          .col-sm-8.col-sm-push-2
+.container
+  .card.o-hidden.border-0.shadow-lg.my-5
+    .card-body.p-0
+      / Nested Row within Card Body
+      .row
+        .col-lg-5.d-none.d-lg-block.bg-register-image
+        .col-lg-7
+          .p-5
+            .text-center
+              %h1.h4.text-gray-900.mb-4 Create an Account!
+            = haml :'partials/notifications'
             - Ditty::Services::Authentication.providers.each do |name|
               - provider = Ditty::Services::Authentication[name]
               - next if provider[:register_prompt].nil?
-              %a.btn.btn-block.btn-default{ href: "#{settings.map_path}/auth/#{name}" }
-                %i.fa{ class: "fa-#{provider[:icon] || 'key'}"}
-                = provider[:register_prompt]
-  .col-md-2
+              %p
+                %a.btn.btn-user.btn-block{ href: "#{settings.map_path}/auth/#{name}", class: "btn-#{provider[:icon] || 'key'}" }
+                  %i.fab.fa-fw{ class: "fa-#{provider[:icon] || 'key'}"}
+                  = provider[:register_prompt]
+            - if Ditty::Services::Authentication.provides? 'identity'
+              = haml :'auth/register_identity', locals: { identity: identity }

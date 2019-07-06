@@ -1,8 +1,8 @@
 .row
   .col-md-2
   .col-md-8
-    .panel.panel-default
-      .panel-body
+    .card
+      .card-body
         <%- columns.each do |col| -%>
         %p.description
           %label <%= col.to_s.titleize %>:
@@ -12,7 +12,7 @@
         .row
           .col-md-6
             - if policy(entity).update?
-              %a.btn.btn-default{ href: "#{base_path}/#{entity.id}/edit" } Edit
+              %a.btn.btn-secondary{ href: "#{base_path}/#{entity.id}/edit" } Edit
           .col-md-6.text-right
             - if policy(entity).delete?
               = delete_form_tag("#{base_path}/#{entity.id}") do
