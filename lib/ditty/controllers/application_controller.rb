@@ -17,7 +17,7 @@ require 'rack/contrib'
 require 'rack/csrf'
 
 module Ditty
-  class Application < Sinatra::Base
+  class ApplicationController < Sinatra::Base
     include ActiveSupport::Inflector
 
     set :root, ENV['APP_ROOT'] || ::File.expand_path(::File.dirname(__FILE__) + '/../../../')

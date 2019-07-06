@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'ditty/controllers/application'
+require 'ditty/controllers/application_controller'
 require 'ditty/helpers/component'
 require 'ditty/helpers/response'
 require 'sinatra/json'
 
 module Ditty
-  class Component < Application
+  class ComponentController < ApplicationController
     helpers Helpers::Component, Helpers::Response
 
     set base_path: nil

@@ -32,12 +32,12 @@ module Ditty
     def self.routes
       load
       {
-        '/' => ::Ditty::Main,
-        '/auth' => ::Ditty::Auth,
-        '/users' => ::Ditty::Users,
-        '/roles' => ::Ditty::Roles,
-        '/audit-logs' => ::Ditty::AuditLogs,
-        '/login-traits' => ::Ditty::UserLoginTraits
+        '/' => ::Ditty::MainController,
+        '/auth' => ::Ditty::AuthController,
+        '/users' => ::Ditty::UsersController,
+        '/roles' => ::Ditty::RolesController,
+        '/audit-logs' => ::Ditty::AuditLogsController,
+        '/login-traits' => ::Ditty::UserLoginTraitsController
       }
     end
 

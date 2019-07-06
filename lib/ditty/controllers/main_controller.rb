@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'ditty/controllers/application'
+require 'ditty/controllers/application_controller'
 require 'ditty/models/role'
 require 'ditty/models/user'
 
 module Ditty
-  class Main < Application
+  class MainController < ApplicationController
     set track_actions: true
 
     before '/' do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'ditty/controllers/component'
+require 'ditty/controllers/component_controller'
 require 'ditty/models/user'
 require 'ditty/models/user_login_trait'
 require 'ditty/policies/user_policy'
@@ -8,7 +8,7 @@ require 'ditty/models/identity'
 require 'ditty/policies/identity_policy'
 
 module Ditty
-  class Users < Ditty::Component
+  class UsersController < Ditty::ComponentController
     SEARCHABLE = %i[name surname email].freeze
 
     set model_class: User

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'ditty/controllers/roles'
+require 'ditty/controllers/roles_controller'
 require 'support/crud_shared_examples'
 
-describe Ditty::Roles do
+describe Ditty::RolesController do
   def app
     described_class
   end

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'ditty/controllers/component'
+require 'ditty/controllers/component_controller'
 require 'ditty/models/audit_log'
 require 'ditty/policies/audit_log_policy'
 
 module Ditty
-  class AuditLogs < Ditty::Component
+  class AuditLogsController < Ditty::ComponentController
     set model_class: AuditLog
 
     SEARCHABLE = %i[details platform device browser ip_address].freeze

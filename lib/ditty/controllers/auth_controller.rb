@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'ditty/controllers/application'
+require 'ditty/controllers/application_controller'
 require 'ditty/services/email'
 require 'securerandom'
 
 module Ditty
-  class Auth < Application
+  class AuthController < ApplicationController
     set track_actions: true
 
     def redirect_path

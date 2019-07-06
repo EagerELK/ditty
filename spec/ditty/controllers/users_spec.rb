@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'ditty/controllers/users'
+require 'ditty/controllers/users_controller'
 require 'support/crud_shared_examples'
 
-describe Ditty::Users do
+describe Ditty::UsersController do
   def app
     described_class
   end

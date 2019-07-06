@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'ditty/controllers/user_login_traits'
+require 'ditty/controllers/user_login_traits_controller'
 require 'support/crud_shared_examples'
 
-describe Ditty::UserLoginTraits do
+describe Ditty::UserLoginTraitsController do
   def app
     described_class
   end

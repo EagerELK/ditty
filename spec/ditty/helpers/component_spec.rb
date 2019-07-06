@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'ditty/controllers/component'
+require 'ditty/controllers/component_controller'
 require 'ditty/helpers/component'
 require 'ditty/models/user'
 
-class DummyComponent < Ditty::Component
+class DummyComponentController < Ditty::ComponentController
   set model_class: Ditty::User
 
   FILTERS = [{ name: :email }].freeze
@@ -14,7 +14,7 @@ end
 
 describe Ditty::Helpers::Component do
   def app
-    DummyComponent
+    DummyComponentController
   end
 
   let(:user) { create(:super_admin_user) }
