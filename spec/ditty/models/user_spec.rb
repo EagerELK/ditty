@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'ditty/models/user'
 
-describe Ditty::User, type: :model do
+describe ::Ditty::User, type: :model do
   let(:super_admin_role) { create(:role, name: 'super_admin') }
   let(:admin_role) { create(:role, name: 'admin', parent_id: super_admin_role.id) }
   let!(:user_role) { create(:role, name: 'user', parent_id: admin_role.id) }

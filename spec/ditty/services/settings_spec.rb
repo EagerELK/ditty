@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'ditty/services/settings'
 
-describe Ditty::Services::Settings do
+describe ::Ditty::Services::Settings do
   def setup_files
     settings = File.read('./spec/fixtures/settings.yml')
     section = File.read('./spec/fixtures/section.yml')

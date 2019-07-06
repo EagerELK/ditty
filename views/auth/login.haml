@@ -11,13 +11,13 @@
               .p-5
                 .text-center
                   %h1.h4.text-gray-900.mb-4 Welcome Back!
-                - Ditty::Services::Authentication.providers.each do |name|
-                  - provider = Ditty::Services::Authentication[name]
+                - ::Ditty::Services::Authentication.providers.each do |name|
+                  - provider = ::Ditty::Services::Authentication[name]
                   - next if provider[:login_prompt].nil?
                   %p
                     %a.btn.btn-block.btn-secondary{ href: "#{settings.map_path}/auth/#{name}" }
                       %i.fab.fw{ class: "fa-#{provider[:icon] || 'key'}"}
                       = provider[:login_prompt]
                 = haml :'partials/notifications'
-                - if Ditty::Services::Authentication.provides? 'identity'
+                - if ::Ditty::Services::Authentication.provides? 'identity'
                   = haml :'auth/identity'

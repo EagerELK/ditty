@@ -97,7 +97,7 @@ module Ditty
         identity.update(reset_token: token, reset_requested: Time.now)
         # Send Email
         reset_url = "#{request.base_url}#{settings.map_path}/reset-password?token=#{token}"
-        Ditty::Services::Email.deliver(
+        ::Ditty::Services::Email.deliver(
           :forgot_password,
           email,
           locals: { identity: identity, reset_url: reset_url, request: request }
@@ -173,7 +173,7 @@ module Ditty
 
       halt 200 if request.xhr?
       flash[:info] = 'Logged Out'
-      redirect(Ditty::Services::Settings[:logout_redirect_path] || "#{settings.map_path}/")
+      redirect(::Ditty::Services::Settings[:logout_redirect_path] || "#{settings.map_path}/")
     end
 
     # Unauthenticated

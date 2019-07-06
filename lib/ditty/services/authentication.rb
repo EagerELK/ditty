@@ -6,8 +6,8 @@ require 'ditty/services/logger'
 require 'backports/2.4.0/hash/compact'
 
 require 'omniauth'
-OmniAuth.config.logger = Ditty::Services::Logger.instance
-OmniAuth.config.path_prefix = "#{Ditty::ApplicationController.map_path}/auth"
+OmniAuth.config.logger = ::Ditty::Services::Logger.instance
+OmniAuth.config.path_prefix = "#{::Ditty::ApplicationController.map_path}/auth"
 OmniAuth.config.on_failure = proc { |env|
   next [400, {}, []] if env['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
 
@@ -37,7 +37,7 @@ module Ditty
         end
 
         def config
-          default.merge Ditty::Services::Settings.values(:authentication) || {}
+          default.merge ::Ditty::Services::Settings.values(:authentication) || {}
         end
 
         def provides?(provider)
@@ -52,9 +52,9 @@ module Ditty
               arguments: [
                 {
                   fields: [:username],
-                  model: Ditty::Identity,
-                  on_login: Ditty::AuthController,
-                  on_registration: Ditty::AuthController,
+                  model: ::Ditty::Identity,
+                  on_login: ::Ditty::AuthController,
+                  on_registration: ::Ditty::AuthController,
                   locate_conditions: ->(req) { { username: req['username'] } }
                 }
               ]
@@ -66,4 +66,4 @@ module Ditty
   end
 end
 
-Ditty::Services::Authentication.setup
+::Ditty::Services::Authentication.setup

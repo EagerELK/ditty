@@ -8,7 +8,7 @@ require 'ditty/models/identity'
 require 'ditty/policies/identity_policy'
 
 module Ditty
-  class UsersController < Ditty::ComponentController
+  class UsersController < ::Ditty::ComponentController
     SEARCHABLE = %i[name surname email].freeze
 
     set model_class: User

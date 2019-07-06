@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Ditty do
+describe ::Ditty do
   it 'has a version number' do
     expect(Ditty::VERSION).not_to be nil
   end

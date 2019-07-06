@@ -5,14 +5,14 @@ require 'ditty/controllers/component_controller'
 require 'ditty/helpers/component'
 require 'ditty/models/user'
 
-class DummyComponentController < Ditty::ComponentController
+class DummyComponentController < ::Ditty::ComponentController
   set model_class: Ditty::User
 
   FILTERS = [{ name: :email }].freeze
   SEARCHABLE = %i[name email].freeze
 end
 
-describe Ditty::Helpers::Component do
+describe ::Ditty::Helpers::Component do
   def app
     DummyComponentController
   end

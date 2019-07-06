@@ -69,7 +69,7 @@ module Ditty
 
     def log_action(values)
       values[:user] ||= values[:target].current_user if values[:target]
-      @mutex.synchronize { Ditty::AuditLog.create values }
+      @mutex.synchronize { ::Ditty::AuditLog.create values }
     end
 
     def user_traits(target)
@@ -84,4 +84,4 @@ module Ditty
   end
 end
 
-Wisper.subscribe(Ditty::Listener.new) unless ENV['RACK_ENV'] == 'test'
+Wisper.subscribe(::Ditty::Listener.new) unless ENV['RACK_ENV'] == 'test'

@@ -6,7 +6,7 @@ require 'ditty/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'ditty'
-  spec.version       = Ditty::VERSION
+  spec.version       = ::Ditty::VERSION
   spec.authors       = ['Jurgens du Toit']
   spec.email         = ['jrgns@jadeit.co.za']
 

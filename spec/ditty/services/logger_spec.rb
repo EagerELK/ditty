@@ -12,7 +12,7 @@ class TestLogger
   end
 end
 
-describe Ditty::Services::Logger, type: :service do
+describe ::Ditty::Services::Logger, type: :service do
   let(:subject) { described_class.clone }
   let(:config_file) { File.read('./spec/fixtures/logger.yml') }
 
@@ -26,7 +26,7 @@ describe Ditty::Services::Logger, type: :service do
     end
 
     it 'reads config from file and creates an array of loggers' do
-      Ditty::Services::Settings.values = nil
+      ::Ditty::Services::Settings.values = nil
       allow(File).to receive(:'file?').and_return(false)
       allow(File).to receive(:'file?').with('./config/logger.yml').and_return(true)
       allow(File).to receive(:read).and_return(config_file)
@@ -37,7 +37,7 @@ describe Ditty::Services::Logger, type: :service do
     end
 
     it 'sets the correct logging level' do
-      Ditty::Services::Settings.values = nil
+      ::Ditty::Services::Settings.values = nil
       allow(File).to receive(:'file?').and_return(false)
       allow(File).to receive(:'file?').with('./config/logger.yml').and_return(true)
       allow(File).to receive(:read).and_return(config_file)
@@ -49,7 +49,7 @@ describe Ditty::Services::Logger, type: :service do
 
   context 'send messages' do
     it 'receives message and passes it to the loggers' do
-      Ditty::Services::Settings.values = nil
+      ::Ditty::Services::Settings.values = nil
       allow(File).to receive(:'file?').and_return(false)
       allow(File).to receive(:'file?').with('./config/logger.yml').and_return(true)
       allow(File).to receive(:read).and_return(config_file)

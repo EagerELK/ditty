@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'ditty/controllers/users_controller'
 require 'support/crud_shared_examples'
 
-describe Ditty::UsersController do
+describe ::Ditty::UsersController do
   def app
     described_class
   end

@@ -16,7 +16,7 @@ use Rack::Session::Cookie,
 require './application'
 require 'ditty/services/authentication'
 use OmniAuth::Builder do
-  Ditty::Services::Authentication.config.each do |prov, config|
+  ::Ditty::Services::Authentication.config.each do |prov, config|
     provider prov, *config[:arguments]
   end
 end

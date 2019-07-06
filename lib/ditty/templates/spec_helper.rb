@@ -21,7 +21,7 @@ if ENV['DATABASE_URL'] == 'sqlite::memory:'
   require 'ditty/seed'
 end
 
-Ditty.component :app
+Ditty.component :ditty
 RSpec.configure do |config|
   config.include Rack::Test::Methods
   config.include FactoryBot::Syntax::Methods

@@ -35,13 +35,13 @@ module Ditty
         private
 
         def config
-          @config ||= default.merge Ditty::Services::Settings.values(:email) || {}
+          @config ||= default.merge ::Ditty::Services::Settings.values(:email) || {}
         end
 
         def default
           {
             delivery_method: :logger,
-            logger: Ditty::Services::Logger.instance
+            logger: ::Ditty::Services::Logger.instance
           }
         end
 

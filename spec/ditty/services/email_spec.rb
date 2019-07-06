@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'ditty/services/email'
 
-describe Ditty::Services::Email do
+describe ::Ditty::Services::Email do
   after do
     described_class.config = nil
   end

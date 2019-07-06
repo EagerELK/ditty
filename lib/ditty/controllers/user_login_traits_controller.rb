@@ -5,7 +5,7 @@ require 'ditty/models/user_login_trait'
 require 'ditty/policies/user_login_trait_policy'
 
 module Ditty
-  class UserLoginTraitsController < Ditty::ComponentController
+  class UserLoginTraitsController < ::Ditty::ComponentController
     SEARCHABLE = %i[platform device browser ip_address].freeze
     FILTERS = [
       { name: :user, field: 'user.email' }

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'haml'
-require 'ditty/components/app'
+require 'ditty/components/ditty'
 
 module Ditty
   module Emails

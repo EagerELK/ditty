@@ -4,7 +4,7 @@ namespace :ditty do
   namespace :ldap do
     desc 'Check the LDAP settings'
     task :check do
-      settings = Ditty::Services::Settings[:authentication][:ldap][:arguments].first
+      settings = ::Ditty::Services::Settings[:authentication][:ldap][:arguments].first
       ldap = Net::LDAP.new host: settings[:host], port: settings[:port]
       ldap.authenticate settings[:bind_dn], settings[:password] if settings[:bind_dn]
       raise 'Could not bind to LDAP server' unless ldap.bind
@@ -18,7 +18,7 @@ namespace :ditty do
       require 'ditty/services/settings'
       require 'ditty/models/role'
 
-      settings = Ditty::Services::Settings[:authentication][:ldap][:arguments].first
+      settings = ::Ditty::Services::Settings[:authentication][:ldap][:arguments].first
       ldap = Net::LDAP.new host: settings[:host], port: settings[:port]
       ldap.authenticate settings[:bind_dn], settings[:password] if settings[:bind_dn]
       if ldap.bind

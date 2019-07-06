@@ -42,7 +42,7 @@ module Ditty
 
     helpers do
       def logger
-        Ditty::Services::Logger.instance
+        ::Ditty::Services::Logger.instance
       end
 
       def base_path
@@ -61,14 +61,14 @@ module Ditty
       end
 
       def config(name, default = '')
-        Ditty::Services::Settings[name] || default
+        ::Ditty::Services::Settings[name] || default
       end
     end
 
     def view_folders
       folders = ['./views']
       folders << settings.view_folder if settings.view_folder
-      folders << Ditty::App.view_folder
+      folders << ::Ditty::Ditty.view_folder
     end
 
     def find_template(views, name, engine, &block)
@@ -78,7 +78,7 @@ module Ditty
       view_folders.each do |folder|
         super(folder, name, engine, &block) # Root
       end
-      raise Ditty::TemplateNotFoundError, "Could not find template `#{name}`"
+      raise ::Ditty::TemplateNotFoundError, "Could not find template `#{name}`"
     end
 
     configure :production do
@@ -92,7 +92,7 @@ module Ditty
 
     configure :production, :development do
       disable :logging
-      use Rack::CommonLogger, Ditty::Services::Logger.instance
+      use Rack::CommonLogger, ::Ditty::Services::Logger.instance
     end
 
     not_found do
@@ -177,7 +177,7 @@ module Ditty
       end
     end
 
-    error Ditty::TemplateNotFoundError do
+    error ::Ditty::TemplateNotFoundError do
       # TODO: Display a better error message
       error = env['sinatra.error']
       broadcast(:application_error, error)

@@ -2,9 +2,9 @@
 
 require 'rake'
 require 'ditty'
-require 'ditty/components/app'
+require 'ditty/components/ditty'
 
-Ditty.component :app
+Ditty.component :ditty
 
 Ditty::Components.tasks
 require 'bundler/gem_tasks' if File.exist? 'ditty.gemspec'

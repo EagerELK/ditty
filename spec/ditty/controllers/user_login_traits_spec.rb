@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'ditty/controllers/user_login_traits_controller'
 require 'support/crud_shared_examples'
 
-describe Ditty::UserLoginTraitsController do
+describe ::Ditty::UserLoginTraitsController do
   def app
     described_class
   end

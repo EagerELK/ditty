@@ -5,7 +5,7 @@ require 'ditty/models/audit_log'
 require 'ditty/policies/audit_log_policy'
 
 module Ditty
-  class AuditLogsController < Ditty::ComponentController
+  class AuditLogsController < ::Ditty::ComponentController
     set model_class: AuditLog
 
     SEARCHABLE = %i[details platform device browser ip_address].freeze

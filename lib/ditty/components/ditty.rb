@@ -4,7 +4,7 @@ require 'ditty'
 require 'ditty/services/settings'
 
 module Ditty
-  class App
+  class Ditty
     def self.load
       controllers = File.expand_path('../controllers', __dir__)
       Dir.glob("#{controllers}/*.rb").each { |f| require f }
@@ -72,10 +72,10 @@ module Ditty
 
     def self.tasks
       Kernel.load 'ditty/tasks/ditty.rake'
-      auth_settings = Ditty::Services::Settings[:authentication] || {}
+      auth_settings = ::Ditty::Services::Settings[:authentication] || {}
       Kernel.load 'ditty/tasks/omniauth-ldap.rake' if auth_settings.key?(:ldap)
     end
   end
 end
 
-Ditty::Components.register_component(:app, Ditty::App)
+Ditty::Components.register_component(:ditty, Ditty::Ditty)

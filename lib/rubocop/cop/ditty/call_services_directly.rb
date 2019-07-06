@@ -13,10 +13,10 @@ module RuboCop
       #
       # @example
       #   # bad
-      #   Ditty::Services::Logger.instance.info 'This is a log message'
+      #   ::Ditty::Services::Logger.instance.info 'This is a log message'
       #
       #   # good
-      #   Ditty::Services::Logger.info 'This is a log message'
+      #   ::Ditty::Services::Logger.info 'This is a log message'
       class CallServicesDirectly < RuboCop::Cop::Cop
         MSG = 'Do not use `.instance` on services. Call the method directly instead'
 

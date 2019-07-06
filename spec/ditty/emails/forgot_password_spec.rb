@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'ditty/emails/forgot_password'
 require 'mail'
 
-describe Ditty::Emails::ForgotPassword do
+describe ::Ditty::Emails::ForgotPassword do
   let(:mail) do
     mail = Mail.new
     allow(mail).to receive(:deliver!)

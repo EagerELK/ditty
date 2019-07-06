@@ -76,7 +76,7 @@ module Ditty
     #
     #   Ditty::Components.register_component(:component_name, ComponentModule)
     def self.register_component(name, mod)
-      Ditty::Services::Logger.instance.info "Registering #{mod} as #{name}"
+      ::Ditty::Services::Logger.instance.info "Registering #{mod} as #{name}"
       @components[name] = mod
     end
 
