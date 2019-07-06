@@ -26,6 +26,7 @@ elsif ENV['DATABASE_URL'].blank? == false
   Sequel::Model.plugin :validation_helpers
   Sequel::Model.plugin :update_or_create
   Sequel::Model.plugin :timestamps, update_on_create: true
+  Sequel::Model.plugin :auto_validations
 else
   ::Ditty::Services::Logger.instance.error 'No database connection set up'
 end
