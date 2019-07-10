@@ -4,7 +4,7 @@ require 'dotenv/load'
 
 # Last Gasp Effort to catch the error
 require 'ditty/middleware/error_catchall'
-use Ditty::Middleware::ErrorCatchall if ENV['APP_ENV'] == 'production'
+use ::Ditty::Middleware::ErrorCatchall if ENV['APP_ENV'] == 'production'
 
 # Session
 use Rack::Session::Cookie,
@@ -23,12 +23,12 @@ end
 
 map '/' do
   use Rack::Static, root: 'public', urls: ['/css', '/images', '/js'], header_rules: [
-    [:all, { 'Cache-Control' => 'public, max-age=31536000'}]
+    [:all, { 'Cache-Control' => 'public, max-age=31536000' }]
   ]
   require 'ditty/middleware/accept_extension'
   use Ditty::Middleware::AcceptExtension
   require 'rack/content_type'
   use Rack::ContentType
 
-  run Rack::URLMap.new Ditty::Components.routes
+  run Rack::URLMap.new ::Ditty::Components.routes
 end

@@ -8,14 +8,15 @@ module Ditty
     class ProjectGenerator < Thor::Group
       include Thor::Actions
 
-      attr_reader :namespace, :folder
+      attr_reader :name, :namespace, :folder
 
       desc 'Initialize a new Ditty project in the current folder'
 
       def setup
-        name = File.basename(Dir.getwd)
-        @folder    = name.underscore
+        @name      = File.basename(Dir.getwd)
+        @folder    = @name.underscore
         @namespace = folder.classify
+        @name      = @name.titleize
       end
 
       def self.source_root
@@ -27,6 +28,8 @@ module Ditty
         directory 'pids'
         copy_file '.gitignore', './.gitignore'
         copy_file 'env.example', './.env'
+        copy_file '.rubocop.yml', './.rubocop.yml'
+        copy_file '.rspec', './.rspec'
 
         template 'lib/project.rb.erb', "lib/#{folder}.rb"
 
@@ -40,7 +43,7 @@ module Ditty
         copy_file '../../../spec/support/api_shared_examples.rb', './specs/support/api_shared_examples.rb'
         copy_file '../../../spec/support/crud_shared_examples.rb', './specs/support/crud_shared_examples.rb'
 
-        copy_file 'settings.yml', './config/settings.yml'
+        template 'settings.yml.erb', './config/settings.yml'
       end
     end
   end

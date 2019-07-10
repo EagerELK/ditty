@@ -1,0 +1,18 @@
+ditty:
+  title: <%= name %>
+logger:
+  loggers:
+    - name: files
+      class: Logger
+      level: DEBUG
+      options: logs/<%%= ENV['APP_ENV'] %>.log
+# authentication:
+#   google_oauth2:
+#     login_prompt: Log in with Google
+#     register_prompt: Register with Google
+#     icon: google
+#     arguments:
+#       - <%= ENV['GOOGLE_CLIENT_ID'] %>
+#       - <%= ENV['GOOGLE_CLIENT_SECRET'] %>
+#       - callback_path: '/_proxes/auth/google_oauth2/callback'
+#         path_prefix: '/_proxes/auth'
