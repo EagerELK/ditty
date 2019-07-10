@@ -26,6 +26,7 @@ module Ditty
       def create_startup_files
         directory 'logs'
         directory 'pids'
+        directory 'public'
         copy_file '.gitignore', './.gitignore'
         copy_file 'env.example', './.env'
         copy_file '.rubocop.yml', './.rubocop.yml'
