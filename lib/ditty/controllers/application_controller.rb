@@ -51,9 +51,9 @@ module Ditty
 
       def view_location
         return settings.view_location if settings.view_location
-        return underscore(pluralize(demodulize(settings.model_class))) if settings.model_class
 
-        underscore(demodulize(self.class))
+        loc = demodulize(settings.model_class ? settings.model_class : self.class)
+        pluralize(underscore(loc.gsub(/Controller\Z/, '')))
       end
 
       def browser
