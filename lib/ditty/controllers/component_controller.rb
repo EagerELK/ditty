@@ -59,7 +59,6 @@ module Ditty
       authorize settings.model_class, :create
 
       entity = settings.model_class.new(permitted_attributes(settings.model_class, :create))
-      session[:redirect_to] = request.fullpath
       haml :"#{view_location}/new",
            locals: { entity: entity, title: heading(:new) },
            layout: layout
@@ -94,6 +93,7 @@ module Ditty
       halt 404 unless entity
       authorize entity, :update
 
+      flash[:redirect_to] = "#{base_path}/#{entity.display_id}"
       haml :"#{view_location}/edit",
            locals: { entity: entity, title: heading(:edit) },
            layout: layout
