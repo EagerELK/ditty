@@ -6,6 +6,9 @@ require 'dotenv/load'
 require 'ditty/middleware/error_catchall'
 use ::Ditty::Middleware::ErrorCatchall if ENV['APP_ENV'] == 'production'
 
+require 'rack/static'
+use Rack::Static, urls: ['/favicon.ico', '/js/', '/images/', '/css/'], root: 'public'
+
 # Session
 use Rack::Session::Cookie,
     key: '_Ditty_session',
