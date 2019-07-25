@@ -29,6 +29,10 @@ module Ditty
       File.expand_path('../../../views', __dir__)
     end
 
+    def self.public_folder
+      File.expand_path('../../../public', __dir__)
+    end
+
     def self.routes
       load
       {
