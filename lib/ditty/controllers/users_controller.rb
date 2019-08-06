@@ -129,6 +129,7 @@ module Ditty
       halt 404 unless entity
       authorize entity, :read
 
+      flash[:redirect_to] = request.path
       haml :"#{view_location}/profile", locals: { entity: entity, identity: entity.identity.first, title: 'My Account' }
     end
   end
