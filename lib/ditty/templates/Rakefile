@@ -5,6 +5,7 @@ require 'dotenv/load'
 require 'rake'
 require 'ditty'
 require 'ditty/db' if ENV['DATABASE_URL']
+require 'ditty/memcached' if ENV['MEMCACHED_URL']
 
 require './application'
 
