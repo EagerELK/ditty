@@ -134,7 +134,36 @@ module Ditty
       end
     end
 
-    error Sequel::ValidationFailed do
+    error ::Sinatra::Param::InvalidParameterError do
+      respond_to do |format|
+        status 400
+        format.html do
+          flash.now[:danger] = env['sinatra.error'].message
+          haml :'400', locals: { title: '4 oh oh' }, layout: layout
+        end
+        format.json do
+          json code: 400, errors: { env['sinatra.error'].param => env['sinatra.error'].message }, full_errors: [env['sinatra.error'].message]
+        end
+      end
+    end
+
+    error ::Sequel::NoMatchingRow do
+      respond_to do |format|
+        status 404
+        format.html do
+          haml :'404', locals: { title: '4 oh 4' }, layout: layout
+        end
+        format.json do
+          if response.body.empty?
+            json code: 404, errors: ['Not Found']
+          else
+            [404, response.body]
+          end
+        end
+      end
+    end
+
+    error ::Sequel::ValidationFailed do
       respond_to do |format|
         entity = env['sinatra.error'].model
         errors = env['sinatra.error'].errors
@@ -145,19 +174,6 @@ module Ditty
         end
         format.json do
           json code: 400, errors: errors, full_errors: errors.full_messages
-        end
-      end
-    end
-
-    error Sinatra::Param::InvalidParameterError do
-      respond_to do |format|
-        status 400
-        format.html do
-          flash.now[:danger] = env['sinatra.error'].message
-          haml :'400', locals: { title: '4 oh oh' }, layout: layout
-        end
-        format.json do
-          json code: 400, errors: { env['sinatra.error'].param => env['sinatra.error'].message }, full_errors: [env['sinatra.error'].message]
         end
       end
     end
