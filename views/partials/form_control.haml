@@ -1,23 +1,27 @@
 - type = attributes.delete(:type)
+- attributes[:value] ||= model.send(field) || default
 - if type == 'hidden'
-  %input{attributes, type: type, value: model[field] || default}
+  %input{attributes, type: type, value: model.send(field) || default}
 - else
   .form-group
     - if type != 'file'
       %label{ for: attributes[:id] }= label
       - if type == 'select'
         - options = attributes.delete(:options)
+        - value = attributes.delete(:value)
+        - if attributes[:multiple]
+          - attributes[:name] = "#{attributes[:name]}[]" unless attributes[:name][-2..-1] == '[]'
         %select{attributes}
           - if attributes[:multiple]
-            - options.each do |k,v| k ||= v;  v ||= k;
-              %option{ value: k, selected: (model.send(field).map(&:id).include? k)}= v
+            - options.each do |k, v| k = v if k.nil?; v = k if v.nil?;
+              %option{ value: k.to_s, selected: value&.include?(k) }= v
           - else
             %option{ value: ""} -- Select One --
-            - options.each do |k,v| k ||= v;  v ||= k;
-              %option{ value: k, selected: [model[field].to_s, default].include?(k.to_s)}= v
+            - options.each do |k, v| k = v if k.nil?; v = k if v.nil?;
+              %option{ value: k.to_s, selected: value == k }= v
       - elsif type == 'textarea'
-        %textarea{attributes}= preserve(model[field] || default)
+        %textarea{attributes}= preserve(model.send(field) || default)
       - else
-        %input{attributes, type: type, value: model[field] || default}
+        %input{ attributes, type: type }
       - if model.errors[field]
         .invalid-feedback= model.errors[field].join(', ')
