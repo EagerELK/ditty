@@ -29,7 +29,8 @@ module Ditty
       Rake::Task['ditty:generate_tokens'].invoke
 
       # Prep Ditty
-      Rake::Task['ditty:prep'].invoke
+      Rake::Task['ditty:prep:folders'].invoke
+      Rake::Task['ditty:prep:migrations'].invoke
 
       # Check the migrations
       Rake::Task['ditty:migrate:check'].invoke
