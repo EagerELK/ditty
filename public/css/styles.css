@@ -1,1 +1,13 @@
 /* Add your application specific styles here */
+
+.bg-login-image {
+	background-image: url('https://source.unsplash.com/4rDCa5hBlCs/600x800');
+}
+
+.bg-password-image {
+	background-image: url('https://source.unsplash.com/4rDCa5hBlCs/600x800');
+}
+
+.bg-register-image {
+	background-image: url('https://source.unsplash.com/4rDCa5hBlCs/600x800');
+}
