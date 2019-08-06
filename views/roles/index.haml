@@ -12,13 +12,13 @@
           - list.all.each do |entity|
             %tr
               %td
-                %a{ href: "#{base_path}/#{entity.id}" }= entity.name
+                %a{ href: "#{base_path}/#{entity.display_id}" }= entity.name
               %td
                 %a{ href: "#{base_path}/#{entity.parent_id}" }= entity.parent&.name || '(None)'
               %td
                 - if policy(entity).update?
-                  %a{ href: "#{base_path}/#{entity.id}/edit", title: 'Edit' }
-                    %i.fa.fa-pencil
+                  %a{ href: "#{base_path}/#{entity.display_id}/edit", title: 'Edit' }
+                    %i.fa.fa-edit
         - else
           %tr
             %td.text-center{ colspan: 3 } No Roles

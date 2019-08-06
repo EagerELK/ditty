@@ -18,7 +18,7 @@
               %tr
                 %td= entity.user&.email || 'Unknown'
                 %td
-                  %a{ href: "#{base_path}/#{entity.id}" }= entity.ip_address || 'Unknown'
+                  %a{ href: "#{base_path}/#{entity.display_id}" }= entity.ip_address || 'Unknown'
                 %td= entity.device || 'Unknown'
                 %td= entity.platform || 'Unknown'
                 %td= entity.browser || 'Unknown'

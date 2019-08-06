@@ -3,7 +3,7 @@
   .col-md-8
     .card.card-default
       .card-body
-        = edit_form_tag "#{base_path}/#{entity.id}" do
+        = edit_form_tag "#{base_path}/#{entity.display_id}" do
           = haml :'user_login_traits/form', locals: { entity: entity }
           %button.btn.btn-primary{ type: 'submit' }
             Update Login Trait
