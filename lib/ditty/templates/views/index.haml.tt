@@ -16,11 +16,11 @@
               %td= entity.<%= col %>
               <%- end %>
               %td
-                %a{ href: "#{base_path}/#{entity.id}", title: 'Show' }
-                  %i.fa.fa-magnify
+                %a{ href: "#{base_path}/#{entity.display_id}", title: 'Show' }
+                  %i.fa.fa-search
                 - if policy(entity).update?
-                  %a{ href: "#{base_path}/#{entity.id}/edit", title: 'Edit' }
-                    %i.fa.fa-pencil
+                  %a{ href: "#{base_path}/#{entity.display_id}/edit", title: 'Edit' }
+                    %i.fa.fa-edit
         - else
           %tr
             %td.text-center{ colspan: <%= columns.count + 1 %> } No <%= model_name.pluralize %>
