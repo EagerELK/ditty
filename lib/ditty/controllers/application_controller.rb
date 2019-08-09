@@ -24,6 +24,7 @@ module Ditty
     set :map_path, nil
     set :view_location, nil
     set :view_folder, nil
+    set :base_path, nil
     set :model_class, nil
     set :raise_sinatra_param_exceptions, true
     set track_actions: false
