@@ -5,12 +5,12 @@ require 'csv'
 module Ditty
   module Helpers
     module Response
-      def list_response(result)
+      def list_response(result, view: 'index')
         respond_to do |format|
           format.html do
             actions = {}
             actions["#{base_path}/new"] = "New #{heading}" if policy(settings.model_class).create?
-            haml :"#{view_location}/index",
+            haml :"#{view_location}/#{view}",
                  locals: { list: result, title: heading(:list), actions: actions },
                  layout: layout
           end
