@@ -8,19 +8,22 @@
         - if item[:group]
           %li.nav-item
             %a.nav-link.collapsed{ href: '#', 'data-toggle': 'collapse', 'data-target': "##{item[:group].parameterize}", 'aria-expanded': 'true', 'aria-controls': item[:group].parameterize }
-              %i.fas.fa-fw{ class: "fa-#{item[:icon]}" }
+              - if item[:icon]
+                %i.fas.fa-fw{ class: "fa-#{item[:icon]}" }
               %span= item[:group]
             .collapse{ id: item[:group].parameterize, 'data-parent': '#accordionSidebar' }
               .bg-white.py-2.collapse-inner.rounded
                 - item[:items].each do |sub_item|
                   - next unless sub_item[:target] && policy(sub_item[:target]).list?
                   %a.collapse-item{ href: "#{settings.map_path}#{sub_item[:link]}" }
-                    %i.fa.fa-fw{ class: "fa-#{sub_item[:icon]}" }
+                    - if sub_item[:icon]
+                      %i.fa.fa-fw{ class: "fa-#{sub_item[:icon]}" }
                     = sub_item[:text]
         - else
           %li.nav-item
             %a.nav-link{ href: "#{settings.map_path}#{item[:link]}" }
-              %i.fas.fa-fw{ class: "fa-#{item[:icon]}" }
+              - if item[:icon]
+                %i.fas.fa-fw{ class: "fa-#{item[:icon]}" }
               %span= item[:text]
     %hr.sidebar-divider
   %li.nav-item
