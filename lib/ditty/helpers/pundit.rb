@@ -12,16 +12,20 @@ module Ditty
         super
       end
 
-      def permitted_attributes(record, action)
-        param_key = PolicyFinder.new(record).param_key
+      def permitted_attributes(record, action = nil)
         policy = policy(record)
+        action ||= record.new? ? :create : :update
         method_name = if policy.respond_to?("permitted_attributes_for_#{action}")
                         "permitted_attributes_for_#{action}"
                       else
                         'permitted_attributes'
                       end
+        policy.public_send(method_name)
+      end
 
-        policy_fields = policy.public_send(method_name)
+      def permitted_parameters(record, action = nil)
+        param_key = PolicyFinder.new(record).param_key
+        policy_fields = permitted_attributes(record, action)
         request.params.fetch(param_key, {}).select do |key, _value|
           policy_fields.include? key.to_sym
         end

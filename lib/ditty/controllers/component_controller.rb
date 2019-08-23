@@ -58,7 +58,7 @@ module Ditty
     get '/new/?' do
       authorize settings.model_class, :create
 
-      entity = settings.model_class.new(permitted_attributes(settings.model_class, :create))
+      entity = settings.model_class.new(permitted_parameters(settings.model_class, :create))
       haml :"#{view_location}/new",
            locals: { entity: entity, title: heading(:new) },
            layout: layout
@@ -66,7 +66,7 @@ module Ditty
 
     # Create
     post '/' do
-      entity = settings.model_class.new(permitted_attributes(settings.model_class, :create))
+      entity = settings.model_class.new(permitted_parameters(settings.model_class, :create))
       authorize entity, :create
 
       entity.db.transaction do
@@ -106,7 +106,7 @@ module Ditty
       authorize entity, :update
 
       entity.db.transaction do
-        entity.set(permitted_attributes(settings.model_class, :update))
+        entity.set(permitted_parameters(settings.model_class, :update))
         entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
         trigger :component_update, entity: entity
       end
