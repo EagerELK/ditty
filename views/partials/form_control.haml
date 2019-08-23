@@ -1,5 +1,7 @@
 - type = attributes.delete(:type)
 - attributes[:value] ||= model.send(field) || default
+- if help_text
+  - attributes[:'aria-describedby'] = "#{attributes[:id]}_helptext"
 - if type == 'hidden'
   %input{attributes, type: type, value: model.send(field) || default}
 - else
@@ -25,3 +27,5 @@
         %input{ attributes, type: type }
       - if model.errors[field]
         .invalid-feedback= model.errors[field].join(', ')
+      - if help_text
+        %small.form-text.text-muted{ id: "#{attributes[:id]}_helptext" }= help_text

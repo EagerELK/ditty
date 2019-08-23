@@ -28,6 +28,7 @@ module Ditty
         group = opts.delete(:group) || model.class.to_s.demodulize.underscore
         field = opts.delete(:field) || name
         default = opts.delete(:default) || nil
+        help_text = opts.delete(:help_text) || nil
 
         attributes = { type: 'text', id: name, name: "#{group}[#{name}]", class: klass }.merge(opts)
         haml :'partials/form_control', locals: {
@@ -37,7 +38,8 @@ module Ditty
           name: name,
           group: group,
           field: field,
-          default: default
+          default: default,
+          help_text: help_text
         }
       end
 
