@@ -47,7 +47,7 @@ module Ditty
     desc 'migrate', 'Run the Ditty migrations'
     def migrate
       # Prep Ditty
-      Rake::Task['ditty:prep'].invoke
+      Rake::Task['ditty:prep:migrations'].invoke
 
       # Run the migrations
       Rake::Task['ditty:migrate:up'].invoke
