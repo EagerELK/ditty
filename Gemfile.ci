@@ -4,9 +4,6 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'faker'
-gem 'rubocop'
-gem 'rubocop-rspec'
-gem 'rubocop-performance'
 gem 'simplecov', '~> 0.13.0'
 gem 'sqlite3'
 
