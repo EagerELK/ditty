@@ -28,11 +28,9 @@ module Ditty
 
         def setup
           providers.each do |provider|
-            begin
-              require "omniauth/#{provider}"
-            rescue LoadError
-              require "omniauth-#{provider}"
-            end
+            require "omniauth/#{provider}"
+          rescue LoadError
+            require "omniauth-#{provider}"
           end
         end
 

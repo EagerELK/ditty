@@ -12,7 +12,7 @@ Sidekiq.configure_client do |config|
   config.redis = { url: ENV['REDIS_URL'] }
 end
 
-Sidekiq::Logging.logger = ::Ditty::Services::Logger.instance
+Sidekiq::Logging.logger = ::Ditty::Services::Logger
 Sidekiq::Logging.logger.level = Logger::WARN unless ENV['SIDEKIQ_DEBUG'].nil?
 
 ::Ditty::Components.workers

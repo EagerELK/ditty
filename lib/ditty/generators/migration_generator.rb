@@ -18,7 +18,7 @@ module Ditty
       end
 
       def create_model
-        filename = File.join("migrations", "#{Time.now.strftime('%Y%m%d')}_#{name.underscore}.rb")
+        filename = File.join('migrations', "#{Time.now.strftime('%Y%m%d')}_#{name.underscore}.rb")
         template '../templates/migration.rb.erb', filename
       end
     end
