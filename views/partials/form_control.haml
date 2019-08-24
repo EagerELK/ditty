@@ -18,7 +18,7 @@
             - options.each do |k, v| k = v if k.nil?; v = k if v.nil?;
               %option{ value: k.to_s, selected: value&.include?(k) }= v
           - else
-            %option{ value: ""} -- Select One --
+            %option{ value: "" } -- Select One --
             - options.each do |k, v| k = v if k.nil?; v = k if v.nil?;
               %option{ value: k.to_s, selected: value == k }= v
       - elsif type == 'textarea'
