@@ -104,7 +104,7 @@ module Ditty
         )
       end
       flash[:info] = 'An email was sent to the email provided with instructions on how to reset your password'
-      redirect '/login'
+      redirect "#{settings.map_path}/auth/login"
     end
 
     get '/reset-password' do
