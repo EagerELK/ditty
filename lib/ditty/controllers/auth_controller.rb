@@ -124,7 +124,7 @@ module Ditty
       halt 404 unless identity
       authorize identity, :reset_password
 
-      identity_params = permitted_attributes(Identity, :update)
+      identity_params = permitted_parameters(Identity, :update)
       identity.set identity_params.merge(reset_token: nil, reset_requested: nil)
       if identity.valid? && identity.save
         broadcast(:identity_update_password, target: self)

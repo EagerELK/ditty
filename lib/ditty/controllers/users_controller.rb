@@ -28,8 +28,8 @@ module Ditty
 
       locals = { title: heading(:new) }
 
-      user_params = permitted_attributes(User, :create)
-      identity_params = permitted_attributes(Identity, :create)
+      user_params = permitted_parameters(User, :create)
+      identity_params = permitted_parameters(Identity, :create)
       user_params['email'] = identity_params['username']
       roles = user_params.delete('role_id')
 
@@ -65,7 +65,7 @@ module Ditty
       halt 404 unless entity
       authorize entity, :update
 
-      values = permitted_attributes(settings.model_class, :update)
+      values = permitted_parameters(settings.model_class, :update)
       roles  = values.delete('role_id')
       entity.set values
       entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
@@ -94,7 +94,7 @@ module Ditty
         return redirect back
       end
 
-      values = permitted_attributes(Identity, :create)
+      values = permitted_parameters(Identity, :create)
       identity.set values
       if identity.valid? && identity.save
         broadcast(:identity_update_password, target: self)
