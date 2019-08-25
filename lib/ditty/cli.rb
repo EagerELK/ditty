@@ -57,6 +57,11 @@ module Ditty
       puts 'Ditty DB Schema Dumped'
     end
 
+    desc 'seed', 'Seed the predefined seeind data'
+    def seed
+      Rake::Task['ditty:seed'].invoke
+    end
+
     desc 'console', 'Open a fully loaded console'
     def console
       Rake::Task['ditty:console'].invoke
