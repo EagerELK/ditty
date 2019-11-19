@@ -15,6 +15,6 @@
     - if self.class.const_defined?(:FILTERS)
       #filter-form.row{ class: self.class.const_defined?(:SEARCHABLE) ? 'collapse' : '' }
         - FILTERS.each do |filter|
-          = filter_control(filter)
+          = filter_control(filter, filters: FILTERS.count)
         - unless self.class.const_defined?(:SEARCHABLE)
           %button.btn.btn-secondary{ type: 'submit'} Go

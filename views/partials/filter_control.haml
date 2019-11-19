@@ -1,4 +1,4 @@
-.form-group.col-md
+.form-group{ class: total_filters.to_i > 4 ? 'col-3' : 'col-md'}
   %label{ for: "filter_#{name}" }= label
   %select.form-control{ name: name, id: "filter_#{name}" }
     %option{ value: '' } -- Select One --

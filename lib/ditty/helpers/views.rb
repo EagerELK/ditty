@@ -50,7 +50,8 @@ module Ditty
         haml :'partials/filter_control', locals: {
           name: filter[:name],
           label: opts[:label] || filter[:name].to_s.titlecase,
-          options: send(meth)
+          options: send(meth),
+          total_filters: opts[:filters]
         }
       end
 
