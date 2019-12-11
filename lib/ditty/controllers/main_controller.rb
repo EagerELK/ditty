@@ -3,6 +3,7 @@
 require 'ditty/controllers/application_controller'
 require 'ditty/models/role'
 require 'ditty/models/user'
+require 'ditty/services/settings'
 
 module Ditty
   class MainController < ApplicationController
@@ -17,6 +18,9 @@ module Ditty
 
     # Home Page
     get '/' do
+      home_page = Services::Settings['ditty.home_page']
+      redirect "#{settings.map_path}#{home_page}" if home_page
+
       authenticate!
       haml :index, locals: { title: 'Home' }
     end
