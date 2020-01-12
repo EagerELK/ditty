@@ -21,6 +21,8 @@ module Ditty
 
     register ::Ditty::Generators::MigrationGenerator, 'migration', 'migration NAME', 'Create a new Sequel migration'
 
+    default_task :server
+
     desc 'server', 'Start the Ditty server'
     require './application' if File.exist?('application.rb')
     ::Ditty::Components.tasks
