@@ -10,7 +10,7 @@ module Ditty
 
     def redirect_path
       return "#{settings.map_path}/" if omniauth_redirect_path.nil?
-      return "#{settings.map_path}/" if omniauth_redirect_path =~ %r{/#{settings.map_path}/auth/?}
+      return "#{settings.map_path}/" if omniauth_redirect_path.match? %r{/#{settings.map_path}/auth/?}
 
       omniauth_redirect_path
     end
