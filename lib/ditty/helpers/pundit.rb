@@ -40,7 +40,7 @@ module Ditty
       end
 
       def pundit_user
-        current_user unless current_user.anonymous?
+        current_user unless current_user&.anonymous?
       end
     end
   end
