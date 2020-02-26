@@ -18,12 +18,18 @@ module Ditty
       dataset.first(settings.model_class.primary_key => id)
     end
 
+    def read!(id)
+      halt 404 unless (entity = read(id))
+      entity
+    end
+
     def skip_verify!
       @skip_verify = true
     end
 
     after do
       return if settings.environment == 'production'
+
       if (response.successful? || response.redirection?) && @skip_verify == false
         verify_authorized if settings.environment != 'production'
       end
@@ -31,9 +37,8 @@ module Ditty
 
     after '/' do
       return if settings.environment == 'production' || request.request_method != 'GET'
-      if (response.successful? || response.redirection?) && @skip_verify == false
-        verify_policy_scoped
-      end
+
+      verify_policy_scoped if (response.successful? || response.redirection?) && @skip_verify == false
     end
 
     # List
