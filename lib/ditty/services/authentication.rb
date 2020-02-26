@@ -20,7 +20,8 @@ module Ditty
 
         def setup
           providers.each do |provider|
-            require "omniauth/#{provider}"
+            req = config.dig(provider, :require) || "omniauth/#{provider}"
+            require req
           end
         end
 
