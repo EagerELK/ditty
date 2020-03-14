@@ -62,7 +62,7 @@ module Ditty
       end
 
       def base_options
-        { subject: '(No Subject)', from: 'no-reply@ditty.io', view: :base }
+        { subject: '(No Subject)', from: 'no-reply@ditty.io', view: :base, content_type: 'text/html; charset=UTF-8' }
       end
 
       def find_template(file)

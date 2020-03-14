@@ -103,7 +103,11 @@ module Ditty
           haml :'404', locals: { title: '4 oh 4' }, layout: layout
         end
         format.json do
-          json code: 404, errors: ['Not Found']
+          if response.body.empty?
+            json code: 404, errors: ['Not Found']
+          else
+            [404, response.body]
+          end
         end
       end
     end
@@ -239,15 +243,21 @@ module Ditty
 
     after do
       return if params[:layout].nil?
+      return unless response.body.respond_to?(:map)
 
-      response.body = response.body.map do |resp|
-        document = Oga.parse_html(resp)
-        document.css('a').each do |elm|
-          unless (href = elm.get('href')).nil?
-            elm.set 'href', with_layout(href)
+      begin
+        orig = response.body
+        response.body = response.body.map do |resp|
+          document = Oga.parse_html(resp)
+          document.css('a').each do |elm|
+            unless (href = elm.get('href')).nil?
+              elm.set 'href', with_layout(href)
+            end
           end
+          document.to_xml
         end
-        document.to_xml
+      rescue StandardError => _e
+        orig
       end
     end
   end

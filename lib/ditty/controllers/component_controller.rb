@@ -19,6 +19,11 @@ module Ditty
       dataset.with_pk(id)
     end
 
+    def read!(id)
+      halt 404 unless (entity = read(id))
+      entity
+    end
+
     def skip_verify!
       @skip_verify = true
     end

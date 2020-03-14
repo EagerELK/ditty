@@ -9,7 +9,7 @@ describe ::Ditty::Services::Email do
   end
 
   context 'config!' do
-    it 'configurs the Mail gem' do
+    it 'configures the Mail gem' do
       expect(Mail).to receive(:defaults)
       described_class.config!
     end

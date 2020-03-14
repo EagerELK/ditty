@@ -31,8 +31,20 @@ module Ditty
         end
       end
 
+      def permitted_response_attributes(record, method = :values)
+        policy = policy(record)
+        response = record.send(method)
+
+        return response unless policy.respond_to? :response_attributes
+
+        policy_fields = policy.response_attributes
+        response.select do |key, _value|
+          policy_fields.include? key.to_sym
+        end
+      end
+
       def pundit_user
-        current_user
+        current_user unless current_user&.anonymous?
       end
     end
   end
