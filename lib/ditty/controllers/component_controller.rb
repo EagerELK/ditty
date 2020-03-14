@@ -84,8 +84,7 @@ module Ditty
 
     # Read
     get '/:id/?' do |id|
-      entity = read(id)
-      halt 404 unless entity
+      entity = read!(id)
       authorize entity, :read
 
       trigger :component_read, entity: entity
@@ -94,8 +93,7 @@ module Ditty
 
     # Update Form
     get '/:id/edit/?' do |id|
-      entity = read(id)
-      halt 404 unless entity
+      entity = read!(id)
       authorize entity, :update
 
       flash[:redirect_to] = "#{base_path}/#{entity.display_id}"
@@ -106,8 +104,7 @@ module Ditty
 
     # Update
     put '/:id/?' do |id|
-      entity = read(id)
-      halt 404 unless entity
+      entity = read!(id)
       authorize entity, :update
 
       entity.db.transaction do
@@ -120,8 +117,7 @@ module Ditty
     end
 
     delete '/:id/?' do |id|
-      entity = read(id)
-      halt 404 unless entity
+      entity = read!(id)
       authorize entity, :delete
 
       entity.db.transaction do
