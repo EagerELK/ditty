@@ -33,11 +33,12 @@ module Ditty
         param :q, String
         param :page, Integer, min: 1, default: 1
         param :sort, String
-        param :order, String, in: %w[asc desc], transform: :downcase, default: 'asc'
+        param :order, String, in: %w[asc desc], transform: :downcase
         # TODO: Can we dynamically validate the search / filter fields?
 
         ds = dataset
         ds = ds.dataset if ds.respond_to?(:dataset)
+        params[:order] ||= 'asc' if params[:sort]
         return ds if params[:count] == 'all'
 
         params[:count] = check_count
