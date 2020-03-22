@@ -7,5 +7,5 @@
 <%- end -%>
 <%- (columns - meta_columns).each do |col| -%>
 <%- next if %i[id guid].include?(name) || (name.to_s =~ /_id/ && info[:type] == :integer) -%>
-= form_control(:<%= col %>, entity, type: '<%= input_types[schema[col][:type]] %>)'
+= form_control(:<%= col %>, entity, type: '<%= input_types[schema[col][:type]] %>')
 <%- end -%>

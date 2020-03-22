@@ -5,7 +5,7 @@ require '<%= folder %>/models/<%= model_name.underscore %>'
 require '<%= folder %>/policies/<%= policy_name.underscore %>'
 
 module <%= namespace %>
-  class <%= controller_name %> < Ditty::Component
+  class <%= controller_name %> < Ditty::ComponentController
     set model_class: <%= model_name %>
     set view_folder: '<%= views_folder %>'
 
