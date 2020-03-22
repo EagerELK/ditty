@@ -6,7 +6,7 @@ require 'ditty/services/logger'
 require 'backports/2.4.0/hash/compact'
 
 require 'omniauth'
-OmniAuth.config.logger = ::Ditty::Services::Logger.instance
+OmniAuth.config.logger = ::Ditty::Services::Logger
 OmniAuth.config.path_prefix = "#{::Ditty::ApplicationController.map_path}/auth"
 OmniAuth.config.on_failure = proc { |env|
   next [400, {}, []] if env['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'

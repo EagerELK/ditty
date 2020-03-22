@@ -30,7 +30,7 @@ module Ditty
 
     def trigger(event, attribs = {})
       attribs[:target] ||= self
-      send(event, attribs) if self.respond_to? event
+      send(event, attribs) if respond_to? event
       broadcast(event, attribs)
     end
 
@@ -75,7 +75,7 @@ module Ditty
       authorize entity, :create
 
       entity.db.transaction do
-        entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
+        entity.save_changes # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
         trigger :component_create, entity: entity
       end
 
@@ -109,7 +109,7 @@ module Ditty
 
       entity.db.transaction do
         entity.set(permitted_parameters(settings.model_class, :update))
-        entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
+        entity.save_changes # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
         trigger :component_update, entity: entity
       end
 

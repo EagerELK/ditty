@@ -38,7 +38,7 @@ module Ditty
 
       DB.transaction(isolation: :serializable) do
         begin
-          identity.save
+          identity.save_changes
         rescue Sequel::ValidationFailed
           raise unless request.accept? 'text/html'
 
@@ -46,7 +46,7 @@ module Ditty
           locals = { title: heading(:new), entity: user, identity: identity }
           return haml(:"#{view_location}/new", locals: locals)
         end
-        user.save
+        user.save_changes
         user.add_identity identity
 
         roles&.each do |role_id|
@@ -68,7 +68,7 @@ module Ditty
       values = permitted_parameters(settings.model_class, :update)
       roles  = values.delete('role_id')
       entity.set values
-      entity.save # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
+      entity.save_changes # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
 
       if roles
         entity.remove_all_roles
@@ -96,7 +96,7 @@ module Ditty
 
       values = permitted_parameters(Identity, :create)
       identity.set values
-      if identity.valid? && identity.save
+      if identity.valid? && identity.save_changes
         broadcast(:identity_update_password, target: self)
         flash[:success] = 'Password Updated'
         redirect back

@@ -43,7 +43,7 @@ module Ditty
 
     helpers do
       def logger
-        ::Ditty::Services::Logger.instance
+        ::Ditty::Services::Logger
       end
 
       def base_path
@@ -53,7 +53,7 @@ module Ditty
       def view_location
         return settings.view_location if settings.view_location
 
-        loc = demodulize(settings.model_class ? settings.model_class : self.class)
+        loc = demodulize(settings.model_class || self.class)
         pluralize(underscore(loc.gsub(/Controller\Z/, '')))
       end
 
@@ -74,7 +74,9 @@ module Ditty
 
     def find_template(views, name, engine, &block)
       # Backwards compatability
-      return super(views, name, engine, &block) if settings.view_folder.nil? && self.class.name.split('::').first != 'Ditty'
+      if settings.view_folder.nil? && self.class.name.split('::').first != 'Ditty'
+        return super(views, name, engine, &block)
+      end
 
       view_folders.each do |folder|
         super(folder, name, engine, &block) # Root
@@ -93,7 +95,7 @@ module Ditty
 
     configure :production, :development do
       disable :logging
-      use Rack::CommonLogger, ::Ditty::Services::Logger.instance
+      use Rack::CommonLogger, ::Ditty::Services::Logger
     end
 
     not_found do
@@ -228,10 +230,10 @@ module Ditty
 
     before(/.*/) do
       logger.info "Running with #{self.class} - #{request.path_info}"
-      if request.path =~ /.*\.json\Z/
+      if /.*\.json\Z/.match?(request.path)
         content_type :json
         request.path_info = request.path_info.gsub(/.json$/, '')
-      elsif request.path =~ /.*\.csv\Z/
+      elsif /.*\.csv\Z/.match?(request.path)
         content_type :csv
         request.path_info = request.path_info.gsub(/.csv$/, '')
       elsif request.env['ACCEPT']

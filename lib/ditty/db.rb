@@ -8,7 +8,7 @@ require 'active_support/core_ext/object/blank'
 pool_timeout = (ENV['DB_POOL_TIMEOUT'] || 5).to_i
 
 if defined? DB
-  ::Ditty::Services::Logger.instance.warn 'Database connection already set up'
+  ::Ditty::Services::Logger.warn 'Database connection already set up'
 elsif ENV['DATABASE_URL'].blank? == false
   # Delete DATABASE_URL from the environment, so it isn't accidently
   # passed to subprocesses.  DATABASE_URL may contain passwords.
@@ -18,7 +18,7 @@ elsif ENV['DATABASE_URL'].blank? == false
   )
 
   DB.sql_log_level = (ENV['SEQUEL_LOGGING_LEVEL'] || :debug).to_sym
-  DB.loggers << ::Ditty::Services::Logger.instance if ENV['DB_DEBUG'].to_i == 1
+  DB.loggers << ::Ditty::Services::Logger if ENV['DB_DEBUG'].to_i == 1
   DB.extension(:pagination)
   DB.extension(:schema_caching)
   DB.load_schema_cache?('./config/schema.dump')
@@ -28,5 +28,5 @@ elsif ENV['DATABASE_URL'].blank? == false
   Sequel::Model.plugin :timestamps, update_on_create: true
   Sequel::Model.plugin :auto_validations
 else
-  ::Ditty::Services::Logger.instance.error 'No database connection set up'
+  ::Ditty::Services::Logger.error 'No database connection set up'
 end

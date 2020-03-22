@@ -8,7 +8,7 @@ module Ditty
     class AcceptExtension
       attr_reader :env, :regex, :content_type
 
-      def initialize(app, regex = /\A(.*)\.json(\/?)\Z/, content_type = 'application/json')
+      def initialize(app, regex = %r{\A(.*)\.json(/?)\Z}, content_type = 'application/json')
         # @mutex = Mutex.new
         @app = app
         @regex = regex
@@ -19,7 +19,7 @@ module Ditty
         @env = env
 
         request = Rack::Request.new(env)
-        if request.path =~ regex
+        if request.path&.match?(regex)
           request.path_info = request.path_info.gsub(regex, '\1\2')
           env = request.env
           env['ACCEPT'] = content_type

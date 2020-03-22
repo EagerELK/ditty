@@ -62,7 +62,9 @@ module Ditty
       h = @components
       unless (component = h[name])
         require "ditty/components/#{name}"
-        raise ComponentError, "Component #{name} did not register itself correctly in Ditty::Components" unless (component = h[name])
+        unless (component = h[name])
+          raise ComponentError, "Component #{name} did not register itself correctly in Ditty::Components"
+        end
       end
       component
     end
@@ -76,7 +78,7 @@ module Ditty
     #
     #   Ditty::Components.register_component(:component_name, ComponentModule)
     def self.register_component(name, mod)
-      ::Ditty::Services::Logger.instance.info "Registering #{mod} as #{name}"
+      ::Ditty::Services::Logger.info "Registering #{mod} as #{name}"
       @components[name] = mod
     end
 

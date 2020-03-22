@@ -126,7 +126,7 @@ module Ditty
 
       identity_params = permitted_parameters(Identity, :update)
       identity.set identity_params.merge(reset_token: nil, reset_requested: nil)
-      if identity.valid? && identity.save
+      if identity.valid? && identity.save_changes
         broadcast(:identity_update_password, target: self)
         flash[:success] = 'Password Updated'
         redirect "#{settings.map_path}/auth/login"
@@ -154,7 +154,7 @@ module Ditty
       begin
         identity.valid?
         DB.transaction do
-          user.save
+          user.save_changes
           user.add_identity identity
           broadcast(:user_register, target: self, values: { user: user })
           flash[:info] = 'Successfully Registered. Please log in'

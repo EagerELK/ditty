@@ -16,8 +16,8 @@ module Ditty
         begin
           @app.call env
         rescue StandardError => e
-          ::Ditty::Services::Logger.instance.error "Ditty Catchall: #{e.class}"
-          ::Ditty::Services::Logger.instance.error e
+          ::Ditty::Services::Logger.error "Ditty Catchall: #{e.class}"
+          ::Ditty::Services::Logger.error e
           [500, {}, ['Unknown Error']]
         end
       end
