@@ -40,10 +40,6 @@ module Ditty
       @mutex.synchronize { @hash.inject(memo, &block) }
     end
 
-    def each(&block)
-      @mutex.synchronize { @hash.each(&block) }
-    end
-
     def each_with_object(memo, &block)
       @mutex.synchronize { @hash.each_with_object(memo, &block) }
     end

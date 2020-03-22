@@ -7,7 +7,7 @@ module Ditty
   class Ditty
     def self.load
       controllers = File.expand_path('../controllers', __dir__)
-      Dir.glob("#{controllers}/*.rb").each { |f| require f }
+      Dir.glob("#{controllers}/*.rb").sort.each { |f| require f }
 
       require 'ditty/models/user'
       require 'ditty/models/role'
