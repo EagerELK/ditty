@@ -88,6 +88,16 @@ namespace :ditty do
       end
     end
 
+    desc 'Migrate Ditty database to the specified version'
+    task :run, [:version] do |_t, args|
+      ::DB.loggers << Logger.new($stdout) if ::DB.loggers.count.zero?
+      raise 'No version specified' unless args[:version]
+
+      puts "** [ditty] Running Ditty Migrations to #{args[:version]}"
+      ::Sequel.extension :migration
+      ::Sequel::Migrator.run(::DB, folder, target: args[:version].to_i)
+    end
+
     desc 'Migrate Ditty database to latest version'
     task :up do
       ::DB.loggers << Logger.new($stdout) if ::DB.loggers.count.zero?
