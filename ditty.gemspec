@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/eagerelk/ditty'
   spec.license       = 'MIT'
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  spec.files         = `git ls-files -z`.split("\x0") #.reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = 'exe'
   spec.executables   = ['ditty']
   spec.require_paths = ['lib']

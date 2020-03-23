@@ -59,7 +59,7 @@ module Ditty
       puts 'Ditty DB Schema Dumped'
     end
 
-    desc 'seed', 'Seed the predefined seeind data'
+    desc 'seed', 'Seed the predefined seeding data'
     def seed
       Rake::Task['ditty:seed'].invoke
     end
