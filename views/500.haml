@@ -1,0 +1,11 @@
+%p.lead.text-center
+  A call to Elasticsearch failed unexpectedly.
+
+- if current_user.admin?
+  %p
+    The error was:
+    %bt
+    = error.message
+  - if current_user.super_admin?
+    %pre
+      %code= error.backtrace.join("\n")
