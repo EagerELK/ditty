@@ -42,8 +42,6 @@
                   %h1.text-dark.mb-2= defined?(title) ? title : '&nbsp;'
                 .col-md-3.text-right.mt-1
                   = haml :'partials/actions', locals: { actions: defined?(actions) ? actions : {} }
-            - else
-              %div{ style: 'padding-top: 20px' }
 
             = yield
 
