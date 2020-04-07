@@ -36,7 +36,7 @@
             / .row
             /   .col-md-12
             = haml :'partials/notifications'
-            - if defined?(title) || defined?(actions)
+            - if defined?(title) && title.present? || (defined?(actions) && actions.present?)
               .row
                 .col-md-9
                   %h1.text-dark.mb-2= defined?(title) ? title : '&nbsp;'
