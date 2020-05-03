@@ -13,7 +13,7 @@ module Ditty
         if list.respond_to? :'last_page?'
           list.last_page?
         else
-          list.current_page == list.total_pages
+          list.next_page.nil?
         end
       end
 
@@ -21,7 +21,7 @@ module Ditty
         if list.respond_to? :'first_page?'
           list.first_page?
         else
-          list.current_page == 0
+          list.previous_page.nil?
         end
       end
 
