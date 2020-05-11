@@ -6,12 +6,12 @@
       - options = attributes.delete(:options)
       %select{attributes}
         - if attributes[:multiple]
-          - options.each do |k,v| k ||= v;  v ||= k;
-            %option{ value: k, selected: (model.send(field).map(&:id).include? k)}= v
+          - options.each do |k, v| k = v if k.nil?;  v = k if v.nil?;
+            %option{ value: k.to_s, selected: (model.send(field).map(&:id).include? k)}= v
         - else
           %option{ value: ""} -- Select One --
-          - options.each do |k,v| k ||= v;  v ||= k;
-            %option{ value: k, selected: [model[field].to_s, default].include?(k.to_s)}= v
+          - options.each do |k, v| k = v if k.nil?;  v = k if v.nil?;
+            %option{ value: k.to_s, selected: [model.send(field), default].include?(k)}= v
     - elsif type == 'textarea'
       %textarea{attributes}= preserve(model[field])
     - else
