@@ -11,6 +11,10 @@ require 'ditty/generators/project_generator'
 require 'ditty/generators/migration_generator'
 require 'ditty/components/ditty'
 
+# TODO: Component generator
+# TODO: Add requires into application.rb
+# TODO: Add requires into schema.rb
+
 module Ditty
   class CLI < Thor
     include Thor::Actions
@@ -25,6 +29,7 @@ module Ditty
 
     desc 'server', 'Start the Ditty server'
     require './application' if File.exist?('application.rb')
+    require 'ditty/db' unless defined?(DB)
     ::Ditty::Components.tasks
     def server
       # Ensure the token files are present
