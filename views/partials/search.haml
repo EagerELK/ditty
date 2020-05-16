@@ -13,8 +13,11 @@
                 %span.fa.fa-arrow-down
 
     - if self.class.const_defined?(:FILTERS)
-      #filter-form.row{ class: self.class.const_defined?(:SEARCHABLE) ? 'collapse' : '' }
-        - FILTERS.each do |filter|
-          = filter_control(filter, filters: FILTERS.count)
-        - unless self.class.const_defined?(:SEARCHABLE)
-          %button.btn.btn-secondary{ type: 'submit'} Go
+      #filter-form{ class: self.class.const_defined?(:SEARCHABLE) ? 'collapse' : '' }
+        .card.card-default.mb-2
+          .card-body
+            .row
+              - FILTERS.each do |filter|
+                = filter_control(filter, filters: FILTERS.count)
+              - unless self.class.const_defined?(:SEARCHABLE)
+                %button.btn.btn-secondary{ type: 'submit'} Go

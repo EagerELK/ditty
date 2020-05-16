@@ -26,7 +26,7 @@ module Ditty
     end
 
     def delete?
-      create?
+      create? && user.super_admin? == false
     end
 
     def permitted_attributes

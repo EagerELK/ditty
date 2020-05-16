@@ -57,6 +57,12 @@ module Ditty
       validates_format(/\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :email)
     end
 
+    def before_save
+      super
+      self.name = nil if name.blank?
+      self.surname = nil if surname.blank?
+    end
+
     # Add the basic roles and identity
     def after_create
       super

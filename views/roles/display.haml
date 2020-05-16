@@ -25,7 +25,7 @@
     .card.card-default
       .card-body
         %h4.card-title Included Roles
-      %table.table.table-striped
+      %table.table.table-striped.mb-0
         %tbody
           - if entity.descendants.count > 0
             - entity.descendants.each do |role|

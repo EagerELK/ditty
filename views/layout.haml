@@ -24,6 +24,20 @@
     %link{ rel: 'stylesheet', href: '/css/styles.css', media: 'screen' }
     %link{ rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', media: 'screen' }
   %body#page-top
+    / Logout Modal
+    #logoutModal.modal.fade{ tabindex: -1, role: 'dialog', 'aria-hidden': 'true' }
+      .modal-dialog{ role: 'document' }
+        .modal-content
+          .modal-header
+            %h5.modal-title Ready to Leave?
+            %button.close{ type: 'button', 'data-dismiss': 'modal', 'aria-label': 'Close' }
+              %span{ 'aria-hidden': 'true' } ×
+          .modal-body
+            Select "Logout" below if you are ready to end your current session.
+          .modal-footer
+            %button.btn.btn-secondary{ type: 'button', 'data-dismiss': 'modal' } Cancel
+            = delete_form_tag("#{settings.map_path}/auth") do
+              %button.btn.btn-primary{ type: 'submit' } Logout
     / Page Wrapper
     #wrapper
       = haml :'partials/sidebar', locals: { title: (defined?(title) ? title : 'Ditty') }

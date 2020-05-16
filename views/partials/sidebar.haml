@@ -3,12 +3,12 @@
   / Sidebar - Brand
   %a.sidebar-brand.d-flex.align-items-center.justify-content-center{ href: config('ditty.home_page', settings.map_path || '/') }
     .sidebar-brand-icon.rotate-n-15
-      %i.fas.fa-laugh-wink
+      %i.fas{ class: config('ditty.brand-icon', 'fa-laugh-wink') }
     .sidebar-brand-text.mx-3
       = config('ditty.title', 'Ditty')
 
-  / Divider
   %hr.sidebar-divider.my-0
+
   = haml :'partials/navitems'
 
   .text-center.d-none.d-md-inline

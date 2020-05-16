@@ -1,10 +1,10 @@
-= haml :'partials/search'
 .row
-  .col-12
+  .col-md-12
+    = haml :'partials/search'
     %table.table.table-striped.table-bordered.table-hover
       %thead.thead-dark
         %tr
-          %th User email
+          %th User
           %th Action
           %th Details
           %th IP Address
@@ -32,4 +32,5 @@
           %tr
             %td.text-center{ colspan: 4 } No records
 
-    =pagination(list, base_path)
+- if list.count > 0
+  = pagination(list, base_path)

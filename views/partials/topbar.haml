@@ -1,18 +1,3 @@
-/ Logout Modal
-#logoutModal.modal.fade{ tabindex: -1, role: 'dialog', 'aria-hidden': 'true' }
-  .modal-dialog{ role: 'document' }
-    .modal-content
-      .modal-header
-        %h5.modal-title Ready to Leave?
-        %button.close{ type: 'button', 'data-dismiss': 'modal', 'aria-label': 'Close' }
-          %span{ 'aria-hidden': 'true' } ×
-      .modal-body
-        Select "Logout" below if you are ready to end your current session.
-      .modal-footer
-        %button.btn.btn-secondary{ type: 'button', 'data-dismiss': 'modal' } Cancel
-        = delete_form_tag("#{settings.map_path}/auth") do
-          %button.btn.btn-primary{ type: 'submit' } Logout
-
 %nav.navbar.navbar-expand.navbar-light.bg-white.topbar.mb-4.static-top.shadow
   / Sidebar Toggle
   %button#sidebarToggleTop.btn.btn-link.d-md-none.rounded-circle.mr-3
