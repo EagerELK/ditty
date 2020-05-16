@@ -51,7 +51,7 @@ module Ditty
       [
         {
           group: 'User Management',
-          order: 10,
+          order: 50,
           icon: 'lock',
           target: ::Ditty::User,
           items: [
