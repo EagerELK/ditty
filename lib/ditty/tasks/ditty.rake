@@ -38,6 +38,7 @@ namespace :ditty do
     task :folders do
       puts 'Prepare the Ditty folders'
       Dir.mkdir 'pids' unless File.exist?('pids')
+      Dir.mkdir 'logs' unless File.exist?('logs')
     end
 
     desc 'Check that the public folder is present and populated'
