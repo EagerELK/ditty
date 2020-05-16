@@ -8,7 +8,8 @@
           .p-5
             .text-center
               %h1.h4.text-gray-900.mb-4 Create an Account!
-            = haml :'partials/notifications'
+            .small
+              = haml :'partials/notifications'
             - ::Ditty::Services::Authentication.providers.each do |name|
               - provider = ::Ditty::Services::Authentication[name]
               - next if provider[:register_prompt].nil?
