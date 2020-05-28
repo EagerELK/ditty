@@ -96,7 +96,7 @@ module Ditty
       entity = read!(id)
       authorize entity, :update
 
-      flash[:redirect_to] = "#{base_path}/#{entity.display_id}"
+      flash[:redirect_to] = "#{base_path}/#{entity.display_id}" unless flash.keep(:redirect_to)
       haml :"#{view_location}/edit",
            locals: { entity: entity, title: heading(:edit) },
            layout: layout
