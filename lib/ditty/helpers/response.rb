@@ -90,7 +90,7 @@ module Ditty
           format.html do
             # TODO: Ability to customize the return path and message?
             flash[:success] = "#{heading} Updated"
-            redirect with_layout(flash[:redirect_to] || back || "#{base_path}/#{entity.display_id}")
+            redirect with_layout(flash[:redirect_to] || "#{base_path}/#{entity.display_id}")
           end
           format.json do
             content_type :json
