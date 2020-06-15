@@ -23,10 +23,11 @@ elsif ENV['DATABASE_URL'].blank? == false
   DB.extension(:schema_caching)
   DB.load_schema_cache?('./config/schema.dump')
 
-  Sequel::Model.plugin :validation_helpers
-  Sequel::Model.plugin :update_or_create
-  Sequel::Model.plugin :timestamps, update_on_create: true
   Sequel::Model.plugin :auto_validations
+  Sequel::Model.plugin :string_stripper
+  Sequel::Model.plugin :timestamps, update_on_create: true
+  Sequel::Model.plugin :update_or_create
+  Sequel::Model.plugin :validation_helpers
 else
   ::Ditty::Services::Logger.error 'No database connection set up'
 end
