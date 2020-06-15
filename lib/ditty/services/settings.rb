@@ -28,7 +28,8 @@ module Ditty
             keys = keys[1..-1]
             key = keys.join('.')
           end
-          from[key.to_sym] || from.dig(*keys)
+          key = key.to_sym if key.respond_to?(:to_sym)
+          from[key] || from.dig(*keys)
         end
 
         def values(scope = :settings)
