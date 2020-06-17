@@ -27,6 +27,7 @@ module Ditty
         directory 'logs'
         directory 'pids'
         directory 'public'
+        directory '../../../views', 'views'
         copy_file '.gitignore', './.gitignore'
         copy_file 'env.example', './.env'
         copy_file '.rubocop.yml', './.rubocop.yml'
