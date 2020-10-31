@@ -25,7 +25,7 @@ module Ditty
           from = values
           if keys.count > 1 && scope?(keys.first)
             from = values(keys.first)
-            keys = keys[1..-1]
+            keys = keys[1..]
             key = keys.join('.')
           end
           key = key.to_sym if key.respond_to?(:to_sym)
@@ -36,10 +36,10 @@ module Ditty
           @values ||= begin
             v = Hash.new do |h, k|
               h[k] = if File.file?("#{CONFIG_FOLDER}/#{k}.yml")
-                       read("#{CONFIG_FOLDER}/#{k}.yml")
-                     elsif k != :settings && h[:settings].key?(k)
-                       h[:settings][k]
-                     end
+                read("#{CONFIG_FOLDER}/#{k}.yml")
+              elsif k != :settings && h[:settings].key?(k)
+                h[:settings][k]
+              end
               h[k]
             end
             v[:settings] = File.file?(CONFIG_FILE) ? read(CONFIG_FILE) : {}

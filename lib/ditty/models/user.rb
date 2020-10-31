@@ -40,7 +40,9 @@ module Ditty
     end
 
     def respond_to_missing?(name, _include_private = false)
-      name[-1] == '?'
+      return true if name[-1] == '?'
+
+      super
     end
 
     def gravatar

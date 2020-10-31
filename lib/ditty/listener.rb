@@ -18,7 +18,7 @@ module Ditty
 
     def method_missing(method, *args)
       unless args[0].is_a?(Hash) && args[0][:target].is_a?(Sinatra::Base) && args[0][:target].settings.track_actions
-        return
+        return super
       end
 
       log_action(
@@ -66,7 +66,7 @@ module Ditty
     def action_from(target, method)
       return method unless method.to_s.start_with? 'component_'
 
-      target.class.to_s.demodulize.underscore + '_' + method.to_s.gsub(/^component_/, '')
+      "#{target.class.to_s.demodulize.underscore}_#{method.to_s.gsub(/^component_/, '')}"
     end
 
     def log_action(values)

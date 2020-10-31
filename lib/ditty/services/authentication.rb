@@ -23,26 +23,36 @@ module Ditty
         end
 
         def providers
-          config.compact.keys
+          config.compact.keys.select { |e| config[e][:available] && config[e][:enabled] != false }
         end
 
         def setup
-          providers.each do |provider|
-            req = config.dig(provider, :require) || "omniauth/#{provider}"
-            begin
-              require req
+          config.compact.keys.each do |provider|
+            ::Ditty::Services::Logger.debug "Loading authentication provider #{provider}"
+            req = if config.dig(provider, :require)
+              [config[provider][:require]]
+            else
+              ["omniauth/#{provider}", "omniauth-#{provider}"]
+            end
+            req.find do |e|
+              require e
+              config[provider][:available] = true
+              true
             rescue LoadError
-              require "omniauth-#{provider}"
+              ::Ditty::Services::Logger.warn "Could not load authentication provider #{provider} using #{e}"
+              config[provider][:available] = false
+              false
             end
           end
         end
 
         def config
-          default.merge ::Ditty::Services::Settings.values(:authentication) || {}
+          @config ||= default.merge(::Ditty::Services::Settings.values(:authentication) || {})
         end
 
         def provides?(provider)
-          providers.include? provider.to_sym
+          provider = provider.to_sym
+          providers.include?(provider) && config[provider][:available] && config.dig(provider, :enabled) != false
         end
 
         def default
@@ -50,6 +60,7 @@ module Ditty
           require 'ditty/controllers/auth_controller'
           {
             identity: {
+              available: true,
               arguments: [
                 {
                   fields: [:username],

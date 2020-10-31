@@ -23,6 +23,7 @@ module Ditty
       def user_options
         policy_scope(::Ditty::User).as_hash(:email, :email)
       end
+
       def platform_options
         policy_scope(::Ditty::UserLoginTrait).select(:platform).distinct.as_hash(:platform, :platform)
       end

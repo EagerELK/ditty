@@ -55,7 +55,7 @@ module Ditty
           # 1 Special Character
           # 1 Number
           # At least 8 characters
-          %r[\A(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#&$*)(}{%^=_+|\\:";'<>,.\-\/?\[\]])(?=.*[0-9]).{8,}\Z],
+          %r[\A(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#&$*)(}{%^=_+|\\:";'<>,.\-/?\[\]])(?=.*[0-9]).{8,}\Z],
           :password,
           message: 'is not strong enough'
         )
@@ -72,12 +72,12 @@ module Ditty
 
     private
 
-    def encrypt_password
-      self.crypted_password = ::BCrypt::Password.create(password)
-    end
+      def encrypt_password
+        self.crypted_password = ::BCrypt::Password.create(password)
+      end
 
-    def password_required
-      crypted_password.blank? || !password.blank?
-    end
+      def password_required
+        crypted_password.blank? || !password.blank?
+      end
   end
 end

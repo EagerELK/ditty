@@ -50,12 +50,6 @@
             / .row
             /   .col-md-12
             = haml :'partials/notifications'
-            - if defined?(title) && title.present? || (defined?(actions) && actions.present?)
-              .row
-                .col-md-9
-                  %h1.text-dark.mb-2= defined?(title) ? title : '&nbsp;'
-                .col-md-3.text-right.mt-1
-                  = haml :'partials/actions', locals: { actions: defined?(actions) ? actions : {} }
 
             = yield
 
@@ -68,6 +62,7 @@
     / Placed at the end of the document so the pages load faster
     %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js' }
     %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js' }
+    %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js' }
     %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js' }
     / %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/react/16.8.6/umd/react.production.min.js' }
     %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js' }

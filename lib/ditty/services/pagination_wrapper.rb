@@ -64,7 +64,9 @@ module Ditty
       end
 
       def respond_to_missing?(method, _include_private = false)
-        list.respond_to? method
+        return true if list.respond_to?(method)
+
+        super
       end
 
       def current_page_record_range

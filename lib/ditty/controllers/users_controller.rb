@@ -96,7 +96,8 @@ module Ditty
 
       values = permitted_parameters(Identity, :create)
       identity.set values
-      if identity.valid? && identity.save_changes
+      if identity.valid?
+        identity.save_changes
         broadcast(:identity_update_password, target: self)
         flash[:success] = 'Password Updated'
         redirect back

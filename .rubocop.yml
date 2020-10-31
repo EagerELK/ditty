@@ -1,9 +1,28 @@
-require: rubocop-rspec
-
+require:
+  - rubocop-rspec
+  - rubocop-performance
+  - rubocop-thread_safety
+  - rubocop-sequel
 AllCops:
-  TargetRubyVersion: 2.7
-Metrics/LineLength:
+  NewCops: enable
+  TargetRubyVersion: 2.7.1
+  Exclude:
+    - migrate/**/*
+Layout/LineLength:
   Max: 120
 Layout/LeadingCommentSpace:
   Exclude:
     - 'config.ru'
+Layout/EndOfLine:
+  EnforcedStyle: lf
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+  IndentationWidth: 2
+Layout/IndentationConsistency:
+  EnforcedStyle: indented_internal_methods
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+Metrics/MethodLength:
+  CountAsOne: ['array', 'heredoc', 'hash']
+Style/Documentation:
+  Enabled: false

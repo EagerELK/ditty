@@ -34,21 +34,21 @@ module Ditty
 
         private
 
-        def config
-          @config ||= default.merge ::Ditty::Services::Settings.values(:email) || {}
-        end
+          def config
+            @config ||= default.merge ::Ditty::Services::Settings.values(:email) || {}
+          end
 
-        def default
-          {
-            delivery_method: :logger,
-            logger: ::Ditty::Services::Logger
-          }
-        end
+          def default
+            {
+              delivery_method: :logger,
+              logger: ::Ditty::Services::Logger
+            }
+          end
 
-        def from_symbol(email, options)
-          require "ditty/emails/#{email}"
-          constantize("Ditty::Emails::#{classify(email)}").new(options)
-        end
+          def from_symbol(email, options)
+            require "ditty/emails/#{email}"
+            constantize("Ditty::Emails::#{classify(email)}").new(options)
+          end
       end
     end
   end

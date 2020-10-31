@@ -30,40 +30,46 @@ module Ditty
         end
       end
 
+      # TODO: REfac this so that you can log something like ES to a separate logger
+
       def method_missing(method, *args, &block)
         loggers.each { |logger| logger.send(method, *args, &block) }
       end
 
       def respond_to_missing?(method, _include_private = false)
-        loggers.any? { |logger| logger.respond_to?(method) }
+        return true if loggers.any? { |logger| logger.respond_to?(method) }
+
+        super
       end
 
       private
 
-      def config
-        default.merge ::Ditty::Services::Settings.values(:logger) || {}
-      end
-
-      def tr(val)
-        {
-          '$stdout' => $stdout,
-          '$stderr' => $stderr
-        }[val] || val
-      end
-
-      def default
-        { loggers: [{ name: 'default', class: 'Logger' }] }
-      end
-
-      class << self
-        def method_missing(method, *args, &block)
-          instance.send(method, *args, &block)
+        def config
+          default.merge ::Ditty::Services::Settings.values(:logger) || {}
         end
 
-        def respond_to_missing?(method, _include_private)
-          instance.respond_to? method
+        def tr(val)
+          {
+            '$stdout' => $stdout,
+            '$stderr' => $stderr
+          }[val] || val
         end
-      end
+
+        def default
+          { loggers: [{ name: 'default', class: 'Logger' }] }
+        end
+
+        class << self
+          def method_missing(method, *args, &block)
+            instance.send(method, *args, &block)
+          end
+
+          def respond_to_missing?(method, _include_private)
+            return true if instance.respond_to?(method)
+
+            super
+          end
+        end
     end
   end
 end

@@ -37,50 +37,52 @@ module Ditty
       end
 
       def respond_to_missing?(method, _include_private = false)
-        mail.respond_to? method
+        return true if mail.respond_to?(method)
+
+        super
       end
 
       private
 
-      def content
-        result = Haml::Engine.new(content_haml).render(Object.new, locals)
-        return result unless options[:layout]
+        def content
+          result = Haml::Engine.new(content_haml).render(Object.new, locals)
+          return result unless options[:layout]
 
-        Haml::Engine.new(layout_haml).render(Object.new, locals.merge(content: result))
-      end
-
-      def content_haml
-        read_template(options[:view])
-      end
-
-      def layout_haml
-        read_template("layouts/#{options[:layout]}") if options[:layout]
-      end
-
-      def read_template(template)
-        File.read(find_template("emails/#{template}"))
-      end
-
-      def base_options
-        { subject: '(No Subject)', from: 'no-reply@ditty.io', view: :base, content_type: 'text/html; charset=UTF-8' }
-      end
-
-      def find_template(file)
-        template = File.expand_path("./views/#{file}.haml")
-        return template if File.file? template
-
-        template = File.expand_path("./#{file}.haml", App.view_folder)
-        return template if File.file? template
-
-        file
-      end
-
-      class << self
-        def deliver!(to = nil, options = {})
-          locals = options[:locals] || {}
-          new(options).deliver!(to, locals)
+          Haml::Engine.new(layout_haml).render(Object.new, locals.merge(content: result))
         end
-      end
+
+        def content_haml
+          read_template(options[:view])
+        end
+
+        def layout_haml
+          read_template("layouts/#{options[:layout]}") if options[:layout]
+        end
+
+        def read_template(template)
+          File.read(find_template("emails/#{template}"))
+        end
+
+        def base_options
+          { subject: '(No Subject)', from: 'no-reply@ditty.io', view: :base, content_type: 'text/html; charset=UTF-8' }
+        end
+
+        def find_template(file)
+          template = File.expand_path("./views/#{file}.haml")
+          return template if File.file? template
+
+          template = File.expand_path("./#{file}.haml", App.view_folder)
+          return template if File.file? template
+
+          file
+        end
+
+        class << self
+          def deliver!(to = nil, options = {})
+            locals = options[:locals] || {}
+            new(options).deliver!(to, locals)
+          end
+        end
     end
   end
 end

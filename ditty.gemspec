@@ -21,16 +21,20 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_development_dependency 'bundler', '>= 1'
+  spec.add_development_dependency 'dotenv'
   spec.add_development_dependency 'database_cleaner'
   spec.add_development_dependency 'factory_bot'
-  spec.add_development_dependency 'rack-test'
+  spec.add_development_dependency 'faker'
   spec.add_development_dependency 'racksh'
+  spec.add_development_dependency 'rack-test'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'rubocop-performance'
   spec.add_development_dependency 'rubocop-rspec'
   spec.add_development_dependency 'rubocop-sequel'
   spec.add_development_dependency 'rubocop-thread_safety'
+  spec.add_development_dependency 'simplecov', '~> 0.13.0'
+  spec.add_development_dependency 'sqlite3'
   spec.add_development_dependency 'timecop'
 
   spec.add_dependency 'activesupport', '>= 3'

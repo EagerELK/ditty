@@ -16,10 +16,10 @@ module Ditty
         policy = policy(record)
         action ||= record.new? ? :create : :update
         method_name = if policy.respond_to?("permitted_attributes_for_#{action}")
-                        "permitted_attributes_for_#{action}"
-                      else
-                        'permitted_attributes'
-                      end
+          "permitted_attributes_for_#{action}"
+        else
+          'permitted_attributes'
+        end
         policy.public_send(method_name)
       end
 

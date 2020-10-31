@@ -61,7 +61,7 @@ namespace :ditty do
         FileUtils.cp_r path, 'migrations' unless File.expand_path(path).eql? File.expand_path('migrations')
       end
       puts 'Migrations added:'
-      Dir.foreach('migrations').sort.each { |x| puts x if File.file?("migrations/#{x}") && x[-3..-1] == '.rb' }
+      Dir.foreach('migrations').sort.each { |x| puts x if File.file?("migrations/#{x}") && x[-3..] == '.rb' }
     end
   end
 

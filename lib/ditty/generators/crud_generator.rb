@@ -58,47 +58,47 @@ module Ditty
 
       private
 
-      def meta_columns
-        %i[id guid slug created_at updated_at]
-      end
+        def meta_columns
+          %i[id guid slug created_at updated_at]
+        end
 
-      def columns
-        require "#{folder}/models/#{model_name.underscore}"
-        name.constantize.columns
-      rescue StandardError
-        []
-      end
+        def columns
+          require "#{folder}/models/#{model_name.underscore}"
+          name.constantize.columns
+        rescue StandardError
+          []
+        end
 
-      def schema
-        require "#{folder}/models/#{model_name.underscore}"
-        name.constantize.db_schema
-      rescue StandardError
-        []
-      end
+        def schema
+          require "#{folder}/models/#{model_name.underscore}"
+          name.constantize.db_schema
+        rescue StandardError
+          []
+        end
 
-      def many_to_ones
-        DB.foreign_key_list(model_name.underscore.pluralize)
-      end
+        def many_to_ones
+          DB.foreign_key_list(model_name.underscore.pluralize)
+        end
 
-      def name_column(table)
-        candidates = DB.schema(table.to_sym).to_h.keys - DB.foreign_key_list(table.to_sym).map { |e| e[:columns] }.flatten
-        (candidates - meta_columns).first
-      end
+        def name_column(table)
+          candidates = DB.schema(table.to_sym).to_h.keys - DB.foreign_key_list(table.to_sym).map { |e| e[:columns] }.flatten
+          (candidates - meta_columns).first
+        end
 
-      def graphql_types
-        @graphql_types ||= Hash.new('String').merge(
-          integer: 'Integer',
-          boolean: 'Boolean',
-          datetime: 'GraphQL::Types::ISO8601DateTime'
-        )
-      end
+        def graphql_types
+          @graphql_types ||= Hash.new('String').merge(
+            integer: 'Integer',
+            boolean: 'Boolean',
+            datetime: 'GraphQL::Types::ISO8601DateTime'
+          )
+        end
 
-      def input_types
-        @input_types ||= Hash.new('text').merge(
-          integer: 'number',
-          datetime: 'date'
-        )
-      end
+        def input_types
+          @input_types ||= Hash.new('text').merge(
+            integer: 'number',
+            datetime: 'date'
+          )
+        end
     end
   end
 end

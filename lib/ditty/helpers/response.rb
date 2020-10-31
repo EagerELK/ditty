@@ -2,8 +2,6 @@
 
 require 'csv'
 
-require 'csv'
-
 module Ditty
   module Helpers
     module Response
@@ -69,12 +67,6 @@ module Ditty
           format.json do
             # TODO: Add links defined by actions (Edit #{heading})
             json permitted_response_attributes(entity, :for_json)
-          end
-          format.csv do
-            CSV.generate do |csv|
-              csv << entity.for_csv.keys
-              csv << entity.for_csv.values
-            end
           end
           format.csv do
             CSV.generate do |csv|
