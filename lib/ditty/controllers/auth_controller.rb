@@ -24,7 +24,7 @@ module Ditty
 
       broadcast("before_#{provider}_login".to_sym, env['omniauth.auth'])
       user = User.first(email: env['omniauth.auth']['info']['email'])
-      user = register_user if user.nil? && authorize(current_user, :register?)
+      user = register_user if user.nil? && authorize(::Ditty::User, :register?)
       return failed_login if user.nil?
 
       broadcast("#{provider}_login".to_sym, user)
