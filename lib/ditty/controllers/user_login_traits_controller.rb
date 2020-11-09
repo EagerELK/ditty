@@ -36,5 +36,9 @@ module Ditty
         policy_scope(::Ditty::UserLoginTrait).select(:browser).distinct.as_hash(:browser, :browser)
       end
     end
+
+    def list
+      super.order(:updated_at).reverse
+    end
   end
 end
