@@ -36,6 +36,10 @@ module Ditty
     use Rack::NestedParams
 
     helpers do
+      def logger
+        ::Ditty::Services::Logger.instance
+      end
+
       def base_path
         settings.base_path || "#{settings.map_path}/#{dasherize(view_location)}"
       end
