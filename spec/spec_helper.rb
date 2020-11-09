@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'dotenv'
+Dotenv.load('.env.test')
+Dotenv.overload('.env.test.local')
+
 ENV['APP_ENV'] ||= 'test'
 ENV['RACK_ENV'] ||= 'test'
 require 'simplecov'
