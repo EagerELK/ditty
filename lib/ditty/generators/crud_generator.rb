@@ -31,6 +31,8 @@ module Ditty
       def create_model
         filename = File.join("lib/#{folder}/models", "#{model_name.underscore}.rb")
         template '../templates/model.rb.erb', filename
+      rescue StandardError => e
+        puts "Could not generate model for #{model_name}: #{e.message}"
       end
 
       def create_controller
@@ -38,16 +40,22 @@ module Ditty
         template '../templates/controller.rb.erb', filename
         # TODO: Insert the route into the component file
         # insert_into_file 'config.ru', "use #{class_name}\n", after: 'run ApplicationController\n'
+      rescue StandardError => e
+        puts "Could not generate controller for #{model_name}: #{e.message}"
       end
 
       def create_policy
         filename = File.join("lib/#{folder}/policies", "#{policy_name.underscore}.rb")
         template '../templates/policy.rb.erb', filename
+      rescue StandardError => e
+        puts "Could not generate policy for #{model_name}: #{e.message}"
       end
 
       def create_type
         filename = File.join("lib/#{folder}/types", "#{model_name.underscore}_type.rb")
         template '../templates/type.rb.erb', filename
+      rescue StandardError => e
+        puts "Could not generate type for #{model_name}: #{e.message}"
       end
 
       def create_views
