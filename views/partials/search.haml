@@ -14,7 +14,7 @@
 
     - if self.class.const_defined?(:FILTERS)
       #filter-form{ class: self.class.const_defined?(:SEARCHABLE) ? 'collapse' : '' }
-        .card.card-default.mb-2
+        .card.card-default.shadow.mb-2
           .card-body
             .row
               - FILTERS.each do |filter|
