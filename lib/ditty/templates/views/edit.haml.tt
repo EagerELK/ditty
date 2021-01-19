@@ -1,7 +1,7 @@
 .row
   .col-md-2
   .col-md-8
-    .card
+    .card.card-default.shadow
       .card-body
         = edit_form_tag "#{base_path}/#{entity.display_id}" do
           = haml :'<%= model_name.pluralize.underscore %>/form', locals: { entity: entity }
