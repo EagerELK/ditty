@@ -25,6 +25,7 @@ module Ditty
             )
           end
           format.csv do
+            attachment "#{base_path}.csv"
             CSV.generate do |csv|
               csv << result.first.for_csv.keys
               result.all.each do |r|
