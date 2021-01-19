@@ -25,6 +25,8 @@ module Ditty
     end
 
     def list
+      return super if params[:sort]
+
       super.order(:created_at).reverse
     end
 

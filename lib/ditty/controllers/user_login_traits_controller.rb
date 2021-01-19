@@ -38,6 +38,8 @@ module Ditty
     end
 
     def list
+      return super if params[:sort]
+
       super.order(:updated_at).reverse
     end
   end
