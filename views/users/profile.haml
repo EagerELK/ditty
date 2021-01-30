@@ -10,10 +10,10 @@
         %hr
         %p.description
           %label Name:
-          = entity.name
+          = entity.name || '(None)'
         %p.description
           %label Surname:
-          = entity.surname
+          = entity.surname || '(None)'
         %p.description
           %label Roles:
           = entity.roles_dataset.map(:name).map(&:titlecase).join(', ')

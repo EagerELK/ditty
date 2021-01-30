@@ -96,7 +96,7 @@ module Ditty
         token = SecureRandom.hex(16)
         identity.update(reset_token: token, reset_requested: Time.now)
         # Send Email
-        reset_url = "#{request.base_url}#{settings.map_path}/reset-password?token=#{token}"
+        reset_url = "#{request.base_url}#{settings.map_path}/auth/reset-password?token=#{token}"
         ::Ditty::Services::Email.deliver(
           :forgot_password,
           email,
@@ -105,6 +105,9 @@ module Ditty
       end
       flash[:info] = 'An email was sent to the email provided with instructions on how to reset your password'
       redirect "#{settings.map_path}/auth/login"
+    rescue Sinatra::Param::InvalidParameterError
+      flash[:warning] = 'Email address not provided'
+      redirect back
     end
 
     get '/reset-password' do
