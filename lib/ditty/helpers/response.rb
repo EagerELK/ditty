@@ -61,6 +61,8 @@ module Ditty
         respond_to do |format|
           format.html do
             title = heading(:read) + (entity.respond_to?(:name) ? ": #{entity.name}" : '')
+            last_modified entity.updated_at if entity.respond_to?(:updated_at)
+            etag entity.etag if entity.respond_to?(:etag)
             haml :"#{view_location}/display",
                  locals: { entity: entity, title: title, actions: actions },
                  layout: layout
