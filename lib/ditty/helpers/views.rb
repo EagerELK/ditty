@@ -142,6 +142,20 @@ module Ditty
       def sort_ui(field)
         haml :'partials/sort_ui', locals: { field: field }
       end
+
+      def sort_query(field)
+        query_string(
+          order: params[:sort] == field.to_s && params[:order] == 'asc' ? 'desc' : 'asc',
+          sort: field,
+        )
+      end
+
+      def sort_icon(field)
+        return 'fa-sort' unless params[:sort] == field.to_s
+        return 'fa-sort-up' if params[:order] == 'asc'
+
+        'fa-sort-down'
+      end
     end
   end
 end
