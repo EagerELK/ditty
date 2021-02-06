@@ -89,7 +89,9 @@ module Ditty
         end
 
         def name_column(table)
-          candidates = DB.schema(table.to_sym).to_h.keys - DB.foreign_key_list(table.to_sym).map { |e| e[:columns] }.flatten
+          candidates = DB.schema(table.to_sym).to_h.keys - DB.foreign_key_list(table.to_sym).map do |e|
+                                                             e[:columns]
+                                                           end.flatten
           (candidates - meta_columns).first
         end
 

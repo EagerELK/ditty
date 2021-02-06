@@ -12,7 +12,7 @@ FactoryBot.define do
   sequence(:email) { |n| "person-#{n}@example.com" }
   sequence(:name) { |n| "Name-#{n}" }
 
-  factory :user, class: Ditty::User, aliases: [:'Ditty::User'] do
+  factory :user, class: 'Ditty::User', aliases: [:'Ditty::User'] do
     email
 
     after(:create) do |user, _evaluator|
@@ -26,17 +26,17 @@ FactoryBot.define do
     end
   end
 
-  factory :identity, class: Ditty::Identity, aliases: [:'Ditty::Identity'] do
+  factory :identity, class: 'Ditty::Identity', aliases: [:'Ditty::Identity'] do
     username { generate :email }
     crypted_password { 'som3Password!' }
   end
 
-  factory :role, class: Ditty::Role, aliases: [:'Ditty::Role'] do
+  factory :role, class: 'Ditty::Role', aliases: [:'Ditty::Role'] do
     name { "Role #{generate(:name)}" }
     parent_id { nil }
   end
 
-  factory :user_login_trait, class: Ditty::UserLoginTrait, aliases: [:'Ditty::UserLoginTrait'] do
+  factory :user_login_trait, class: 'Ditty::UserLoginTrait', aliases: [:'Ditty::UserLoginTrait'] do
     association :user, strategy: :create, factory: :user
     ip_address { Faker::Internet.ip_v4_address }
     platform { Faker::Device.platform }

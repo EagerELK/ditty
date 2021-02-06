@@ -37,8 +37,8 @@ module Ditty
     after do
       return if settings.environment == 'production'
 
-      if (response.successful? || response.redirection?) && @skip_verify == false
-        verify_authorized if settings.environment != 'production'
+      if (response.successful? || response.redirection?) && @skip_verify == false && (settings.environment != 'production')
+        verify_authorized
       end
     end
 

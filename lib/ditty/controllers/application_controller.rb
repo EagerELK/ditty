@@ -149,7 +149,8 @@ module Ditty
           haml :'400', locals: { title: '4 oh oh' }, layout: layout
         end
         format.json do
-          json code: 400, errors: { env['sinatra.error'].param => env['sinatra.error'].message }, full_errors: [env['sinatra.error'].message]
+          json code: 400, errors: { env['sinatra.error'].param => env['sinatra.error'].message },
+               full_errors: [env['sinatra.error'].message]
         end
       end
     end
@@ -238,8 +239,8 @@ module Ditty
         request.path_info = request.path_info.gsub(/.csv$/, '')
       elsif request.env['ACCEPT']
         content_type request.env['ACCEPT']
-      else
-        content_type(:json) if request.accept.count.eql?(1) && request.accept.first.to_s.eql?('*/*')
+      elsif request.accept.count.eql?(1) && request.accept.first.to_s.eql?('*/*')
+        content_type(:json)
       end
     end
 

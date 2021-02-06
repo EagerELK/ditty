@@ -11,7 +11,7 @@ describe ::Ditty::Emails::Base do
     mail
   end
 
-  context '.new' do
+  describe '.new' do
     it 'defaults to base options' do
       expect(subject.options).to include subject: '(No Subject)', from: 'no-reply@ditty.io', view: :base
     end
@@ -24,7 +24,7 @@ describe ::Ditty::Emails::Base do
     end
   end
 
-  context '.deliver!' do
+  describe '.deliver!' do
     it 'delivers the email to the specified email address' do
       expect(mail).to receive(:to).with('test@email.com')
       expect(mail).to receive(:deliver!)
@@ -44,7 +44,7 @@ describe ::Ditty::Emails::Base do
     end
   end
 
-  context '#deliver!' do
+  describe '#deliver!' do
     it 'delivers the email to the specified email address' do
       expect(mail).to receive(:to).with('test2@email.com')
       base = described_class.new(mail: mail)

@@ -16,7 +16,7 @@ describe ::Ditty::Services::Settings do
     allow(File).to receive(:read).with('./config/section.yml').and_return(section)
   end
 
-  context '#[]' do
+  describe '#[]' do
     before do
       setup_files
       described_class.values = nil
@@ -35,7 +35,7 @@ describe ::Ditty::Services::Settings do
     end
   end
 
-  context '#values' do
+  describe '#values' do
     context 'uses the global file' do
       before do
         setup_files
