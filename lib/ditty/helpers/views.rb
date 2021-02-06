@@ -138,6 +138,10 @@ module Ditty
           haml_tag :a, name, html_options
         end
       end
+
+      def sort_ui(field)
+        haml :'partials/sort_ui', locals: { field: field }
+      end
     end
   end
 end
