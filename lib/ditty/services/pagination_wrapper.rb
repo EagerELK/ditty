@@ -10,7 +10,7 @@ module Ditty
       end
 
       def last_page?
-        if list.respond_to? :'last_page?'
+        if list.respond_to? :last_page?
           list.last_page?
         else
           list.next_page.nil?
@@ -18,7 +18,7 @@ module Ditty
       end
 
       def first_page?
-        if list.respond_to? :'first_page?'
+        if list.respond_to? :first_page?
           list.first_page?
         else
           list.previous_page.nil?
