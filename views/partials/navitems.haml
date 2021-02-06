@@ -1,5 +1,5 @@
 - if authenticated?
-  - Ditty::Components.navigation.each do |item|
+  - Ditty::Components.navigation(request).each do |item|
     - if item[:type] == 'divider'
       %hr.sidebar-divider.my-0
     - elsif item[:target].nil? || policy(item[:target]).list?

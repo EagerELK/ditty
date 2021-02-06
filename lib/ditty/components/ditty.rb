@@ -41,7 +41,7 @@ module Ditty
       }
     end
 
-    def self.navigation
+    def self.navigation(_request)
       load
 
       [

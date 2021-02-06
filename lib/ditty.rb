@@ -96,9 +96,9 @@ module Ditty
 
     # Return an ordered list of navigation items:
     # `[{order:0, link:'/users/', text:'Users'}, {order:1, link:'/roles/', text:'Roles'}]
-    def self.navigation
+    def self.navigation(request)
       nav = components.each_with_object([]) do |comp, memo|
-        memo.concat comp[1].navigation if comp[1].respond_to?(:navigation)
+        memo.concat comp[1].navigation(request) if comp[1].respond_to?(:navigation)
       end
       nav.sort_by { |v| v[:order] }
     end
