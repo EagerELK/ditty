@@ -27,7 +27,7 @@ module Ditty
         end
 
         def setup
-          config.compact.keys.each do |provider|
+          config.compact.each_key do |provider|
             ::Ditty::Services::Logger.debug "Loading authentication provider #{provider}"
             req = if config.dig(provider, :require)
               [config[provider][:require]]

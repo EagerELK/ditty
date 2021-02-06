@@ -25,7 +25,7 @@ module Ditty
           from = values
           if keys.count > 1 && scope?(keys.first)
             from = values(keys.first)
-            keys = keys[1..-1]
+            keys = keys[1..]
             key = keys.join('.')
           end
           key = key.to_sym if key.respond_to?(:to_sym)

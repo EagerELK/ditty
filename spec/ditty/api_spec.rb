@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-Dir.glob('./lib/ditty/controllers/*.rb').each { |f| require f }
+Dir.glob('./lib/ditty/controllers/*.rb').sort.each { |f| require f }
 require 'support/api_shared_examples'
 
 describe ::Ditty::RolesController, type: :controller do

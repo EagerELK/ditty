@@ -20,7 +20,7 @@ require 'database_cleaner'
 require 'timecop'
 
 if ENV['DATABASE_URL'] == 'sqlite::memory:'
-  folder = File.expand_path(File.dirname(__FILE__) + '/../migrate')
+  folder = File.expand_path("#{File.dirname(__FILE__)}/../migrate")
   Sequel.extension :migration
   Sequel::Migrator.apply(DB, folder)
 

@@ -15,12 +15,12 @@ describe ::Ditty::User, type: :model do
   describe '#role?(check)' do
     context 'when a user has a role without a parent' do
       it 'returns true only for specific role' do
-        expect(user.role?('user')).to be_truthy
+        expect(user).to be_role('user')
       end
 
       it 'returns false for other roles' do
         %w[admin super_admin].each do |role|
-          expect(user.role?(role)).to be_falsy
+          expect(user).not_to be_role(role)
         end
       end
     end
@@ -28,7 +28,7 @@ describe ::Ditty::User, type: :model do
     context 'when a user has a role with descendants' do
       it 'returns true for all descendants' do
         %w[user admin super_admin].each do |role|
-          expect(super_admin.role?(role)).to be_truthy
+          expect(super_admin).to be_role(role)
         end
       end
     end
