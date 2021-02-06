@@ -5,6 +5,7 @@
     %meta{ 'http-equiv' => 'X-UA-Compatible', 'content' => 'IE=edge,chrome=1' }
     %meta{ name: 'viewport', content: 'width=device-width, initial-scale=1' }
     %meta{ name: 'theme-color', content: '#ffffff' }
+    = Rack::Csrf.csrf_metatag(env)
     %link{ rel: 'manifest', href: '/manifest.json' }
     %link{ rel: 'icon', type: 'image/png', sizes: '32x32', href: '#{request.base_url}/images/favicon-32x32.png' }
     %link{ rel: 'icon', type: 'image/png', sizes: '16x16', href: '#{request.base_url}/images/favicon-16x16.png' }
@@ -20,14 +21,9 @@
     %meta{ name: 'author', content: '' }
 
     / Le styles
-    %link{ rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', media: 'screen' }
-    %link{ rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-sb-admin-2/3.3.7+1/css/sb-admin-2.min.css', media: 'screen' }
-    %link{ rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css', media: 'screen' }
-    /[if lt IE 9] <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-    /[if lt IE 9] <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
-
-    %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js' }
-    %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-sb-admin-2/3.3.7+1/js/sb-admin-2.min.js' }
+    %link{ rel: 'stylesheet', href: '/css/sb-admin-2.min.css', media: 'screen' }
+    %link{ rel: 'stylesheet', href: '/css/styles.css', media: 'screen' }
+    %link{ rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css', media: 'screen' }
   %body
     .container-fluid
       .row
@@ -37,6 +33,16 @@
       = yield
 
     / Placed at the end of the document so the pages load faster
-    %script{ type: 'text/javascript', src: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js' }
-    %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.4.1/react.min.js' }
-    %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js' }
+    %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js' }
+    %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js' }
+    %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js' }
+    %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js' }
+    / %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/react/16.8.6/umd/react.production.min.js' }
+    %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js' }
+    %script{ type: 'text/javascript', src: 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js' }
+    %script{ type: 'text/javascript', src: '/js/sb-admin-2.min.js' }
+    %script{ type: 'text/javascript', src: '/js/scripts.js' }
+    :javascript
+        $(function() {
+            $('.select2').select2();
+        });
