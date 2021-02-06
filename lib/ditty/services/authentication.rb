@@ -3,7 +3,6 @@
 require 'ditty/controllers/application_controller'
 require 'ditty/services/settings'
 require 'ditty/services/logger'
-require 'backports/2.4.0/hash/compact'
 
 require 'omniauth'
 OmniAuth.config.logger = ::Ditty::Services::Logger

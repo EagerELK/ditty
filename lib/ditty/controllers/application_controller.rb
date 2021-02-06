@@ -37,7 +37,7 @@ module Ditty
     register Sinatra::Flash, Sinatra::RespondWith
 
     use Rack::Csrf, raise: ENV['APP_ENV'] == 'development' unless ENV['APP_ENV'] == 'test'
-    use Rack::PostBodyContentTypeParser
+    use Rack::JSONBodyParser
     use Rack::MethodOverride
     use Rack::NestedParams
 
