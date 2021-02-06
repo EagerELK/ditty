@@ -1,0 +1,32 @@
+- group = entity.class.to_s.demodulize.underscore
+%table.table.mb-0
+  %tbody
+    - if entity.users.count.positive?
+      - entity.users.each do |user|
+        %tr
+          %td
+            - if policy(user).read?
+              %a{ href: "#{settings.map_path}/users/#{user.id}" }
+                = user.username
+            - else
+              = user.username
+          %td.text-right
+            = delete_form_tag "#{base_path}/#{entity.display_id}/users/#{user.id}" do
+              %button.btn.btn-danger.btn-sm{ type: 'submit' } &times;
+    - else
+      %tr
+        %td{ colspan: 2 } No Users Associated
+    %tr
+      %td{ colspan: 2 }
+        - users = user_options.select { |k, v| entity.users.map(&:id).include?(k) == false }
+        - if users && users.count.positive?
+          = new_form_tag "#{base_path}/#{entity.display_id}/users" do
+            .input-group
+              %select.form-control{ name: "#{group}[user_id]", id: 'user_id' }
+                %option{ value: '' } Select User
+                - users.each do |key, value|
+                  %option{ value: key }= value
+              %span.input-group-append
+                %button.btn.btn-primary{ type: 'submit' } Add User
+        - else
+          No Users available to link

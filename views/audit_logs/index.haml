@@ -4,14 +4,14 @@
     %table.table.table-striped.table-bordered.table-hover
       %thead.thead-dark
         %tr
-          %th User
-          %th Action
-          %th Details
-          %th IP Address
-          %th Browser
-          %th Device
-          %th Platform
-          %th Created at
+          %th= "User&nbsp;#{sort_ui(:user)}"
+          %th= "Action&nbsp;#{sort_ui(:action)}"
+          %th= "Details&nbsp;#{sort_ui(:details)}"
+          %th= "IP Address&nbsp;#{sort_ui(:ip_address)}"
+          %th= "Browser&nbsp;#{sort_ui(:browser)}"
+          %th= "Device&nbsp;#{sort_ui(:device)}"
+          %th= "Platform&nbsp;#{sort_ui(:platform)}"
+          %th= "Created&nbsp;At&nbsp;#{sort_ui(:created_at)}"
       %tbody
         - if list.count > 0
           - list.all.each do |entity|

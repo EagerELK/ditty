@@ -1,0 +1,23 @@
+%link{ rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism-okaidia.min.css' }
+
+.row.mb-4
+  .col-2
+  .col-8
+    .card.card-default.border-left-dark.shadow.h-100
+      %h4.card-header Run on a folder
+      .card-body
+        %pre
+          %code.lang-shell
+            :preserve
+              docker run -d -e ELASTICSEARCH_HOSTS=192.168.1.200:9200 \
+                --volume=/var/log/nginx/:/usr/share/incoming/ \
+                hackerplanet/requestd-filebeat:latest
+    .card.card-default.border-left-dark.shadow.h-100
+      %h4.card-header Run on a single file
+      .card-body
+        %pre
+          %code.lang-shell
+            :preserve
+              docker run -d -e ELASTICSEARCH_HOSTS=elastic.hackerpla.net:9200 \
+                --volume=/var/log/nginx/access.log:/usr/share/incoming/access.log \
+                hackerplanet/requestd-filebeat:latest

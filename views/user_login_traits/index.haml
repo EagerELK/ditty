@@ -4,12 +4,12 @@
     %table.table.table-striped.table-bordered.table-hover
       %thead.thead-dark
         %tr
-          %th User
-          %th IP Address
-          %th Device
-          %th Platform
-          %th Browser
-          %th Last Seen
+          %th= "User&nbsp;#{sort_ui(:user_id)}"
+          %th= "IP Address&nbsp;#{sort_ui(:ip_address)}"
+          %th= "Device&nbsp;#{sort_ui(:device)}"
+          %th= "Platform&nbsp;#{sort_ui(:platform)}"
+          %th= "Browser&nbsp;#{sort_ui(:browser)}"
+          %th= "Last Seen&nbsp;#{sort_ui(:updated_at)}"
       %tbody
         - if list.count.positive?
           - list.all.each do |entity|

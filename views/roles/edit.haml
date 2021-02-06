@@ -1,8 +1,8 @@
 .row
   .col-md-2
   .col-md-8
-    .card
-      .card-body.card-default.shadow
+    .card.card-default.shadow
+      .card-body
         = edit_form_tag "#{base_path}/#{entity.display_id}" do
           = haml :'roles/form', locals: { entity: entity }
           %button.btn.btn-primary{ type: 'submit' }

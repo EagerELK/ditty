@@ -1,5 +1,13 @@
 / Footer
 %footer.sticky-footer.bg-light
   .container.my-auto
-    .copyright.text-center.my-auto.text-dark
-      %span Copyright &copy; Ditty.io 2019
+    -if ENV['SKIP_BRANDING'].blank?
+      .copyright.text-center.my-auto.text-dark
+        %p
+          Copyright &copy;
+          %a{ href: 'https://hackerpla.net/requestd', target: '_blank' }
+            HackerPlanet
+          2020
+        %p.mb-0
+          %a{ href: 'https://hackerpla.net/requestd', target: '_blank' }
+            %img.rounded{ src: 'http://hackerpla.net/wp-content/uploads/2014/07/HP_1C_128x128.png', height: 60 }

@@ -1,5 +1,5 @@
 %form{ { method: %i[get post].include?(form_verb.to_sym) ? form_verb : :post, action: url }.merge(attributes) }
-  = Rack::Csrf.csrf_tag(env) unless ENV['APP_ENV'] == 'test'
+  = Rack::Csrf.csrf_tag(env) unless form_verb.to_sym == :get || ENV['APP_ENV'] == 'test'
   - if form_verb.to_sym == :get && layout
     %input{ name: 'layout', value: layout, type: 'hidden' }
   - if %i[get post].include?(form_verb.to_sym) == false

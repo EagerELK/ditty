@@ -4,11 +4,11 @@
     %table.table.table-striped.table-bordered.table-hover
       %thead.thead-dark
         %tr
-          %th Email
-          %th Name
-          %th Surname
+          %th= "Email&nbsp;#{sort_ui(:email)}"
+          %th= "Name&nbsp;#{sort_ui(:name)}"
+          %th= "Surname&nbsp;#{sort_ui(:surname)}"
           %th Roles
-          %th Signed Up
+          %th= "Signed&nbsp;Up&nbsp;#{sort_ui(:created_at)}"
           %th
       %tbody
         - if list.count > 0
