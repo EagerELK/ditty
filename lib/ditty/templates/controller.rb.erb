@@ -14,7 +14,7 @@ module <%= namespace %>
     # Add field filter definitions here
     FILTERS = [
       <%- many_to_ones.each do |key| -%>
-      { name: :<%= key[:table].to_s.singularize %>, field: :<%= key[:key] || 'id' %> },
+      { name: :<%= key[:table].to_s.singularize %>, field: :<%= key[:columns].first || 'id' %> },
       <%- end -%>
     ].freeze
 
@@ -44,6 +44,12 @@ module <%= namespace %>
     end
     <%- end -%>
     <%- if many_to_ones.count.positive? -%>
+
+    before '/' do
+      <%- many_to_ones.each do |key| -%>
+      param(:<%= key[:table].to_s.singularize %>, Integer) unless params[:<%= key[:table].to_s.singularize %>].blank?
+      <%- end -%>
+    end
 
     before '*', provides: 'html' do
       <%- many_to_ones.each do |key| -%>
