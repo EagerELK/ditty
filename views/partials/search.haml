@@ -19,5 +19,7 @@
             .row
               - FILTERS.each do |filter|
                 = filter_control(filter, filters: FILTERS.count)
-              - unless self.class.const_defined?(:SEARCHABLE)
-                %button.btn.btn-secondary{ type: 'submit'} Go
+              - unless self.class.const_defined?(:SEARCHABLE) && SEARCHABLE.count.positive?
+                .form-group
+                  %label
+                  %button.form-control.btn.btn-secondary{ type: 'submit'} Go
