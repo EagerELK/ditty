@@ -24,10 +24,10 @@
               %button.page-link.dropdown-toggle{ type: 'button', id: 'dropdownMenuButton', 'data-toggle':  'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' }
                 = params[:count] || 10
               .dropdown-menu
-                %a.dropdown-item{ href: "#{base_path}?#{URI.encode_www_form(and_params.merge(count: 10))}" } 10
-                %a.dropdown-item{ href: "#{base_path}?#{URI.encode_www_form(and_params.merge(count: 25))}" } 25
-                %a.dropdown-item{ href: "#{base_path}?#{URI.encode_www_form(and_params.merge(count: 50))}" } 50
-                %a.dropdown-item{ href: "#{base_path}?#{URI.encode_www_form(and_params.merge(count: 100))}" } 100
+                %a.dropdown-item{ href: "#{base_path}?#{query_string(count: 10)}" } 10
+                %a.dropdown-item{ href: "#{base_path}?#{query_string(count: 25)}" } 25
+                %a.dropdown-item{ href: "#{base_path}?#{query_string(count: 50)}" } 50
+                %a.dropdown-item{ href: "#{base_path}?#{query_string(count: 100)}" } 100
           - if list.last_page?
             %li.page-item.disabled
               %span.page-link Next
