@@ -68,7 +68,7 @@ module Ditty
       def query_string(add = {})
         qs = params.clone.merge(add)
         qs.delete('captures')
-        Rack::Utils.build_query qs
+        Rack::Utils.build_query qs.delete_if { |_k, v| v == '' }
       end
 
       def delete_form(entity, label = 'Delete')
