@@ -55,7 +55,7 @@ module Ditty
         user.check_roles
       end
 
-      broadcast(:component_create, target: self, entity: entity)
+      broadcast(:component_create, target: self, entity: user)
       create_response(user)
     end
 
