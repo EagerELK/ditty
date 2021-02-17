@@ -62,13 +62,13 @@ module Ditty
         messages = flash(key).collect do |message|
           "  <div class='alert alert-#{message[0]} alert-dismissable' role='alert'>#{message[1]}</div>\n"
         end
-        "<div id='#{id}'>\n" + messages.join + '</div>'
+        "<div id='#{id}'>\n#{messages.join}</div>"
       end
 
       def query_string(add = {})
         qs = params.clone.merge(add)
         qs.delete('captures')
-        Rack::Utils.build_query qs.delete_if { |_k, v| v == '' }
+        Rack::Utils.build_query(qs.delete_if { |_k, v| v == '' })
       end
 
       def delete_form(entity, label = 'Delete')
