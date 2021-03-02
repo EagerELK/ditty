@@ -60,4 +60,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'tilt', '>= 2'
   spec.add_dependency 'will_paginate', '>= 3.1'
   spec.add_dependency 'wisper', '~> 2.0'
+  spec.add_dependency 'zeitwerk'
 end

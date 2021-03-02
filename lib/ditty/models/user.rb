@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'sequel'
 require 'ditty/models/base'
 require 'digest/md5'
 require 'active_support'

@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require 'ditty/controllers/application_controller'
-require 'ditty/services/settings'
-require 'ditty/services/logger'
-
 require 'omniauth'
 OmniAuth.config.logger = ::Ditty::Services::Logger
 OmniAuth.config.path_prefix = "#{::Ditty::ApplicationController.map_path}/auth"
@@ -55,8 +51,6 @@ module Ditty
         end
 
         def default
-          require 'ditty/models/identity'
-          require 'ditty/controllers/auth_controller'
           {
             identity: {
               available: true,

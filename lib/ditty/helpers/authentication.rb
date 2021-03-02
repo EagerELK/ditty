@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'ditty/models/user'
-
 module Ditty
   module Helpers
     module Authentication
@@ -39,7 +37,9 @@ module Ditty
 
       def logout
         env['rack.session']&.delete('user_id')
+        env['rack.session']&.delete('session_id')
         env.delete('omniauth.auth')
+        session.clear
       end
     end
 

@@ -2,19 +2,19 @@
 
 require 'browser/browser'
 require 'wisper'
+require 'sequel'
 require 'oga'
 require 'sinatra/base'
 require 'sinatra/flash'
 require 'sinatra/param'
 require 'sinatra/respond_with'
-require 'ditty/helpers/views'
-require 'ditty/helpers/pundit'
-require 'ditty/helpers/authentication'
-require 'ditty/services/logger'
 require 'active_support'
 require 'active_support/inflector'
 require 'rack/contrib'
 require 'rack/csrf'
+require 'ditty/helpers/views'
+require 'ditty/helpers/pundit'
+require 'ditty/helpers/authentication'
 
 module Ditty
   class ApplicationController < Sinatra::Base
@@ -31,7 +31,7 @@ module Ditty
 
     # The order here is important, since Wisper has a deprecated method respond_with method
     helpers Wisper::Publisher
-    helpers Helpers::Pundit, Helpers::Views, Helpers::Authentication
+    helpers ::Ditty::Helpers::Pundit, ::Ditty::Helpers::Views, ::Ditty::Helpers::Authentication
     helpers Sinatra::Param
 
     register Sinatra::Flash, Sinatra::RespondWith

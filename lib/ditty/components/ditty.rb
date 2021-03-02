@@ -1,24 +1,12 @@
 # frozen_string_literal: true
 
 require 'ditty'
-require 'ditty/services/settings'
 
 module Ditty
   class Ditty
     def self.load
       controllers = File.expand_path('../controllers', __dir__)
       Dir.glob("#{controllers}/*.rb").sort.each { |f| require f }
-
-      require 'ditty/models/user'
-      require 'ditty/models/role'
-      require 'ditty/models/identity'
-      require 'ditty/models/audit_log'
-      require 'ditty/models/user_login_trait'
-    end
-
-    def self.configure(_container)
-      require 'ditty/db' unless defined? ::DB
-      require 'ditty/listener'
     end
 
     def self.migrations

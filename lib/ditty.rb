@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
-require 'ditty/version'
-require 'ditty/services/logger'
+require 'zeitwerk'
+loader = Zeitwerk::Loader.for_gem
+loader.collapse "#{__dir__}/ditty/controllers"
+loader.collapse "#{__dir__}/ditty/components"
+loader.inflector.inflect(
+  'db' => 'DB',
+)
 
 module Ditty
   class ComponentError < StandardError; end
