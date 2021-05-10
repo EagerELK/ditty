@@ -71,7 +71,7 @@ module Ditty
           template = File.expand_path("./views/#{file}.haml")
           return template if File.file? template
 
-          template = File.expand_path("./#{file}.haml", App.view_folder)
+          template = File.expand_path("./#{file}.haml", ::Ditty::Ditty.view_folder)
           return template if File.file? template
 
           file
