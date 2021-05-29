@@ -31,6 +31,7 @@ module Ditty
     require './application' if File.exist?('application.rb')
     require 'ditty/db' unless defined?(DB)
     ::Ditty::Components.tasks
+
     def server
       # Ensure the token files are present
       Rake::Task['ditty:generate_tokens'].invoke
@@ -47,8 +48,14 @@ module Ditty
       Rake::Task['ditty:seed'].invoke
 
       # RackUP!
+      rack_opts = {
+        environment: ENV['APP_ENV'] || 'development',
+        Port: ENV['APP_PORT'] || 9292,
+        Host: ENV['APP_HOST'] || '0.0.0.0',
+        config: "config.ru"
+      }
       puts 'Starting the Ditty Server'
-      Rack::Server.start(config: 'config.ru')
+      Rack::Server.start(rack_opts)
     end
 
     desc 'migrate', 'Run the Ditty migrations'
