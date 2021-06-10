@@ -21,8 +21,8 @@
         - users = user_options.select { |k, v| entity.users.map(&:id).include?(k) == false }
         - if users && users.count.positive?
           = new_form_tag "#{base_path}/#{entity.display_id}/users" do
-            .input-group
-              %select.form-control{ name: "#{group}[user_id]", id: 'user_id' }
+            .input-group.tall-select2
+              %select.form-control.select2{ name: "#{group}[user_id]", id: 'user_id' }
                 %option{ value: '' } Select User
                 - users.each do |key, value|
                   %option{ value: key }= value

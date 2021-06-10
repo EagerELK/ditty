@@ -37,6 +37,10 @@ module Ditty
       }
     end
 
+    def uid
+      user&.id
+    end
+
     # Validation
     def validate
       super
