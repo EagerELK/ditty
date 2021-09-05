@@ -7,6 +7,8 @@ require 'sinatra/json'
 
 module Ditty
   class ComponentController < ApplicationController
+    use Rack::Csrf, raise: ENV['APP_ENV'] == 'development' unless ENV['APP_ENV'] == 'test'
+
     helpers Helpers::Component, Helpers::Response
 
     set base_path: nil
