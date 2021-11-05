@@ -45,11 +45,14 @@
 
       #content-wrapper.d-flex.flex-column
         #content
-          = haml :'partials/topbar'
+          = haml :'partials/topbar', locals: { title: (defined?(title) ? title : nil) }
           .container-fluid
-            / TODO
-            / .row
-            /   .col-md-12
+            - if (defined?(hide_title).nil? || hide_title == false) && defined?(title)
+              .row.mb-2
+                .col-md-9.my-auto
+                  %h1.text-dark= title
+                .col.md-3.text-right.my-auto
+                  = haml :'partials/actions', locals: { actions: defined?(actions) ? actions : {} }
             = haml :'partials/notifications'
 
             = yield

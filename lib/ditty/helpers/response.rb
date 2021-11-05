@@ -6,10 +6,9 @@ module Ditty
   module Helpers
     module Response
       def list_response(result, view: 'index')
+        actions = actions(action: :list)
         respond_to do |format|
           format.html do
-            actions = {}
-            actions["#{base_path}/new"] = "New #{heading}" if policy(settings.model_class).create?
             haml :"#{view_location}/#{view}",
                  locals: { list: result, title: heading(:list), actions: actions },
                  layout: layout
@@ -49,15 +48,16 @@ module Ditty
         end
       end
 
-      def actions(entity = nil)
+      def actions(entity: nil, action: nil)
         actions = {}
-        actions["#{base_path}/#{entity.display_id}/edit"] = "Edit #{heading}" if entity && policy(entity).update?
-        actions["#{base_path}/new"] = "New #{heading}" if policy(settings.model_class).create?
+        actions["#{base_path}/#{entity.display_id}/edit"] = "Edit #{heading}" if entity && policy(entity).update? && action != :edit
+        actions[base_path] = "List #{heading(:list)}" if policy(entity || settings.model_class).list? && action != :list
+        actions["#{base_path}/new"] = "New #{heading}" if policy(entity || settings.model_class).create? && action != :new
         actions
       end
 
       def read_response(entity)
-        actions = actions(entity)
+        actions = actions(entity: entity, action: :read)
         respond_to do |format|
           format.html do
             title = heading(:read) + (entity.respond_to?(:name) ? ": #{entity.name}" : '')

@@ -15,10 +15,10 @@ module Ditty
     set track_actions: true
 
     # New
-    get '/new' do
+    get '/new/?' do
       authorize settings.model_class, :create
 
-      locals = { title: heading(:new), entity: User.new, identity: Identity.new }
+      locals = { title: heading(:new), entity: User.new, identity: Identity.new, actions: actions(action: :new) }
       haml :"#{view_location}/new", locals: locals
     end
 
@@ -60,7 +60,7 @@ module Ditty
     end
 
     # Update
-    put '/:id' do |id|
+    put '/:id/?' do |id|
       entity = dataset.first(settings.model_class.primary_key => id)
       halt 404 unless entity
       authorize entity, :update
@@ -80,7 +80,7 @@ module Ditty
       update_response(entity)
     end
 
-    put '/:id/identity' do |id|
+    put '/:id/identity/?' do |id|
       entity = dataset.first(settings.model_class.primary_key => id)
       halt 404 unless entity
       authorize entity, :update
@@ -111,7 +111,7 @@ module Ditty
     end
 
     # Delete
-    delete '/:id', provides: %i[html json] do |id|
+    delete '/:id/?', provides: %i[html json] do |id|
       entity = dataset.first(settings.model_class.primary_key => id)
       halt 404 unless entity
       authorize entity, :delete
@@ -125,13 +125,13 @@ module Ditty
     end
 
     # Profile
-    get '/profile' do
+    get '/profile/?' do
       entity = current_user
       halt 404 unless entity
       authorize entity, :read
 
       flash[:redirect_to] = request.path
-      haml :"#{view_location}/profile", locals: { entity: entity, identity: entity.identity.first, title: 'My Account' }
+      haml :"#{view_location}/profile", locals: { entity: entity, identity: entity.identity.first, title: 'My Account', actions: actions(entity: entity, action: :read) }
     end
   end
 end

@@ -67,7 +67,7 @@ module Ditty
 
       entity = settings.model_class.new(permitted_parameters(settings.model_class, :create))
       haml :"#{view_location}/new",
-           locals: { entity: entity, title: heading(:new) },
+           locals: { entity: entity, title: heading(:new), actions: actions(action: :new) },
            layout: layout
     end
 
@@ -100,7 +100,7 @@ module Ditty
 
       flash[:redirect_to] = "#{base_path}/#{entity.display_id}" unless flash.keep(:redirect_to)
       haml :"#{view_location}/edit",
-           locals: { entity: entity, title: heading(:edit) },
+           locals: { entity: entity, title: heading(:edit), actions: actions(entity: entity, action: :edit) },
            layout: layout
     end
 
