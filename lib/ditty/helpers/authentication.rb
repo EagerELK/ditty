@@ -9,6 +9,11 @@ module Ditty
         return nil if current_user_id.nil?
 
         @current_user ||= User[current_user_id]
+      rescue Sequel::DatabaseError => e
+        Services::Logger.warn "Could not fetch current user: #{e.message}"
+        Services::Logger.debug e
+        Sentry.capture_exception(e)
+        nil
       end
 
       def current_user=(user)
