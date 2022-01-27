@@ -1,27 +1,29 @@
 .row
   .col-md-12
     = haml :'partials/search'
-    %table.table.table-striped.table-bordered.table-hover
-      %thead.thead-dark
-        %tr
-          %th= "Name#{sort_ui(:name)}"
-          %th Parent
-          %th
-      %tbody
-        - if list.count > 0
-          - list.all.each do |entity|
-            %tr
-              %td
-                %a{ href: "#{base_path}/#{entity.display_id}" }= entity.name
-              %td
-                %a{ href: "#{base_path}/#{entity.parent_id}" }= entity.parent&.name || '(None)'
-              %td
-                - if policy(entity).update?
-                  %a{ href: "#{base_path}/#{entity.display_id}/edit", title: 'Edit' }
-                    %i.fa.fa-edit
-        - else
+    .card.card-default.shadow.table-responsive
+      %table.table.table-striped.table-bordered.table-hover.mb-0
+        %thead.thead-dark
           %tr
-            %td.text-center{ colspan: 3 } No Roles
+            %th= "Name#{sort_ui(:name)}"
+            %th Parent
+            %th
+        %tbody
+          - if list.count > 0
+            - list.all.each do |entity|
+              %tr
+                %td
+                  %a{ href: "#{base_path}/#{entity.display_id}" }= entity.name
+                %td
+                  %a{ href: "#{base_path}/#{entity.parent_id}" }= entity.parent&.name || '(None)'
+                %td
+                  - if policy(entity).update?
+                    %a{ href: "#{base_path}/#{entity.display_id}/edit", title: 'Edit' }
+                      %i.fa.fa-edit
+          - else
+            %tr
+              %td.text-center{ colspan: 3 } No Roles
 
-- if list.count > 0
-  = pagination(list, base_path)
+      - if list.count > 0
+        .card-body
+          = pagination(list, base_path)

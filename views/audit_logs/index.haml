@@ -1,36 +1,38 @@
 .row
   .col-md-12
     = haml :'partials/search'
-    %table.table.table-striped.table-bordered.table-hover
-      %thead.thead-dark
-        %tr
-          %th= "User&nbsp;#{sort_ui(:user)}"
-          %th= "Action&nbsp;#{sort_ui(:action)}"
-          %th= "Details&nbsp;#{sort_ui(:details)}"
-          %th= "IP Address&nbsp;#{sort_ui(:ip_address)}"
-          %th= "Browser&nbsp;#{sort_ui(:browser)}"
-          %th= "Device&nbsp;#{sort_ui(:device)}"
-          %th= "Platform&nbsp;#{sort_ui(:platform)}"
-          %th= "Created&nbsp;At&nbsp;#{sort_ui(:created_at)}"
-      %tbody
-        - if list.count > 0
-          - list.all.each do |entity|
-            %tr
-              %td
-                -if entity.user
-                  %a{ href: "#{settings.map_path}/users/#{entity.user.id}" }= entity.user.email
-                -else
-                  None
-              %td= entity.action
-              %td= entity.details
-              %td= entity.ip_address || 'Unknown'
-              %td= entity.browser || 'Unknown'
-              %td= entity.device || 'Unknown'
-              %td= entity.platform || 'Unknown'
-              %td= entity.created_at&.strftime('%Y-%m-%d %H:%M:%S') || 'Unknown'
-        - else
+    .card.card-default.shadow.table-responsive
+      %table.table.table-striped.table-bordered.table-hover.mb-0
+        %thead.thead-dark
           %tr
-            %td.text-center{ colspan: 4 } No records
+            %th= "User&nbsp;#{sort_ui(:user)}"
+            %th= "Action&nbsp;#{sort_ui(:action)}"
+            %th= "Details&nbsp;#{sort_ui(:details)}"
+            %th= "IP Address&nbsp;#{sort_ui(:ip_address)}"
+            %th= "Browser&nbsp;#{sort_ui(:browser)}"
+            %th= "Device&nbsp;#{sort_ui(:device)}"
+            %th= "Platform&nbsp;#{sort_ui(:platform)}"
+            %th= "Created&nbsp;At&nbsp;#{sort_ui(:created_at)}"
+        %tbody
+          - if list.count > 0
+            - list.all.each do |entity|
+              %tr
+                %td
+                  -if entity.user
+                    %a{ href: "#{settings.map_path}/users/#{entity.user.id}" }= entity.user.email
+                  -else
+                    None
+                %td= entity.action
+                %td= entity.details
+                %td= entity.ip_address || 'Unknown'
+                %td= entity.browser || 'Unknown'
+                %td= entity.device || 'Unknown'
+                %td= entity.platform || 'Unknown'
+                %td= entity.created_at&.strftime('%Y-%m-%d %H:%M:%S') || 'Unknown'
+          - else
+            %tr
+              %td.text-center{ colspan: 4 } No records
 
-- if list.count > 0
-  = pagination(list, base_path)
+      - if list.count > 0
+        .card-body
+          = pagination(list, base_path)

@@ -1,28 +1,31 @@
 .row
   .col-md-12
     = haml :'partials/search'
-    %table.table.table-striped.table-bordered.table-hover
-      %thead.thead-dark
-        %tr
-          %th= "User&nbsp;#{sort_ui(:user_id)}"
-          %th= "IP Address&nbsp;#{sort_ui(:ip_address)}"
-          %th= "Device&nbsp;#{sort_ui(:device)}"
-          %th= "Platform&nbsp;#{sort_ui(:platform)}"
-          %th= "Browser&nbsp;#{sort_ui(:browser)}"
-          %th= "Last Seen&nbsp;#{sort_ui(:updated_at)}"
-      %tbody
-        - if list.count.positive?
-          - list.all.each do |entity|
-            %tr
-              %td= entity.user&.email || 'Unknown'
-              %td
-                %a{ href: "#{base_path}/#{entity.display_id}" }= entity.ip_address || 'Unknown'
-              %td= entity.device || 'Unknown'
-              %td= entity.platform || 'Unknown'
-              %td= entity.browser || 'Unknown'
-              %td= entity.updated_at
-        - else
+    .card.card-default.shadow.table-responsive
+      %table.table.table-striped.table-bordered.table-hover.mb-0
+        %thead.thead-dark
           %tr
-            %td.text-center{ colspan: 6 } No records
+            %th= "User&nbsp;#{sort_ui(:user_id)}"
+            %th= "IP Address&nbsp;#{sort_ui(:ip_address)}"
+            %th= "Device&nbsp;#{sort_ui(:device)}"
+            %th= "Platform&nbsp;#{sort_ui(:platform)}"
+            %th= "Browser&nbsp;#{sort_ui(:browser)}"
+            %th= "Last Seen&nbsp;#{sort_ui(:updated_at)}"
+        %tbody
+          - if list.count.positive?
+            - list.all.each do |entity|
+              %tr
+                %td= entity.user&.email || 'Unknown'
+                %td
+                  %a{ href: "#{base_path}/#{entity.display_id}" }= entity.ip_address || 'Unknown'
+                %td= entity.device || 'Unknown'
+                %td= entity.platform || 'Unknown'
+                %td= entity.browser || 'Unknown'
+                %td= entity.updated_at
+          - else
+            %tr
+              %td.text-center{ colspan: 6 } No records
 
-=pagination(list, base_path)
+      - if list.count > 0
+        .card-body
+          = pagination(list, base_path)
