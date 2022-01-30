@@ -1,29 +1,31 @@
 .row
   .col-md-12
     = haml :'partials/search'
-    %table.table.table-striped.table-bordered.table-hover
-      %thead.thead-dark
-        %tr
-          <%- columns.each do |col| -%>
-          %th <%= col.to_s.titleize %>
-          <%- end %>
-          %th
-      %tbody
-        - if list.count > 0
-          - list.all.each do |entity|
-            %tr
-              <%- columns.each do |col| -%>
-              %td= entity.<%= col %>
-              <%- end %>
-              %td
-                %a{ href: "#{base_path}/#{entity.display_id}", title: 'Show' }
-                  %i.fa.fa-search
-                - if policy(entity).update?
-                  %a{ href: "#{base_path}/#{entity.display_id}/edit", title: 'Edit' }
-                    %i.fa.fa-edit
-        - else
+    .card.card-default.shadow.table-responsive
+      %table.table.table-striped.table-bordered.table-hover.mb-0
+        %thead.thead-dark
           %tr
-            %td.text-center{ colspan: <%= columns.count + 1 %> } No <%= model_name.pluralize %>
+            <%- columns.each do |col| -%>
+            %th <%= col.to_s.titleize %>
+            <%- end %>
+            %th
+        %tbody
+          - if list.count > 0
+            - list.all.each do |entity|
+              %tr
+                <%- columns.each do |col| -%>
+                %td= entity.<%= col %>
+                <%- end %>
+                %td
+                  %a{ href: "#{base_path}/#{entity.display_id}", title: 'Show' }
+                    %i.fa.fa-search
+                  - if policy(entity).update?
+                    %a{ href: "#{base_path}/#{entity.display_id}/edit", title: 'Edit' }
+                      %i.fa.fa-edit
+          - else
+            %tr
+              %td.text-center{ colspan: <%= columns.count + 1 %> } No <%= model_name.pluralize %>
 
-- if list.count > 0
-  = pagination(list, base_path)
+    - if list.count > 0
+      .card-body
+        = pagination(list, base_path)
