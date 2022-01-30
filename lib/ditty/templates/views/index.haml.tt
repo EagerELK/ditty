@@ -26,6 +26,6 @@
             %tr
               %td.text-center{ colspan: <%= columns.count + 1 %> } No <%= model_name.pluralize %>
 
-    - if list.count > 0
-      .card-body
-        = pagination(list, base_path)
+      - if list.count > 0
+        .card-body
+          = pagination(list, base_path)
