@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'ditty/services/pagination_wrapper'
+require 'digest/sha2'
 
 module Ditty
   module Helpers
@@ -155,6 +156,14 @@ module Ditty
         return 'fa-sort-up' if params[:order] == 'asc'
 
         'fa-sort-down'
+      end
+
+      def static_headers(view)
+        view_path = "views/#{view}.haml"
+        return unless File.exist?(view_path)
+
+        last_modified File.mtime(view_path)
+        etag Digest::SHA2.hexdigest(File.read(view_path))
       end
     end
   end
