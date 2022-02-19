@@ -75,7 +75,7 @@ module Ditty
         else
           return (0..0) if list.current_page > page_count
 
-          a = 1 + (list.current_page - 1) * page_size
+          a = 1 + ((list.current_page - 1) * page_size)
           b = a + page_size - 1
           b = pagination_record_count if b > pagination_record_count
           a..b
