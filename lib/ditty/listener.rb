@@ -70,11 +70,14 @@ module Ditty
     end
 
     def log_action(values)
-      values[:user] ||= values[:target].current_user if values[:target]
+      require 'ditty/models/audit_log'
+
+      values[:user] ||= values[:target].current_user if values[:target] && values[:target].respond_to?(:current_user)
       @mutex.synchronize { ::Ditty::AuditLog.create values }
     end
 
     def user_traits(target)
+      return {} unless target.respond_to?(:current_user) && target.respond_to?(:browser)
       {
         user_id: target.current_user&.id,
         platform: target.browser.platform.name,

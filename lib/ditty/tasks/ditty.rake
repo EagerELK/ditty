@@ -34,6 +34,26 @@ namespace :ditty do
   end
 
   namespace :prep do
+    desc 'Create a user'
+    task :user, [:email, :password] do |_t, args|
+      require 'ditty/listener'
+
+      identity = Ditty::Identity.new(username: args[:email], password: args[:password])
+      identity.password_confirmation = identity.password
+      user = Ditty::User.new(email: identity.username)
+      begin
+        identity.valid?
+        DB.transaction do
+          user.save_changes
+          user.add_identity identity
+          Ditty::Listener.new.user_register(target: self, values: { user: user })
+        end
+      rescue StandardError => e
+        Ditty::Services::Logger.error "Could not regster super user: #{e.message}"
+        Ditty::Services::Logger.debug e
+      end
+    end
+
     desc 'Check that the required Ditty folders are present'
     task :folders do
       puts 'Prepare the Ditty folders'

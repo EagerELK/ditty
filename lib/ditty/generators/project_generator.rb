@@ -41,9 +41,9 @@ module Ditty
         copy_file 'sidekiq.rb', './config/sidekiq.rb'
         copy_file 'sidekiq.yml', './config/sidekiq.yml'
 
-        copy_file 'spec_helper.rb', './specs/spec_helper.rb'
-        copy_file '../../../spec/support/api_shared_examples.rb', './specs/support/api_shared_examples.rb'
-        copy_file '../../../spec/support/crud_shared_examples.rb', './specs/support/crud_shared_examples.rb'
+        copy_file 'spec_helper.rb', './spec/spec_helper.rb'
+        copy_file '../../../spec/support/api_shared_examples.rb', './spec/support/api_shared_examples.rb'
+        copy_file '../../../spec/support/crud_shared_examples.rb', './spec/support/crud_shared_examples.rb'
 
         template 'settings.yml.erb', './config/settings.yml'
       end
