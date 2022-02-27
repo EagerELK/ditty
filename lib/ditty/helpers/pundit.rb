@@ -5,7 +5,7 @@ require 'pundit'
 module Ditty
   module Helpers
     module Pundit
-      include ::Pundit
+      include ::Pundit::Authorization
 
       def authorize(record, query)
         query = :"#{query}?" unless query[-1] == '?'
@@ -24,7 +24,7 @@ module Ditty
       end
 
       def permitted_parameters(record, action = nil)
-        param_key = PolicyFinder.new(record).param_key
+        param_key = ::Pundit::PolicyFinder.new(record).param_key
         policy_fields = permitted_attributes(record, action)
         request.params.fetch(param_key, {}).select do |key, _value|
           policy_fields.include? key.to_sym

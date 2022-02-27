@@ -10,9 +10,8 @@ module Ditty
 
         @current_user ||= User[current_user_id]
       rescue Sequel::DatabaseError => e
-        Services::Logger.warn "Could not fetch current user: #{e.message}"
+        Services::Logger.warn "Could not fetch current user: #{e.message} / #{current_user_id}"
         Services::Logger.debug e
-        Sentry.capture_exception(e)
         nil
       end
 

@@ -4,6 +4,7 @@ require 'ditty/models/base'
 require 'digest/md5'
 require 'active_support'
 require 'active_support/core_ext/object/blank'
+require 'ditty/models/role'
 
 # Why not store this in Elasticsearch?
 module Ditty

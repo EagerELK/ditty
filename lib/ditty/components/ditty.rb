@@ -66,8 +66,9 @@ module Ditty
         load
 
         sa = ::Ditty::Role.find_or_create(name: 'super_admin')
-        admin = ::Ditty::Role.find_or_create(name: 'admin') { |e| e.parent = sa }
-        ::Ditty::Role.find_or_create(name: 'user') { |e| e.parent = admin }
+        admin = ::Ditty::Role.find_or_create(name: 'admin') { |rec| rec.parent = sa }
+        ::Ditty::Role.find_or_create(name: 'user') { |rec| rec.parent = admin }
+        ::Ditty::Role.find_or_create(name: 'anonymous')
       end
     end
 
