@@ -8,7 +8,7 @@ require 'active_support/core_ext/object/blank'
 pool_timeout = (ENV['DB_POOL_TIMEOUT'] || 5).to_i
 
 if defined? DB
-  ::Ditty::Services::Logger.warn 'Database connection already set up'
+  ::Ditty::Services::Logger.warn '** Database connection already set up **'
 elsif ENV['DATABASE_URL'].blank? == false
   # Delete DATABASE_URL from the environment, so it isn't accidently
   # passed to subprocesses.  DATABASE_URL may contain passwords.
@@ -29,5 +29,5 @@ elsif ENV['DATABASE_URL'].blank? == false
   Sequel::Model.plugin :update_or_create
   Sequel::Model.plugin :validation_helpers
 else
-  ::Ditty::Services::Logger.error 'No database connection set up'
+  ::Ditty::Services::Logger.error '*** NO DATABASE CONNECTION SET UP ***'
 end
