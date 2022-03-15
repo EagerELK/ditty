@@ -12,7 +12,7 @@
               Password
               %a{ href: "#{settings.map_path}/auth/identity/forgot", style: 'float: right', tabindex: '5' }
                 Forgot?
-            %input.form-control.border-input{ name: 'password', type: 'password', tabindex: '2' }
+            %input.form-control.border-input{ name: 'password', type: 'password', tabindex: '2', autocomplete: 'off' }
           %button.btn.btn-primary{ type: 'submit', tabindex: '3' } Log In
           - if policy(::Ditty::Identity).register?
             .pull-right
