@@ -7,15 +7,14 @@
           = form_control(:username, identity, label: 'Email', placeholder: 'your@email.com')
           = form_control(:password, identity, label: 'Password', type: :password, autocomplete: 'off')
           = form_control(:password_confirmation, identity, label: 'Confirm Password', type: :password, autocomplete: 'off')
-
-          - if identity.errors[:password] && identity.errors[:password].include?('is not strong enough')
+          - if identity.errors[:password]
             .alert.alert-warning
-              %p Make sure your password is at least 8 characters long, and including the following
+              %p Your password is not strong enough
               %ul
-                %li Upper- and lowercase letters
-                %li Numbers
-                %li Special Characters
-
+                - identity.errors[:password].each do |error|
+                  %li
+                    Your password
+                    = error
           - if policy(::Ditty::Identity).register?
             %button.btn.btn-primary{ type: 'submit' } Register
         .row

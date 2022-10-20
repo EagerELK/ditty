@@ -58,13 +58,22 @@ module Ditty
           # 1 Special Character
           # 1 Number
           # At least 8 characters
-          %r[\A(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#&$*)(}{%^=_+|\\:";'<>,.\-\/?\[\]])(?=.*[0-9]).{8,}\Z],
+          %r[\A(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#&$*)(}{%^=_+|\\:";'<>,.\-\/?\[\]])(?=.*[0-9]).+\Z],
           :password,
-          message: 'is not strong enough'
+          message: 'must contain at least one number, one uppercase, one lowercase and one special character'
+        )
+        validates_min_length(
+          min_password_length,
+          :password,
+          message: "must be at least #{min_password_length} characters",
         )
       end
 
       errors.add(:password_confirmation, 'must match password') if !password.blank? && password != password_confirmation
+    end
+
+    def min_password_length
+      Ditty::Services::Authentication.config.dig(:identity, :min_password_length) || 8
     end
 
     # Callbacks

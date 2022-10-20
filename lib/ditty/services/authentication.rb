@@ -26,7 +26,7 @@ module Ditty
         end
 
         def config
-          default.merge Ditty::Services::Settings.values(:authentication) || {}
+          default.deep_merge Ditty::Services::Settings.values(:authentication) || {}
         end
 
         def provides?(provider)

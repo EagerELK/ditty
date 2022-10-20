@@ -32,7 +32,7 @@
                 %button.btn.btn-warning{ type: 'submit' } Delete
   .col-md-2
 
-- if entity.identity.first
+- if identity
   .row
     .col-md-2
     .col-md-8
@@ -42,8 +42,16 @@
         .panel-body
           %form.form-horizontal{ method: 'post', action: "#{base_path}/#{entity.id}/identity" }
             %input{ name: '_method', value: 'PUT', type: 'hidden' }
-            = form_control(:password, entity.identity.first, type: 'password', placeholder: 'Your password', group: 'identity')
-            = form_control(:password_confirmation, entity.identity.first, type: 'password', label: 'Confirm Password', placeholder: 'Confirm your password', group: 'identity')
+            = form_control(:password, identity, type: 'password', placeholder: 'Your password', group: 'identity')
+            = form_control(:password_confirmation, identity, type: 'password', label: 'Confirm Password', placeholder: 'Confirm your password', group: 'identity')
+            - if identity.errors[:password]
+              .alert.alert-warning
+                %p Your password is not strong enough
+                %ul
+                  - identity.errors[:password].each do |error|
+                    %li
+                      Your password
+                      = error
             %button.btn.btn-primary{ type: 'submit' }
               Change Password
     .col-md-2

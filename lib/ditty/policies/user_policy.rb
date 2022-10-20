@@ -5,7 +5,7 @@ require 'ditty/policies/application_policy'
 module Ditty
   class UserPolicy < ApplicationPolicy
     def create?
-      user && user.super_admin?
+      user && (user.user_admin? || user.super_admin?)
     end
 
     def list?
@@ -13,7 +13,7 @@ module Ditty
     end
 
     def read?
-      user && (record.id == user.id || user.super_admin?)
+      user && (record.id == user.id || user.user_admin? || user.super_admin?)
     end
 
     def update?
@@ -26,13 +26,13 @@ module Ditty
 
     def permitted_attributes
       attribs = %i[email name surname]
-      attribs << :role_id if user.super_admin?
+      attribs << :role_id if (user.user_admin? || user.super_admin?)
       attribs
     end
 
     class Scope < ApplicationPolicy::Scope
       def resolve
-        if user && user.super_admin?
+        if user && (user.user_admin? || user.super_admin?)
           scope
         elsif user
           scope.where(id: user.id)

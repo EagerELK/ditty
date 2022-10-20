@@ -43,6 +43,14 @@
           = form_control(:old_password, identity, type: 'password', placeholder: 'Your current password')
           = form_control(:password, identity, type: 'password', placeholder: 'Your new password')
           = form_control(:password_confirmation, identity, type: 'password', label: 'Confirm Password', placeholder: 'Confirm your password')
+          - if identity.errors[:password]
+            .alert.alert-warning
+              %p Your password is not strong enough
+              %ul
+                - identity.errors[:password].each do |error|
+                  %li
+                    Your password
+                    = error
           %button.btn.btn-primary{ type: 'submit' }
             Change Password
   .col-md-2
