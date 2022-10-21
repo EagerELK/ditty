@@ -1,6 +1,6 @@
 = form_control(:username, identity, label: 'Email', placeholder: 'Your email address')
-= form_control(:password, identity, type: 'password', placeholder: 'Your password')
-= form_control(:password_confirmation, identity, type: 'password', label: 'Confirm Password', placeholder: 'Confirm your password')
+= form_control(:password, identity, type: 'password', placeholder: 'Your password', autocomplete: 'off')
+= form_control(:password_confirmation, identity, type: 'password', label: 'Confirm Password', placeholder: 'Confirm your password', autocomplete: 'off')
 - if identity.errors[:password]
   .alert.alert-warning
     %p Your password is not strong enough
