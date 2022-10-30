@@ -41,6 +41,7 @@ module Ditty
       def filter_control(filter, opts = {})
         meth = "#{filter[:name]}_options".to_sym
         return unless respond_to? meth
+
         haml :'partials/filter_control', locals: {
           name: filter[:name],
           label: opts[:label] || filter[:name].to_s.titlecase,

@@ -157,7 +157,6 @@ module Ditty
     end
 
     before(/.*/) do
-      request.session['init'] = true
       ::Ditty::Services::Logger.instance.debug "Running with #{self.class} - #{request.path_info}"
       if request.path =~ /.*\.json\Z/
         content_type :json
