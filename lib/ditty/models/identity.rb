@@ -21,9 +21,9 @@ module Ditty
     end
 
     def authenticate(unencrypted)
-      return false if crypted_password.blank?
+      return false if crypted_password.blank? || ::BCrypt::Password.new(crypted_password) != unencrypted
 
-      self if ::BCrypt::Password.new(crypted_password) == unencrypted
+      self
     end
 
     def persisted?

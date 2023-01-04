@@ -37,7 +37,7 @@
       .card-body
         %h4.card-title Change Password
         = edit_form_tag("#{base_path}/#{entity.display_id}/identity") do
-          - if current_user.super_admin? == false
+          - if current_user.super_admin? == false || current_user_id == entity.id
             = form_control(:old_password, identity, type: 'password', placeholder: 'Your current password', value: '')
           = form_control(:password, identity, type: 'password', placeholder: 'Your new password')
           = form_control(:password_confirmation, identity, type: 'password', label: 'Confirm Password', placeholder: 'Confirm your password')

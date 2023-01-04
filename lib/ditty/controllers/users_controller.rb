@@ -88,10 +88,10 @@ module Ditty
       identity = entity.identity.first
       identity_params = params['identity']
 
-      unless current_user.super_admin? || identity.authenticate(identity_params['old_password'])
+      if (current_user.super_admin? == false || current_user_id == entity.id) && identity.authenticate(identity_params['old_password']) == false
         broadcast(:identity_update_password_failed, target: self)
         flash[:danger] = 'Old Password didn\'t match'
-        return redirect back
+        return redirect(with_layout(params[:redirect_to] || flash[:redirect_to] || back))
       end
 
       values = permitted_parameters(Identity, :update)
