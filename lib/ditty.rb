@@ -104,21 +104,21 @@ module Ditty
     end
 
     def self.migrations
-      components.map do |_name, comp|
+      components.filter_map do |_name, comp|
         comp.migrations if comp.respond_to?(:migrations)
-      end.compact
+      end
     end
 
     def self.public_folder
-      components.map do |_name, comp|
+      components.filter_map do |_name, comp|
         comp.public_folder if comp.respond_to?(:public_folder)
-      end.compact
+      end
     end
 
     def self.seeders
-      components.map do |_name, comp|
+      components.filter_map do |_name, comp|
         comp.seeder if comp.respond_to?(:seeder)
-      end.compact
+      end
     end
 
     def self.workers

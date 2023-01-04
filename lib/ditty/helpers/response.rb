@@ -50,9 +50,15 @@ module Ditty
 
       def actions(entity: nil, action: nil)
         actions = {}
-        actions["#{base_path}/#{entity.display_id}/edit"] = "Edit #{heading}" if entity && policy(entity).update? && action != :edit
+        if entity && policy(entity).update? && action != :edit
+          actions["#{base_path}/#{entity.display_id}/edit"] =
+            "Edit #{heading}"
+        end
         actions[base_path] = "List #{heading(:list)}" if policy(entity || settings.model_class).list? && action != :list
-        actions["#{base_path}/new"] = "New #{heading}" if policy(entity || settings.model_class).create? && action != :new
+        if policy(entity || settings.model_class).create? && action != :new
+          actions["#{base_path}/new"] =
+            "New #{heading}"
+        end
         actions
       end
 

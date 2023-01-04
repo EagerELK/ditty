@@ -41,7 +41,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'bcrypt', '>= 3.1'
   spec.add_dependency 'browser', '>= 5.3'
   spec.add_dependency 'dotenv', '>= 2'
-  spec.add_dependency 'haml', '~> 5.1', '>= 5.1.2'
+  spec.add_dependency 'haml', '~> 5.1', '>= 5.1.2' # Going to 6 creates a `undefined method capture_html` and breaks a lot of other stuff
   spec.add_dependency 'logger', '>= 1.0'
   spec.add_dependency 'mail', '>= 1.7'
   spec.add_dependency 'oga', '>= 2.14'

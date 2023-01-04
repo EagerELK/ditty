@@ -147,7 +147,7 @@ module Ditty
       def sort_query(field)
         query_string(
           order: params[:sort] == field.to_s && params[:order] == 'asc' ? 'desc' : 'asc',
-          sort: field,
+          sort: field
         )
       end
 
