@@ -52,7 +52,7 @@ module Ditty
         environment: ENV['APP_ENV'] || 'development',
         Port: ENV['APP_PORT'] || 9292,
         Host: ENV['APP_HOST'] || '0.0.0.0',
-        config: "config.ru"
+        config: 'config.ru'
       }
       puts 'Starting the Ditty Server'
       Rack::Server.start(rack_opts)

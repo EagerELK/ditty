@@ -55,7 +55,11 @@ module Ditty
         attr_writer :values
 
         def read(filename)
-          base = YAML.safe_load(ERB.new(File.read(filename)).result, [Symbol]).deep_symbolize_keys
+          base = if Gem::Version.new(Psych::VERSION) >= Gem::Version.new('3.1.0.pre1')
+            ::YAML.safe_load(ERB.new(File.read(filename)).result, permitted_classes: [Symbol])
+          else
+            ::YAML.safe_load(ERB.new(File.read(filename)).result, [Symbol])
+          end.deep_symbolize_keys
           base.deep_merge!(base[ENV['APP_ENV'].to_sym]) unless ENV['APP_ENV'].nil? || base[ENV['APP_ENV'].to_sym].nil?
           base
         end

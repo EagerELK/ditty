@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'fileutils'
+
 namespace :ditty do
   desc 'Run the ditty console'
   task :console do
@@ -57,14 +59,14 @@ namespace :ditty do
     desc 'Check that the required Ditty folders are present'
     task :folders do
       puts 'Prepare the Ditty folders'
-      Dir.mkdir 'pids' unless File.exist?('pids')
-      Dir.mkdir 'logs' unless File.exist?('logs')
+      FileUtils.mkdir_p 'pids'
+      FileUtils.mkdir_p 'logs'
     end
 
     desc 'Check that the public folder is present and populated'
     task :public do
       puts 'Preparing the Ditty public folder'
-      Dir.mkdir 'public' unless File.exist?('public')
+      FileUtils.mkdir_p 'public'
       ::Ditty::Components.public_folder.each do |path|
         puts "Checking #{path}"
         path = "#{path}/."
@@ -75,7 +77,7 @@ namespace :ditty do
     desc 'Check that the migrations folder is present and populated'
     task :migrations do
       puts 'Preparing the Ditty migrations folder'
-      Dir.mkdir 'migrations' unless File.exist?('migrations')
+      FileUtils.mkdir_p 'migrations'
       ::Ditty::Components.migrations.each do |path|
         path = "#{path}/."
         FileUtils.cp_r path, 'migrations' unless File.expand_path(path).eql? File.expand_path('migrations')
