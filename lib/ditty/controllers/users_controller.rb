@@ -131,9 +131,7 @@ module Ditty
       authorize entity, :read
 
       flash[:redirect_to] = request.path
-      haml :"#{view_location}/profile",
-           locals: { entity: entity, identity: entity.identity.first, title: 'My Account',
-                     actions: actions(entity: entity, action: :read) }
+      haml :"#{view_location}/profile", locals: { entity: entity, identity: entity.identity.first, title: 'My Account', actions: actions(entity: entity, action: :read) }
     end
   end
 end

@@ -81,13 +81,13 @@ module Ditty
       end
 
       def filters
-        filter_fields.filter_map do |filter|
+        filter_fields.map do |filter|
           next if params[filter[:name]].blank?
 
           filter[:field] ||= filter[:name]
           filter[:modifier] ||= :to_s # TODO: Do this with Sinatra Param?
           filter
-        end
+        end.compact
       end
 
       def ordering
