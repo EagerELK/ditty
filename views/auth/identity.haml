@@ -1,8 +1,8 @@
 = form_tag("#{settings.map_path}/auth/identity/callback", attributes: { class: 'user' }) do
   .form-group
-    %input.form-control.form-control-user{ name: 'username', type: 'email', 'aria-describedby': 'emailHelp', placeholder: 'Enter Email Address...' }
+    %input.form-control.form-control-user{ name: 'username', type: 'email', 'aria-describedby': 'emailHelp', placeholder: 'Enter Email Address...', required: true }
   .form-group
-    %input.form-control.form-control-user{ name: 'password', type: 'password', placeholder: 'Password' }
+    %input.form-control.form-control-user{ name: 'password', type: 'password', placeholder: 'Password', required: true }
   / .form-group
   /   .custom-control.custom-checkbox.small
   /     <input type="checkbox" class="custom-control-input" id="customCheck">

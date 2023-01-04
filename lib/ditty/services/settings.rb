@@ -55,7 +55,7 @@ module Ditty
         attr_writer :values
 
         def read(filename)
-          base = YAML.safe_load(ERB.new(File.read(filename)).result).deep_symbolize_keys
+          base = YAML.safe_load(ERB.new(File.read(filename)).result, [Symbol]).deep_symbolize_keys
           base.deep_merge!(base[ENV['APP_ENV'].to_sym]) unless ENV['APP_ENV'].nil? || base[ENV['APP_ENV'].to_sym].nil?
           base
         end

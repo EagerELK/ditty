@@ -69,7 +69,7 @@ module Ditty
     end
 
     # Callbacks
-    def before_save
+    def before_validation
       super
       encrypt_password unless password == '' || password.nil?
     end
@@ -81,7 +81,7 @@ module Ditty
       end
 
       def password_required
-        crypted_password.blank? || !password.blank?
+        crypted_password.blank? || password.present?
       end
   end
 end

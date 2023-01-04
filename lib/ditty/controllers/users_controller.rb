@@ -94,7 +94,7 @@ module Ditty
         return redirect back
       end
 
-      values = permitted_parameters(Identity, :create)
+      values = permitted_parameters(Identity, :update)
       identity.set values
       if identity.valid?
         identity.save_changes
