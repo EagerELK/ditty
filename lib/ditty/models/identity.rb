@@ -72,13 +72,13 @@ module Ditty
       end
 
       errors.add(:password_confirmation, 'must match password') if !password.blank? && password != password_confirmation
-      errors.add(:password, 'must not be a password you have used before') if validates_used_passwords
+      errors.add(:password, 'must not be a password you have used before') if !password.blank? && validate_used_passwords
 
     end
 
     def validate_used_passwords
-      used_passwords = password_histories.map { |ph| ph.crypted_password  }
-      used_passwords.include?(::BCrypt::Password.new(crypted_password) == password)
+      used_passwords = password_histories.map { |ph| BCrypt::Password.new(ph.crypted_password)}
+      used_passwords.include?(password)
     end
 
     def min_password_length
@@ -93,7 +93,8 @@ module Ditty
 
     def after_save
       super
-      PasswordHistory.create({ identity_id => self.id, crypted_password => self.crypted_password })
+
+      PasswordHistory.create({ identity_id: self.id, crypted_password: self.crypted_password }) if !password.blank?
     end
 
     private
