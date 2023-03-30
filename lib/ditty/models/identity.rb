@@ -2,6 +2,7 @@
 
 require 'bcrypt'
 require 'ditty/models/base'
+require 'ditty/models/password_history'
 require 'omniauth-identity'
 require 'active_support'
 require 'active_support/core_ext/object/blank'
@@ -10,6 +11,7 @@ module Ditty
   class Identity < ::Sequel::Model
     include ::Ditty::Base
     many_to_one :user
+    one_to_many :password_histories
 
     attr_accessor :password, :password_confirmation
 
@@ -70,6 +72,13 @@ module Ditty
       end
 
       errors.add(:password_confirmation, 'must match password') if !password.blank? && password != password_confirmation
+      errors.add(:password, 'must not be a password you have used before') if validates_used_passwords
+
+    end
+
+    def validate_used_passwords
+      used_passwords = password_histories.map { |ph| ph.crypted_password  }
+      used_passwords.include?(::BCrypt::Password.new(crypted_password) == password)
     end
 
     def min_password_length
@@ -80,6 +89,11 @@ module Ditty
     def before_save
       super
       encrypt_password unless password == '' || password.nil?
+    end
+
+    def after_save
+      super
+      PasswordHistory.create({ identity_id => self.id, crypted_password => self.crypted_password })
     end
 
     private

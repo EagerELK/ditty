@@ -78,8 +78,8 @@ module Ditty
       halt 404 unless identity && identity.reset_requested && identity.reset_requested > (Time.now - (24 * 60 * 60))
 
       identity_params = permitted_attributes(Identity, :update)
-
-      identity.set identity_params.merge(reset_token: nil, reset_requested: nil)
+      # Clear reset fields and set password expiry 30 in the future
+      identity.set identity_params.merge(reset_token: nil, reset_requested: nil, password_expiry_date: (Time.now + (30 * (24 * 60 * 60))))
       if identity.valid? && identity.save
         broadcast(:identity_update_password, target: self, details: "IP: #{request.ip}")
         flash[:success] = 'Password Updated'
@@ -141,6 +141,16 @@ module Ditty
       if env['omniauth.auth']
         # Successful Login
         user = User.find(email: env['omniauth.auth']['info']['email'])
+        #Check Identity for Password Expiry
+        identity = Identity.find(user_id: user[:id])
+        if identity[:password_expiry_date] && identity[:password_expiry_date] <= Time.now
+          flash[:warning] = 'Password Expired. Please reset.'
+          token = SecureRandom.hex(16)
+          identity.update(reset_token: token, reset_requested: Time.now)
+          # Send Email
+          reset_url = "#{request.base_url}#{settings.map_path}/auth/identity/reset?token=#{token}"
+          redirect reset_url
+        end
         self.current_user = user
         broadcast(:user_login, target: self, details: "IP: #{request.ip}")
         halt 200 if request.xhr?
