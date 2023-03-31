@@ -16,7 +16,6 @@ module Ditty
     def before_save
       super
       self.id ||= SecureRandom.uuid
-      self.created_at ||= Time.now
     end
   end
 end
