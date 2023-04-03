@@ -41,7 +41,7 @@ module Ditty
       end
 
       def anonymous_user
-        role = ::Ditty::Role.where(name: 'anonymous').first
+        role = ::Ditty::Role.where(name: 'anonymous').order(:created_at).first
         ::Ditty::User.where(roles: role).first unless role.nil?
       end
     end
