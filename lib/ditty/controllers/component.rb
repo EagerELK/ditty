@@ -27,18 +27,6 @@ module Ditty
       @skip_verify = true
     end
 
-    before(/.*/) do
-      return unless respond_to?(:browser) && respond_to?(:request) && request.path_info != '/auth/identity/callback'
-
-      active_trait = current_user.user_login_traits.select { |t| t.active == true }.first
-      if active_trait && (active_trait.ip_address != request.ip ||
-          active_trait.platform != browser.platform.name ||
-          active_trait.browser != browser.name)
-        logout
-        return redirect "#{settings.map_path}/auth/identity"
-      end
-    end
-
     after do
       return if settings.environment == 'production'
 
