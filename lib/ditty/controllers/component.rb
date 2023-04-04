@@ -28,24 +28,22 @@ module Ditty
     end
 
     before(/.*/) do
-      super
+      return unless respond_to?(:browser) && respond_to?(:request) && request.path_info != '/auth/identity/callback'
 
-      return unless self.respond_to?(:browser) && self.respond_to?(:request) && request.path_info != '/auth/identity/callback'
-
-      active_trait = current_user?.user_login_traits.select{ |t| t.active == true }.first
-      if active_trait
-        if active_trait.ip_address != request.ip || active_trait.platform != browser.platform.name || active_trait.browser != browser.name
-          logout
-          return redirect "#{settings.map_path}/auth/identity"
-        end
+      active_trait = current_user.user_login_traits.select { |t| t.active == true }.first
+      if active_trait && (active_trait.ip_address != request.ip ||
+          active_trait.platform != browser.platform.name ||
+          active_trait.browser != browser.name)
+        logout
+        return redirect "#{settings.map_path}/auth/identity"
       end
     end
 
     after do
       return if settings.environment == 'production'
 
-      if (response.successful? || response.redirection?) && @skip_verify == false
-        verify_authorized if settings.environment != 'production'
+      if (response.successful? || response.redirection?) && @skip_verify == false && (settings.environment != 'production')
+        verify_authorized
       end
     end
 
