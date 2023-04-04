@@ -52,9 +52,11 @@ module Ditty
     end
 
     def log_action(values)
-      values[:user] ||= values[:target].current_user if values[:target]
-      values[:user] = nil unless values[:user].is_a? Ditty::User
-      @mutex.synchronize { Ditty::AuditLog.create values }
+      require 'ditty/models/audit_log'
+
+      values[:user] ||= values[:target].current_user if values[:target] && values[:target].respond_to?(:current_user)
+      values.delete(:active) if values.include? :active
+      @mutex.synchronize { ::Ditty::AuditLog.create values }
     end
 
     def user_login(event)

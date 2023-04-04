@@ -27,8 +27,18 @@ module Ditty
       @skip_verify = true
     end
 
-    before do
-      # TODO: check session for active session else log out
+    before(/.*/) do
+      super
+
+      return unless self.respond_to?(:browser) && self.respond_to?(:request) && request.path_info != '/auth/identity/callback'
+
+      active_trait = current_user?.user_login_traits.select{ |t| t.active == true }.first
+      if active_trait
+        if active_trait.ip_address != request.ip || active_trait.platform != browser.platform.name || active_trait.browser != browser.name
+          logout
+          return redirect "#{settings.map_path}/auth/identity"
+        end
+      end
     end
 
     after do

@@ -49,6 +49,10 @@ module Ditty
         return underscore(pluralize(demodulize(settings.model_class))) if settings.model_class
         underscore(demodulize(self.class))
       end
+
+      def browser
+        Browser.new(request.user_agent, accept_language: request.env['HTTP_ACCEPT_LANGUAGE'])
+      end
     end
 
     configure :production do
@@ -158,6 +162,7 @@ module Ditty
 
     before(/.*/) do
       ::Ditty::Services::Logger.instance.debug "Running with #{self.class} - #{request.path_info}"
+
       if request.path =~ /.*\.json\Z/
         content_type :json
         request.path_info = request.path_info.gsub(/.json$/, '')
