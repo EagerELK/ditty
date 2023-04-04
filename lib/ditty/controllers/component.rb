@@ -27,6 +27,10 @@ module Ditty
       @skip_verify = true
     end
 
+    before do
+      # TODO: check session for active session else log out
+    end
+
     after do
       return if settings.environment == 'production'
 
