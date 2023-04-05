@@ -148,15 +148,54 @@ module Ditty
         #Check Identity for Password Expiry
         password_expiry_check(user)
         self.current_user = user
-        broadcast(:user_login, target: self, details: "IP: #{request.ip}")
-        halt 200 if request.xhr?
-        flash[:success] = 'Logged In'
-        redirect redirect_path
+        use_mfa = ENV['USE_MFA'] ? ENV['USE_MFA'].to_i == 1 : false
+        if(use_mfa)
+          identity = Identity.find(user_id: user[:id])
+          pin = set_mfa_pin(identity)
+          flash[:info] = 'An email was sent with your OTP'
+          Ditty::Services::Email.deliver(
+            :otp,
+            identity[:username],
+            locals: { identity: identity, otp: pin, request: request }
+          )
+          mfa_url = "#{settings.map_path}/auth/mfa"
+          redirect mfa_url
+        else
+          successful_login
+        end
       else
         # Failed Login
-        broadcast(:identity_failed_login, target: self, details: "IP: #{request.ip}")
-        flash[:warning] = 'Invalid credentials. Please try again.'
-        redirect "#{settings.map_path}/auth/identity"
+        failed_login
+      end
+    end
+
+    get 'auth/identity/mfa' do
+      if env['omniauth.auth']
+        user = User.find(email: env['omniauth.auth']['info']['email'])
+        identity = Identity.find(user_id: user[:id])
+        if identity&.pin == nil || identity&.pin_expiry_date == nil || identity.pin_expiry_date > Time.now
+          logout
+          redirect "#{settings.map_path}/auth/identity"
+        else
+           haml :'identity/mfa', locals: { identity: identity, title: 'Enter OTP' }
+        end
+      end
+
+      halt 404
+    end
+
+    post'auth/identity/mfa' do
+      halt 500 unless params[:otp]
+      if env['omniauth.auth']
+        user = User.find(email: env['omniauth.auth']['info']['email'])
+        identity = Identity.find(user_id: user[:id])
+        if identity&.pin && identity.pin == params[:otp]
+          identity.update(pin_verified: true)
+          successful_login
+        else
+          # Failed Login
+          failed_login
+        end
       end
     end
 
@@ -188,6 +227,20 @@ module Ditty
       redirect "#{settings.map_path}/auth/identity"
     end
 
+    def failed_login
+      broadcast(:identity_failed_login, target: self, details: "IP: #{request.ip}")
+      flash[:warning] = 'Invalid credentials. Please try again.'
+      redirect "#{settings.map_path}/auth/identity"
+    end
+
+    def set_mfa_pin(identity)
+      pin = SecureRandom.random_number(999999 - 100000 + 1) + 100000
+      mins_in_future = ENV['PIN_EXPIRY_MINS'] || 5
+      pin_expiry_date = (Time.now + (mins_in_future * 60))
+      identity.update(pin: pin, pin_expiry_date: pin_expiry_date, pin_verified: false)
+      pin
+    end
+
     def password_expiry_check(user)
       identity = Identity.find(user_id: user[:id])
       if identity[:password_expiry_date] && identity[:password_expiry_date] <= Time.now
@@ -198,6 +251,13 @@ module Ditty
         reset_url = "#{request.base_url}#{settings.map_path}/auth/identity/reset?token=#{token}"
         redirect reset_url
       end
+    end
+
+    def successful_login
+      broadcast(:user_login, target: self, details: "IP: #{request.ip}")
+      halt 200 if request.xhr?
+      flash[:success] = 'Logged In'
+      redirect redirect_path
     end
   end
 end
