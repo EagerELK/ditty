@@ -174,20 +174,22 @@ module Ditty
       else
         content_type(:json) if request.accept.count.eql?(1) && request.accept.first.to_s.eql?('*/*')
       end
-      
-      return unless respond_to?(:browser) &&
-                    respond_to?(:request) &&
-                    respond_to?(:current_user) &&
-                    current_user.is_a?(Ditty::User) &&
-                    request.path_info != '/auth/identity/callback'
 
-      active_trait = current_user.user_login_traits.select { |t| t.active == true }.first
-      if active_trait &&
-         (active_trait.ip_address != request.ip ||
-           active_trait.platform != browser.platform.name ||
-           active_trait.browser != browser.name)
-        logout
-        return redirect "#{settings.map_path}/auth/identity"
+      if(ENV['USE_SINGLE_SESSION'] && ENV['USE_SINGLE_SESSION'].to_i == 1)
+        return unless respond_to?(:browser) &&
+          respond_to?(:request) &&
+          respond_to?(:current_user) &&
+          current_user.is_a?(Ditty::User) &&
+          request.path_info != '/auth/identity/callback'
+
+        active_trait = current_user.user_login_traits.select { |t| t.active == true }.first
+        if active_trait &&
+          (active_trait.ip_address != request.ip ||
+            active_trait.platform != browser.platform.name ||
+            active_trait.browser != browser.name)
+          logout
+          return redirect "#{settings.map_path}/auth/identity"
+        end
       end
     end
 

@@ -60,8 +60,8 @@ module Ditty
     end
 
     def user_login(event)
-      #TODO: Check for existing active sessions and marks them inactive
       target = event[:target]
+
       if target.current_user.is_a? Ditty::User
         user = target.current_user
         traits = user.user_login_traits.select{ |trait| trait.active }
@@ -70,7 +70,6 @@ module Ditty
           trait.save
         end
       end
-
 
       log_action(
         user_traits(event[:target]).merge(
