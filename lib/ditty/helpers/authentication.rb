@@ -3,6 +3,7 @@
 require 'ditty/models/user'
 require 'ditty/models/role'
 require 'ditty/models/identity'
+require 'ditty/services/authentication'
 
 module Ditty
   module Helpers
@@ -28,6 +29,10 @@ module Ditty
 
       def authenticated?
         current_user && !current_user.role?('anonymous')
+      end
+
+      def single_session?
+        Ditty::Services::Authentication.config.dig(:identity, :use_single_session) || false
       end
 
       def authenticate!

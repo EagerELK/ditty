@@ -3,6 +3,7 @@
 require 'active_support'
 require 'active_support/inflector'
 require 'wisper'
+require 'browser'
 
 module Ditty
   class Listener
@@ -50,9 +51,49 @@ module Ditty
     end
 
     def log_action(values)
-      values[:user] ||= values[:target].current_user if values[:target]
-      values[:user] = nil unless values[:user].is_a? Ditty::User
-      @mutex.synchronize { Ditty::AuditLog.create values }
+      require 'ditty/models/audit_log'
+
+      values[:user] ||= values[:target].current_user if values[:target] && values[:target].respond_to?(:current_user)
+      values.delete(:active) if values.include? :active
+      @mutex.synchronize { ::Ditty::AuditLog.create values }
+    end
+
+    def user_login(event)
+      target = event[:target]
+
+      if target.current_user.is_a? Ditty::User
+        require 'ditty/models/user_login_trait'
+        user = target.current_user
+        traits = user.user_login_traits.select{ |trait| trait.active }
+        traits.each do |trait|
+          trait.active = false
+          trait.save
+        end
+      end
+
+      log_action(
+        user_traits(event[:target]).merge(
+          action: action_from(event[:target], :user_login),
+          details: event[:details]
+        ).merge(event[:values] || {})
+      )
+
+      @mutex.synchronize do
+        traits = user_traits(event[:target])
+        UserLoginTrait.update_or_create(user_traits(event[:target]), updated_at: Time.now) unless traits.empty?
+      end
+    end
+
+    def user_traits(target)
+      return {} unless target.respond_to?(:current_user) && target.respond_to?(:browser)
+      {
+        user_id: target.current_user&.id,
+        platform: target.browser.platform.name,
+        device: target.browser.device.name,
+        browser: target.browser.name,
+        ip_address: target.request.ip,
+        active: true,
+      }
     end
   end
 end

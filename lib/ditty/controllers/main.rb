@@ -146,15 +146,7 @@ module Ditty
         # Successful Login
         user = User.find(email: env['omniauth.auth']['info']['email'])
         #Check Identity for Password Expiry
-        identity = Identity.find(user_id: user[:id])
-        if identity[:password_expiry_date] && identity[:password_expiry_date] <= Time.now
-          flash[:warning] = 'Password Expired. Please reset.'
-          token = SecureRandom.hex(16)
-          identity.update(reset_token: token, reset_requested: Time.now)
-
-          reset_url = "#{request.base_url}#{settings.map_path}/auth/identity/reset?token=#{token}"
-          redirect reset_url
-        end
+        password_expiry_check(user)
         self.current_user = user
         broadcast(:user_login, target: self, details: "IP: #{request.ip}")
         halt 200 if request.xhr?
@@ -194,6 +186,18 @@ module Ditty
     # Unauthenticated
     get '/unauthenticated' do
       redirect "#{settings.map_path}/auth/identity"
+    end
+
+    def password_expiry_check(user)
+      identity = Identity.find(user_id: user[:id])
+      if identity[:password_expiry_date] && identity[:password_expiry_date] <= Time.now
+        flash[:warning] = 'Password Expired. Please reset.'
+        token = SecureRandom.hex(16)
+        identity.update(reset_token: token, reset_requested: Time.now)
+
+        reset_url = "#{request.base_url}#{settings.map_path}/auth/identity/reset?token=#{token}"
+        redirect reset_url
+      end
     end
   end
 end

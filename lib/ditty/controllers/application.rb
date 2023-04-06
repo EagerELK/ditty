@@ -49,6 +49,10 @@ module Ditty
         return underscore(pluralize(demodulize(settings.model_class))) if settings.model_class
         underscore(demodulize(self.class))
       end
+
+      def browser
+        Browser.new(request.user_agent, accept_language: request.env['HTTP_ACCEPT_LANGUAGE'])
+      end
     end
 
     configure :production do
@@ -158,6 +162,7 @@ module Ditty
 
     before(/.*/) do
       ::Ditty::Services::Logger.instance.debug "Running with #{self.class} - #{request.path_info}"
+
       if request.path =~ /.*\.json\Z/
         content_type :json
         request.path_info = request.path_info.gsub(/.json$/, '')
@@ -168,6 +173,24 @@ module Ditty
         content_type request.env['ACCEPT']
       else
         content_type(:json) if request.accept.count.eql?(1) && request.accept.first.to_s.eql?('*/*')
+      end
+
+      if single_session?
+        return unless respond_to?(:browser) &&
+                      respond_to?(:request) &&
+                      respond_to?(:current_user) &&
+                      current_user.is_a?(Ditty::User) &&
+                      request.path_info != '/auth/identity/callback'
+
+        require 'ditty/models/user_login_trait'
+        active_trait = current_user.user_login_traits.select { |t| t.active == true }.first
+        if active_trait &&
+           (active_trait.ip_address != request.ip ||
+             active_trait.platform != browser.platform.name ||
+             active_trait.browser != browser.name)
+          logout
+          return redirect "#{settings.map_path}/auth/identity"
+        end
       end
     end
 

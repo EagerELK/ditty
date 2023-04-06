@@ -13,6 +13,7 @@ module Ditty
     one_to_many :identity
     many_to_many :roles
     one_to_many :audit_logs
+    one_to_many :user_login_traits
 
     def role?(check)
       @roles ||= Hash.new do |h, k|
