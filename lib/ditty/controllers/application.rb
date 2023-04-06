@@ -191,11 +191,17 @@ module Ditty
           logout
           return redirect "#{settings.map_path}/auth/identity"
         end
+      end
 
-      use_mfa = ENV['USE_MFA'] ? ENV['USE_MFA'].to_i == 1 : false
-      if use_mfa
+
+      if ENV['USE_MFA'] && ENV['USE_MFA'].to_i == 1
+        return unless respond_to?(:request) &&
+                      respond_to?(:current_user) &&
+                      current_user.is_a?(Ditty::User) &&
+                      !request.path_info.include?('/auth/identity')
+
         identity = Identity.find(user_id: current_user[:id])
-        unless identity&.pin && identity&.pin_verified
+        if identity && !(identity[:pin] && identity[:pin_verified])
           logout
           return redirect "#{settings.map_path}/auth/identity"
         end

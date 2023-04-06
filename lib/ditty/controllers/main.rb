@@ -145,20 +145,19 @@ module Ditty
       if env['omniauth.auth']
         # Successful Login
         user = User.find(email: env['omniauth.auth']['info']['email'])
-        #Check Identity for Password Expiry
+        # Check Identity for Password Expiry
         password_expiry_check(user)
         self.current_user = user
-        use_mfa = ENV['USE_MFA'] ? ENV['USE_MFA'].to_i == 1 : false
-        if(use_mfa)
+        if ENV['USE_MFA'] && ENV['USE_MFA'].to_i == 1
           identity = Identity.find(user_id: user[:id])
-          pin = set_mfa_pin(identity)
+          pin = mfa_pin(identity)
           flash[:info] = 'An email was sent with your OTP'
           Ditty::Services::Email.deliver(
             :otp,
             identity[:username],
             locals: { identity: identity, otp: pin, request: request }
           )
-          mfa_url = "#{settings.map_path}/auth/mfa"
+          mfa_url = "#{settings.map_path}/auth/identity/mfa"
           redirect mfa_url
         else
           successful_login
@@ -169,31 +168,27 @@ module Ditty
       end
     end
 
-    get 'auth/identity/mfa' do
-      if env['omniauth.auth']
-        user = User.find(email: env['omniauth.auth']['info']['email'])
-        identity = Identity.find(user_id: user[:id])
-        if identity&.pin == nil || identity&.pin_expiry_date == nil || identity.pin_expiry_date > Time.now
-          logout
-          redirect "#{settings.map_path}/auth/identity"
-        else
-           haml :'identity/mfa', locals: { identity: identity, title: 'Enter OTP' }
+    get '/auth/identity/mfa' do
+      if current_user&.is_a? Ditty::User
+        identity = Identity.find(user_id: current_user[:id])
+        unless identity[:pin].nil? || identity[:pin_expiry_date].nil? || identity[:pin_expiry_date] < Time.now
+          return haml :'identity/mfa', locals: { identity: identity, title: 'Enter OTP' }
         end
-      end
 
-      halt 404
+        logout
+        redirect "#{settings.map_path}/auth/identity"
+      end
     end
 
-    post'auth/identity/mfa' do
-      halt 500 unless params[:otp]
-      if env['omniauth.auth']
-        user = User.find(email: env['omniauth.auth']['info']['email'])
-        identity = Identity.find(user_id: user[:id])
-        if identity&.pin && identity.pin == params[:otp]
+    post '/auth/identity/mfa' do
+      if current_user&.is_a? Ditty::User
+        halt 500 unless params[:otp]
+        identity = Identity.find(user_id: current_user[:id])
+        if identity && identity[:pin] && identity[:pin] == params[:otp].to_i
           identity.update(pin_verified: true)
           successful_login
         else
-          # Failed Login
+          logout
           failed_login
         end
       end
@@ -233,7 +228,7 @@ module Ditty
       redirect "#{settings.map_path}/auth/identity"
     end
 
-    def set_mfa_pin(identity)
+    def mfa_pin(identity)
       pin = SecureRandom.random_number(999999 - 100000 + 1) + 100000
       mins_in_future = ENV['PIN_EXPIRY_MINS'] || 5
       pin_expiry_date = (Time.now + (mins_in_future * 60))
@@ -243,7 +238,7 @@ module Ditty
 
     def password_expiry_check(user)
       identity = Identity.find(user_id: user[:id])
-      if identity[:password_expiry_date] && identity[:password_expiry_date] <= Time.now
+      unless !(identity[:password_expiry_date] && identity[:password_expiry_date] <= Time.now)
         flash[:warning] = 'Password Expired. Please reset.'
         token = SecureRandom.hex(16)
         identity.update(reset_token: token, reset_requested: Time.now)
