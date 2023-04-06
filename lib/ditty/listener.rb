@@ -2,7 +2,6 @@
 
 require 'active_support'
 require 'active_support/inflector'
-require 'ditty/models/user_login_trait'
 require 'wisper'
 require 'browser'
 
@@ -63,6 +62,7 @@ module Ditty
       target = event[:target]
 
       if target.current_user.is_a? Ditty::User
+        require 'ditty/models/user_login_trait'
         user = target.current_user
         traits = user.user_login_traits.select{ |trait| trait.active }
         traits.each do |trait|
