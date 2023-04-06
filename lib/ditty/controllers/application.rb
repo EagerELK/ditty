@@ -193,7 +193,6 @@ module Ditty
         end
       end
 
-
       if multi_factor_authentication?
         return unless respond_to?(:request) &&
                       respond_to?(:current_user) &&

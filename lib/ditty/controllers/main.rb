@@ -163,7 +163,6 @@ module Ditty
           successful_login
         end
       else
-        # Failed Login
         failed_login
       end
     end
