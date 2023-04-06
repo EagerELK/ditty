@@ -35,6 +35,10 @@ module Ditty
         Ditty::Services::Authentication.config.dig(:identity, :use_single_session) || false
       end
 
+      def multi_factor_authentication?
+        Ditty::Services::Authentication.config.dig(:identity, :use_mfa) || false
+      end
+
       def authenticate!
         raise NotAuthenticated unless authenticated?
         true

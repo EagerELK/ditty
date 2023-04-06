@@ -194,7 +194,7 @@ module Ditty
       end
 
 
-      if ENV['USE_MFA'] && ENV['USE_MFA'].to_i == 1
+      if multi_factor_authentication?
         return unless respond_to?(:request) &&
                       respond_to?(:current_user) &&
                       current_user.is_a?(Ditty::User) &&

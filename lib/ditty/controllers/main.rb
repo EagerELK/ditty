@@ -148,7 +148,7 @@ module Ditty
         # Check Identity for Password Expiry
         password_expiry_check(user)
         self.current_user = user
-        if ENV['USE_MFA'] && ENV['USE_MFA'].to_i == 1
+        if multi_factor_authentication?
           identity = Identity.find(user_id: user[:id])
           pin = mfa_pin(identity)
           flash[:info] = 'An email was sent with your OTP'
