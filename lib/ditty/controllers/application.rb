@@ -176,6 +176,7 @@ module Ditty
       end
 
       if single_session?
+        return if request.path_info == '/auth/identity/mfa'
         return unless respond_to?(:browser) &&
                       respond_to?(:request) &&
                       respond_to?(:current_user) &&

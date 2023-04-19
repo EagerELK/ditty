@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'ditty/controllers/application'
+require 'ditty/services/authentication'
 require 'ditty/services/email'
 require 'securerandom'
 
@@ -149,14 +150,8 @@ module Ditty
         password_expiry_check(user)
         self.current_user = user
         if multi_factor_authentication?
-          identity = Identity.find(user_id: user[:id])
-          pin = mfa_pin(identity)
+          Services::Authentication.prep_mfa(current_user_id, request)
           flash[:info] = 'An email was sent with your OTP'
-          Ditty::Services::Email.deliver(
-            :otp,
-            identity[:username],
-            locals: { identity: identity, otp: pin, request: request }
-          )
           mfa_url = "#{settings.map_path}/auth/identity/mfa"
           redirect mfa_url
         else
@@ -169,8 +164,8 @@ module Ditty
 
     get '/auth/identity/mfa' do
       if current_user&.is_a? Ditty::User
-        identity = Identity.find(user_id: current_user[:id])
-        unless identity[:pin].nil? || identity[:pin_expiry_date].nil? || identity[:pin_expiry_date] < Time.now
+        identity = Identity.find(user_id: current_user_id)
+        unless identity.pin_expired?
           return haml :'identity/mfa', locals: { identity: identity, title: 'Enter OTP' }
         end
 
@@ -182,9 +177,8 @@ module Ditty
     post '/auth/identity/mfa' do
       if current_user&.is_a? Ditty::User
         halt 500 unless params[:otp]
-        identity = Identity.find(user_id: current_user[:id])
-        if identity && identity[:pin] && identity[:pin] == params[:otp].to_i
-          identity.update(pin_verified: true)
+        identity = Identity.find(user_id: current_user_id)
+        if identity.valid_mfa?(params[:otp].to_i)
           successful_login
         else
           logout
@@ -225,14 +219,6 @@ module Ditty
       broadcast(:identity_failed_login, target: self, details: "IP: #{request.ip}")
       flash[:warning] = 'Invalid credentials. Please try again.'
       redirect "#{settings.map_path}/auth/identity"
-    end
-
-    def mfa_pin(identity)
-      pin = SecureRandom.random_number(999999 - 100000 + 1) + 100000
-      mins_in_future = ENV['PIN_EXPIRY_MINS'] || 5
-      pin_expiry_date = (Time.now + (mins_in_future * 60))
-      identity.update(pin: pin, pin_expiry_date: pin_expiry_date, pin_verified: false)
-      pin
     end
 
     def password_expiry_check(user)
