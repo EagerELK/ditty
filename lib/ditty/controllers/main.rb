@@ -176,7 +176,7 @@ module Ditty
 
     post '/auth/identity/mfa' do
       if current_user&.is_a? Ditty::User
-        halt 500 unless params[:otp]
+        param :otp,           Integer, required: true
         identity = Identity.find(user_id: current_user_id)
         if identity.valid_mfa?(params[:otp].to_i)
           successful_login
@@ -223,7 +223,7 @@ module Ditty
 
     def password_expiry_check(user)
       identity = Identity.find(user_id: user[:id])
-      unless !(identity[:password_expiry_date] && identity[:password_expiry_date] <= Time.now)
+      if identity[:password_expiry_date] && identity[:password_expiry_date] <= Time.now
         flash[:warning] = 'Password Expired. Please reset.'
         token = SecureRandom.hex(16)
         identity.update(reset_token: token, reset_requested: Time.now)
