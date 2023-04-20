@@ -1,0 +1,16 @@
+.row
+  .col-md-4
+  .col-md-4
+    .panel.panel-default
+      .panel-body
+        %p.text-center
+          Enter your OTP sent to your email.
+        %form.form-horizontal{ method: 'post', action: "#{settings.map_path}/auth/identity/mfa" }
+          .form-group
+            .col-sm-12
+              %input.form-control{ name: 'otp', type: 'number', placeholder: 'Enter OTP' }
+          .row.text-right
+            .col-md-12
+              %button.btn.btn-primary.btn-block{ type: 'submit' }
+                Submit
+  .col-md-4

@@ -1,0 +1,19 @@
+%p
+	Hi #{identity.user.name}
+
+%p
+	your OTP is below.
+
+%p.text-center
+	%strong #{ otp } 
+
+%p
+	Thanx!
+
+%ul
+	%li
+		Requesting IP:
+		= request.ip
+	%li
+		Requesting User Agent:
+		= request.user_agent

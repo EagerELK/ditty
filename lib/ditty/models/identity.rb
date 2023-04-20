@@ -39,6 +39,27 @@ module Ditty
       }
     end
 
+    def generate_pin
+      pin = SecureRandom.random_number(999999 - 100000 + 1) + 100000
+      mins_in_future = ENV['PIN_EXPIRY_MINS'] || 5
+      pin_expiry_date = (Time.now + (mins_in_future * 60))
+      self.update(pin: pin, pin_expiry_date: pin_expiry_date, pin_verified: false)
+      pin
+    end
+
+    def valid_mfa?(otp)
+      if self.pin && self.pin == otp
+        self.update(pin_verified: true)
+        true
+      else
+        false
+      end
+    end
+
+    def pin_expired?
+      self.pin.nil? || self.pin_expiry_date.nil? || self.pin_expiry_date < Time.now
+    end
+
     def uid
       user&.id
     end

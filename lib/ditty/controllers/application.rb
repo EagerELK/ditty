@@ -176,6 +176,7 @@ module Ditty
       end
 
       if single_session?
+        return if request.path_info == '/auth/identity/mfa'
         return unless respond_to?(:browser) &&
                       respond_to?(:request) &&
                       respond_to?(:current_user) &&
@@ -188,6 +189,19 @@ module Ditty
            (active_trait.ip_address != request.ip ||
              active_trait.platform != browser.platform.name ||
              active_trait.browser != browser.name)
+          logout
+          return redirect "#{settings.map_path}/auth/identity"
+        end
+      end
+
+      if multi_factor_authentication?
+        return unless respond_to?(:request) &&
+                      respond_to?(:current_user) &&
+                      current_user.is_a?(Ditty::User) &&
+                      !request.path_info.include?('/auth/identity')
+
+        identity = Identity.find(user_id: current_user[:id])
+        if identity && !(identity[:pin] && identity[:pin_verified])
           logout
           return redirect "#{settings.map_path}/auth/identity"
         end

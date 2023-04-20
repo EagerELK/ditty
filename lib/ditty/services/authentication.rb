@@ -33,6 +33,16 @@ module Ditty
           providers.include? provider.to_sym
         end
 
+        def prep_mfa(user_id, request)
+          identity = Identity.find(user_id: user_id)
+          pin = identity.generate_pin
+          Ditty::Services::Email.deliver(
+            :otp,
+            identity[:username],
+            locals: { identity: identity, otp: pin, request: request }
+          )
+        end
+
         def default
           {
             identity: {

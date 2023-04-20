@@ -3,7 +3,6 @@
 require 'ditty/models/user'
 require 'ditty/models/role'
 require 'ditty/models/identity'
-require 'ditty/services/authentication'
 
 module Ditty
   module Helpers
@@ -32,7 +31,13 @@ module Ditty
       end
 
       def single_session?
+        require 'ditty/services/authentication'
         Ditty::Services::Authentication.config.dig(:identity, :use_single_session) || false
+      end
+
+      def multi_factor_authentication?
+        require 'ditty/services/authentication'
+        Ditty::Services::Authentication.config.dig(:identity, :use_mfa) || false
       end
 
       def authenticate!
