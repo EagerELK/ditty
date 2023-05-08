@@ -184,7 +184,8 @@ module Ditty
                       request.path_info != '/auth/identity/callback'
 
         require 'ditty/models/user_login_trait'
-        active_trait = current_user.user_login_traits.select { |t| t.active == true }.first
+        ::Ditty::Services::Logger.instance.info "Checking single session for current user #{current_user.id}"
+        active_trait = Ditty::UserLoginTrait.where(user_id: current_user.id, active: true).first
         if active_trait &&
            (active_trait.ip_address != request.ip ||
              active_trait.platform != browser.platform.name ||
