@@ -64,7 +64,7 @@ module Ditty
       if target.current_user.is_a? Ditty::User
         require 'ditty/models/user_login_trait'
         user = target.current_user
-        traits = user.user_login_traits.select{ |trait| trait.active }
+        traits = user.user_login_traits.where(active: 1).all
         traits.each do |trait|
           trait.active = false
           trait.save
