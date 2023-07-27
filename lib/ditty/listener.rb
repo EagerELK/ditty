@@ -64,17 +64,13 @@ module Ditty
       target = event[:target]
 
       if target.respond_to?(:current_user) &&
-        target.respond_to?(:browser) &&
-        target.current_user.is_a?(Ditty::User)
+         target.respond_to?(:browser) &&
+         target.current_user.is_a?(Ditty::User)
 
         require 'ditty/models/user_login_trait'
         user = target.current_user
         ::Ditty::Services::Logger.instance.info "Clearing active sessions for current user #{user.id}"
-        active_traits = Ditty::UserLoginTrait.where(user_id: user.id, active: true)
-        active_traits.each do |trait|
-          trait.active = false
-          trait.save
-        end
+        Ditty::UserLoginTrait.where(user_id: user.id, active: true).update(active: false)
       end
 
       log_action(
