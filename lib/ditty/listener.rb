@@ -42,11 +42,13 @@ module Ditty
       # Create the SA user if none is present
       sa = Role.find_or_create(name: 'super_admin')
       return if User.where(roles: sa).count.positive?
+
       user.add_role sa
     end
 
     def action_from(target, method)
       return method unless method.to_s.start_with? 'component_'
+
       target.class.to_s.demodulize.underscore + '_' + method.to_s.gsub(/^component_/, '')
     end
 
@@ -61,14 +63,14 @@ module Ditty
     def user_login(event)
       target = event[:target]
 
-      if target.current_user.is_a? Ditty::User
+      if target.respond_to?(:current_user) &&
+         target.respond_to?(:browser) &&
+         target.current_user.is_a?(Ditty::User)
+
         require 'ditty/models/user_login_trait'
         user = target.current_user
-        traits = user.user_login_traits.where(active: 1).all
-        traits.each do |trait|
-          trait.active = false
-          trait.save
-        end
+        ::Ditty::Services::Logger.instance.info "Clearing active sessions for current user #{user.id}"
+        Ditty::UserLoginTrait.where(user_id: user.id, active: true).update(active: false)
       end
 
       log_action(
@@ -86,13 +88,14 @@ module Ditty
 
     def user_traits(target)
       return {} unless target.respond_to?(:current_user) && target.respond_to?(:browser)
+
       {
         user_id: target.current_user&.id,
         platform: target.browser.platform.name,
         device: target.browser.device.name,
         browser: target.browser.name,
         ip_address: target.request.ip,
-        active: true,
+        active: true
       }
     end
   end

@@ -96,6 +96,7 @@ module Ditty
     end
 
     def validate_used_passwords
+      return false unless password_histories.any?
       # fetch x passwords back
       password_history_limit = ENV['PASSWORD_HISTORY_LIMIT'] || 3
       used_passwords = password_histories.sort_by! { |k| k['created_at'] }
