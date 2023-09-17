@@ -9,6 +9,9 @@ module Ditty
       controllers = File.expand_path('../controllers', __dir__)
       Dir.glob("#{controllers}/*.rb").sort.each { |f| require f }
 
+      services = File.expand_path('../services', __dir__)
+      Dir.glob("#{services}/*.rb").sort.each { |f| require f }
+
       require 'ditty/models/user'
       require 'ditty/models/role'
       require 'ditty/models/identity'
@@ -19,6 +22,8 @@ module Ditty
     def self.configure(_container)
       require 'ditty/db' unless defined? ::DB
       require 'ditty/listener'
+
+      self.load
     end
 
     def self.migrations

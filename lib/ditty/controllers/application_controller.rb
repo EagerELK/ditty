@@ -11,6 +11,7 @@ require 'ditty/helpers/views'
 require 'ditty/helpers/pundit'
 require 'ditty/helpers/authentication'
 require 'ditty/services/logger'
+require 'ditty/middleware/telemetry'
 require 'active_support'
 require 'active_support/inflector'
 require 'rack/contrib'
@@ -36,6 +37,7 @@ module Ditty
 
     register Sinatra::Flash, Sinatra::RespondWith
 
+    use Middleware::Telemetry
     use Rack::JSONBodyParser
     use Rack::MethodOverride
     use Rack::NestedParams
@@ -63,6 +65,15 @@ module Ditty
       def config(name, default = '')
         ::Ditty::Services::Settings[name] || default
       end
+    end
+
+    # Fine for certain things, but using middleware might be a better idea
+    before do
+      broadcast(:before_route, target: self)
+    end
+
+    after do
+      broadcast(:after_route, target: self)
     end
 
     def view_folders
@@ -98,6 +109,7 @@ module Ditty
     end
 
     not_found do
+      broadcast(:application_error, env['sinatra.error'], error_code: 404, target: self)
       respond_to do |format|
         status 404
         format.html do
@@ -114,7 +126,7 @@ module Ditty
     end
 
     error Helpers::NotAuthenticated, ::Pundit::NotAuthorizedError do
-      # TODO: Check if this is logged / tracked
+      broadcast(:application_error, env['sinatra.error'], error_code: 403, target: self)
       if authenticated?
         respond_to do |format|
           status 403
@@ -141,6 +153,7 @@ module Ditty
     end
 
     error ::Sinatra::Param::InvalidParameterError do
+      broadcast(:application_error, env['sinatra.error'], error_code: 400, target: self)
       respond_to do |format|
         status 400
         format.html do
@@ -155,6 +168,7 @@ module Ditty
     end
 
     error ::Sequel::NoMatchingRow do
+      broadcast(:application_error, env['sinatra.error'], error_code: 404, target: self)
       respond_to do |format|
         status 404
         format.html do
@@ -171,6 +185,7 @@ module Ditty
     end
 
     error ::Sequel::ValidationFailed do
+      broadcast(:application_error, env['sinatra.error'], error_code: 400, target: self)
       respond_to do |format|
         entity = env['sinatra.error'].model
         errors = env['sinatra.error'].errors
@@ -187,7 +202,7 @@ module Ditty
 
     error ::Sequel::ForeignKeyConstraintViolation do
       error = env['sinatra.error']
-      broadcast(:application_error, error)
+      broadcast(:application_error, error, error_code: 400, target: self)
       logger.error error
       respond_to do |format|
         status 400
@@ -203,7 +218,7 @@ module Ditty
     error ::Ditty::TemplateNotFoundError do
       # TODO: Display a better error message
       error = env['sinatra.error']
-      broadcast(:application_error, error)
+      broadcast(:application_error, error, error_code: 500, target: self)
       logger.error error
       respond_to do |format|
         status 500
@@ -215,7 +230,7 @@ module Ditty
 
     error do
       error = env['sinatra.error']
-      broadcast(:application_error, error)
+      broadcast(:application_error, error, error_code: 500, target: self)
       logger.error error
       respond_to do |format|
         status 500

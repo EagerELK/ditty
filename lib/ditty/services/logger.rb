@@ -30,7 +30,7 @@ module Ditty
         end
       end
 
-      # TODO: REfac this so that you can log something like ES to a separate logger
+      # TODO: Refac this so that you can log something like ES to a separate logger
 
       def method_missing(method, *args, &block)
         loggers.each { |logger| logger.send(method, *args, &block) }
