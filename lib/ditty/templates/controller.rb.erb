@@ -7,7 +7,7 @@ require '<%= folder %>/policies/<%= policy_name.underscore %>'
 module <%= namespace %>
   class <%= controller_name %> < Ditty::ComponentController
     set model_class: <%= model_name %>
-    set view_folder: '<%= views_folder %>'
+    set view_folder: Ditty::<%= namespace %>.view_folder
 
     # Add text fields that are searchable here
     SEARCHABLE = %i[].freeze
