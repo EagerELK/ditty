@@ -9,7 +9,7 @@ module Ditty
       end
 
       def instrumented?
-        (ENV['DITTY_TELEMETRY_ENABLED'] || 0).to_i == 1
+        (ENV['DITTY_TELEMETRY_DISABLED'] || 0).to_i != 1
       end
 
       def instrumented(span_name, attribs = {})
@@ -21,7 +21,6 @@ module Ditty
       end
 
       def application_error(error, opts = {})
-        error ||= env['sinatra.error']
         return unless error.is_a? StandardError
         return unless @request_span
 
