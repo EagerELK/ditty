@@ -1,6 +1,9 @@
-.form-group{ class: total_filters.to_i > 4 ? 'col-3' : 'col-md'}
+.form-group.col
   %label{ for: "filter_#{name}" }= label
-  %select.form-control.select2{ style: 'width: 100%', name: name, id: "filter_#{name}" }
-    %option{ value: '' } -- Select One --
-    - options.each do |k,v| k ||= v;  v ||= k;
-      %option{ value: k, selected: (params[name].eql? k)}= v
+  - if options
+    %select.form-control.select2{ style: 'width: 100%', name: name, id: "filter_#{name}" }
+      %option{ value: '' } -- Select One --
+      - options.each do |k,v| k ||= v;  v ||= k;
+        %option{ value: k, selected: (params[name].eql? k)}= v
+  - else
+    %input.form-control{ name: name, id: "filter_#{name}", value: params[name] }

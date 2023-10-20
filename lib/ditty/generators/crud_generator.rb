@@ -38,8 +38,6 @@ module Ditty
       def create_controller
         filename = File.join("lib/#{folder}/controllers", "#{controller_name.underscore}.rb")
         template '../templates/controller.rb.erb', filename
-        # TODO: Insert the route into the component file
-        # insert_into_file 'config.ru', "use #{class_name}\n", after: 'run ApplicationController\n'
       rescue StandardError => e
         puts "Could not generate controller for #{model_name}: #{e.message}"
       end

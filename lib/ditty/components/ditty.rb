@@ -23,7 +23,6 @@ module Ditty
       require 'ditty/db' unless defined? ::DB
       require 'ditty/listener'
 
-      self.load
     end
 
     def self.migrations

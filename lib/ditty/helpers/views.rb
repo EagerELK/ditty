@@ -45,14 +45,17 @@ module Ditty
       end
 
       def filter_control(filter, opts = {})
-        meth = "#{filter[:name]}_options".to_sym
-        return unless respond_to? meth
+        options = if opts[:options]
+          opts[:options]
+        else
+          meth = "#{filter[:name]}_options".to_sym
+          send(meth) if respond_to? meth
+        end
 
         haml :'partials/filter_control', locals: {
           name: filter[:name],
           label: opts[:label] || filter[:name].to_s.titlecase,
-          options: send(meth),
-          total_filters: opts[:filters]
+          options: options
         }
       end
 
