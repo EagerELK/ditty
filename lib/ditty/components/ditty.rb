@@ -17,6 +17,8 @@ module Ditty
       require 'ditty/models/identity'
       require 'ditty/models/audit_log'
       require 'ditty/models/user_login_trait'
+    rescue Sequel::DatabaseError => e
+      puts "ERROR: Could not load database: #{e.message}"
     end
 
     def self.configure(_container)
