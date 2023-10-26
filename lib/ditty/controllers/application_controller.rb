@@ -37,7 +37,7 @@ module Ditty
 
     register Sinatra::Flash, Sinatra::RespondWith
 
-    use Middleware::Telemetry
+    use Middleware::Telemetry if ENV.fetch('DITTY_TELEMETRY_ENABLED', 0).to_i == 1
     use Rack::JSONBodyParser
     use Rack::MethodOverride
     use Rack::NestedParams
