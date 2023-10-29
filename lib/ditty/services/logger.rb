@@ -42,6 +42,10 @@ module Ditty
         super
       end
 
+      def warn(*args)
+        method_missing(:warn, *args)
+      end
+
       private
 
         def config
