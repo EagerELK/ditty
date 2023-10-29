@@ -9,7 +9,7 @@ module Ditty
       end
 
       def instrumented?
-        (ENV['DITTY_TELEMETRY_DISABLED'] || 0).to_i != 1
+        ENV.fetch('DITTY_TELEMETRY_ENABLED', 0).to_i == 1
       end
 
       def instrumented(span_name, attribs = {})
