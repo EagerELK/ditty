@@ -100,7 +100,6 @@ namespace :ditty do
 
     desc 'Check if the migration is current'
     task :check do
-      ::DB.loggers << Logger.new($stdout) if ::DB.loggers.count.zero?
       puts '** [ditty] Running Ditty Sequel Migrations check'
       ::Sequel.extension :migration
       begin
@@ -113,7 +112,6 @@ namespace :ditty do
 
     desc 'Migrate Ditty database to the specified version'
     task :run, [:version] do |_t, args|
-      ::DB.loggers << Logger.new($stdout) if ::DB.loggers.count.zero?
       raise 'No version specified' unless args[:version]
 
       puts "** [ditty] Running Ditty Migrations to #{args[:version]}"
@@ -123,7 +121,6 @@ namespace :ditty do
 
     desc 'Migrate Ditty database to latest version'
     task :up do
-      ::DB.loggers << Logger.new($stdout) if ::DB.loggers.count.zero?
       puts '** [ditty] Running Ditty Migrations up'
       ::Sequel.extension :migration
       ::Sequel::Migrator.apply(::DB, folder)
@@ -131,7 +128,6 @@ namespace :ditty do
 
     desc 'Remove the whole Ditty database. You WILL lose data'
     task :down do
-      ::DB.loggers << Logger.new($stdout) if ::DB.loggers.count.zero?
       puts '** [ditty] Running Ditty Migrations down'
       ::Sequel.extension :migration
       ::Sequel::Migrator.apply(::DB, folder, 0)
@@ -139,7 +135,6 @@ namespace :ditty do
 
     desc 'Reset the Ditty database. You WILL lose data'
     task :bounce do
-      ::DB.loggers << Logger.new($stdout) if ::DB.loggers.count.zero?
       puts '** [ditty] Running Ditty Migrations bounce'
       ::Sequel.extension :migration
       ::Sequel::Migrator.apply(::DB, folder, 0)
