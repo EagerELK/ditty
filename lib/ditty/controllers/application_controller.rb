@@ -21,6 +21,12 @@ module Ditty
   class ApplicationController < Sinatra::Base
     include ActiveSupport::Inflector
 
+    def initialize
+      self.class.subscribe(self)
+
+      super
+    end
+
     set :root, ENV['APP_ROOT'] || ::File.expand_path("#{::File.dirname(__FILE__)}/../../../")
     set :map_path, nil
     set :view_location, nil
