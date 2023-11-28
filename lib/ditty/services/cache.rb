@@ -19,10 +19,15 @@ module Ditty
 
       def set(key, obj)
         store.set(key, obj, ttl)
+        obj
       end
 
       def get(key)
         store.get(key)
+      end
+
+      def clear(key)
+        delete(key)
       end
 
       def delete(key)
