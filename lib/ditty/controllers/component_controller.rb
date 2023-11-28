@@ -71,7 +71,8 @@ module Ditty
 
     # Create
     post '/' do
-      entity = settings.model_class.new(permitted_parameters(settings.model_class, :create))
+      parameters = check_parameters(:create)
+      entity = settings.model_class.new(parameters)
       authorize entity, :create
 
       entity.db.transaction do
@@ -106,9 +107,10 @@ module Ditty
     put '/:id/?' do |id|
       entity = read!(id)
       authorize entity, :update
+      parameters = check_parameters(:update)
 
       entity.db.transaction do
-        entity.set(permitted_parameters(settings.model_class, :update))
+        entity.set(parameters)
         entity.save_changes # Will trigger a Sequel::ValidationFailed exception if the model is incorrect
         trigger :component_update, entity: entity
       end

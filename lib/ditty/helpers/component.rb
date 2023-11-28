@@ -65,6 +65,10 @@ module Ditty
         settings.dehumanized || underscore(heading)
       end
 
+      def check_parameters(action)
+        permitted_parameters(settings.model_class, action)
+      end
+
       def filter_fields
         self.class.const_defined?('FILTERS') ? self.class::FILTERS : []
       end
