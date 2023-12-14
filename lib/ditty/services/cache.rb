@@ -98,5 +98,5 @@ module URI
   class Memcached < Generic
     DEFAULT_PORT = 11211
   end
-  @@schemes['Memcached'] = Memcached
+  register_scheme 'Memcached', Memcached
 end
