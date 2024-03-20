@@ -2,6 +2,7 @@
 
 require 'dalli'
 require 'net/telnet'
+require 'memcached'
 
 module Ditty
   module Services
@@ -17,16 +18,21 @@ module Ditty
       end
 
       def store
-        @store ||= Dalli::Client.new(ENV.fetch('CACHE_URL'), namespace: namespace)
+        @store ||= begin
+          Dalli::Client.new(ENV.fetch('CACHE_URL'), namespace: namespace)
+        rescue KeyError
+          logger.error 'Could not initialize Cache - No URL'
+          nil
+        end
       end
 
       def set(key, obj)
-        store.set(key, obj, ttl)
+        store&.set(key, obj, ttl)
         obj
       end
 
       def get(key)
-        store.get(key)
+        store&.get(key)
       rescue Memcached::ServerIsMarkedDead => e
         logger.warn "Could not retrieve cache key #{key}: #{e.message}"
         nil
@@ -37,7 +43,7 @@ module Ditty
       end
 
       def delete(key)
-        store.delete(key)
+        store&.delete(key)
       end
 
       def dump
@@ -89,6 +95,10 @@ module Ditty
           end
         end
         items
+      end
+
+      def logger
+        @logger ||= ::Ditty::Services::Logger
       end
     end
   end

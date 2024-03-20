@@ -5,7 +5,7 @@ require:
   - rubocop-sequel
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 2.7.1
+  TargetRubyVersion: 3.2
   Exclude:
     - migrate/**/*
 Layout/LineLength:
