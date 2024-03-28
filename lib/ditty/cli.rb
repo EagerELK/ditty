@@ -25,7 +25,7 @@ module Ditty
 
     register ::Ditty::Generators::MigrationGenerator, 'migration', 'migration NAME', 'Create a new Sequel migration'
 
-    default_task :server
+    default_task :help
 
     desc 'server', 'Start the Ditty server'
     require './application' if File.exist?('application.rb')
@@ -56,6 +56,10 @@ module Ditty
       }
       puts 'Starting the Ditty Server'
       Rack::Server.start(rack_opts)
+    end
+
+    def self.exit_on_failure?
+      true
     end
 
     desc 'migrate', 'Run the Ditty migrations'
