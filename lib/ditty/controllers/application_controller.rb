@@ -35,6 +35,9 @@ module Ditty
     set :model_class, nil
     set :raise_sinatra_param_exceptions, true
     set track_actions: false
+    set cache_headers: false
+    set html_cache_headers: true
+    set json_cache_headers: true
 
     # The order here is important, since Wisper has a deprecated method respond_with method
     helpers Wisper::Publisher
@@ -197,8 +200,13 @@ module Ditty
         errors = env['sinatra.error'].errors
         status 400
         format.html do
-          action = entity.id ? :edit : :new
-          haml :"#{view_location}/#{action}", locals: { entity: entity, title: heading(action) }, layout: layout
+          if params[:redirect_to]
+            flash[:errors] = errors
+            redirect params[:redirect_to]
+          else
+            action = entity.id ? :edit : :new
+            haml :"#{view_location}/#{action}", locals: { entity: entity, title: heading(action) }, layout: layout
+          end
         end
         format.json do
           json code: 400, errors: errors, full_errors: errors.full_messages
