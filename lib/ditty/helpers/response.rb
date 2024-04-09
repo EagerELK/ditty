@@ -61,14 +61,20 @@ module Ditty
         respond_to do |format|
           format.html do
             title = heading(:read) + (entity.respond_to?(:name) ? ": #{entity.name}" : '')
-            last_modified entity.updated_at if entity.respond_to?(:updated_at)
-            etag entity.etag if entity.respond_to?(:etag)
+            if settings.cache_headers && settings.html_cache_headers
+              last_modified entity.updated_at if entity.respond_to?(:updated_at)
+              etag entity.etag if entity.respond_to?(:etag)
+            end
             haml :"#{view_location}/display",
                  locals: { entity: entity, title: title, actions: actions },
                  layout: layout
           end
           format.json do
             # TODO: Add links defined by actions (Edit #{heading})
+            if settings.cache_headers && settings.json_cache_headers
+              last_modified entity.updated_at if entity.respond_to?(:updated_at)
+              etag entity.etag if entity.respond_to?(:etag)
+            end
             json permitted_response_attributes(entity, :for_json)
           end
           format.csv do
