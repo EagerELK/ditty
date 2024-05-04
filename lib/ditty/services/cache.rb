@@ -2,7 +2,7 @@
 
 require 'dalli'
 require 'net/telnet'
-require 'memcached'
+require 'dalli'
 
 module Ditty
   module Services
@@ -33,9 +33,9 @@ module Ditty
 
       def get(key)
         store&.get(key)
-      rescue Memcached::ServerIsMarkedDead => e
-        logger.warn "Could not retrieve cache key #{key}: #{e.message}"
-        nil
+      # rescue Memcached::ServerIsMarkedDead => e
+      #   logger.warn "Could not retrieve cache key #{key}: #{e.message}"
+      #   nil
       end
 
       def clear(key)
@@ -102,11 +102,4 @@ module Ditty
       end
     end
   end
-end
-
-module URI
-  class Memcached < Generic
-    DEFAULT_PORT = 11211
-  end
-  register_scheme 'Memcached', Memcached
 end
