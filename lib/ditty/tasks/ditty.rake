@@ -11,14 +11,16 @@ namespace :ditty do
   end
 
   desc 'Prepare Ditty'
-  task prep: ['generate_tokens', 'prep:folders', 'prep:public', 'prep:migrations']
+  task prep: ['prep:folders', 'generate_tokens', 'prep:public', 'prep:migrations']
 
   desc 'Generate the needed tokens'
   task :generate_tokens do
     puts 'Generating the Ditty tokens'
+
     require 'securerandom'
-    File.write('.session_secret', SecureRandom.random_bytes(40)) unless File.file?('.session_secret')
-    File.write('.token_secret', SecureRandom.random_bytes(40)) unless File.file?('.token_secret')
+    unless File.file?('.session_secret') || ENV.fetch('SECRET_SEED', nil)
+      File.write('./config/.secret_seed', SecureRandom.random_bytes(40))
+    end
   end
 
   desc 'Seed the Ditty database'
@@ -116,7 +118,7 @@ namespace :ditty do
 
       puts "** [ditty] Running Ditty Migrations to #{args[:version]}"
       ::Sequel.extension :migration
-      ::Sequel::Migrator.run(::DB, folder, target: args[:version].to_i)
+      ::Sequel::Migrator.run(::DB, folder, target: args[:version])
     end
 
     desc 'Migrate Ditty database to latest version'

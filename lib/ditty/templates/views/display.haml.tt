@@ -15,6 +15,5 @@
               %a.btn.btn-secondary{ href: "#{base_path}/#{entity.display_id}/edit" } Edit
           .col-md-6.text-right
             - if policy(entity).delete?
-              = delete_form_tag("#{base_path}/#{entity.display_id}") do
-                %button.btn.btn-warning{ type: 'submit' } Delete
+              = delete_form(entity)
   .col-md-2
